@@ -57,11 +57,12 @@ header{
 .navbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;}
 .brand{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-weight:700;font-size:22px;}
 .brand .mark{
-  width:38px;height:38px;border-radius:50%;overflow:hidden;
-  background:conic-gradient(from 200deg, var(--fucsia), var(--dorado), var(--morado), var(--fucsia));
+  width:48px;height:48px;border-radius:50%;overflow:hidden;
+  background:#fff;padding:3px;
+  box-shadow:0 0 0 2px var(--rosa-suave);
   display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0;
 }
-.brand .mark img{width:100%;height:100%;object-fit:cover;}
+.brand .mark img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
 nav.links{display:flex;gap:22px;font-size:14.5px;font-weight:600;}
 nav.links a{opacity:.8;transition:opacity .2s;text-decoration:none;}
 nav.links a:hover{opacity:1;color:var(--fucsia);}
@@ -108,12 +109,12 @@ nav.links a:hover{opacity:1;color:var(--fucsia);}
 .btn-ghost:hover{border-color:var(--fucsia);color:var(--fucsia);}
 
 .hero-cake{
-  position:relative;aspect-ratio:1/1;border-radius:32px;overflow:hidden;
+  position:relative;aspect-ratio:1/1;max-width:340px;margin:0 auto;border-radius:32px;
   background:linear-gradient(160deg, var(--rosa), var(--morado));
   display:flex;align-items:center;justify-content:center;font-size:110px;
-  box-shadow:var(--shadow);
+  box-shadow:var(--shadow);padding:36px;
 }
-.hero-cake img{width:100%;height:100%;object-fit:cover;}
+.hero-cake img{width:100%;height:100%;object-fit:contain;border-radius:18px;}
 
 .stats{display:flex;gap:34px;margin-top:36px;flex-wrap:wrap;}
 .stat b{font-family:Georgia,serif;font-size:26px;display:block;color:var(--fucsia);}
@@ -162,6 +163,12 @@ section{padding:64px 0;}
   transition:background .2s;flex-shrink:0;
 }
 .add-btn:hover{background:var(--fucsia);color:#fff;}
+.qty-add{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.qty-input{
+  width:48px;padding:8px 6px;text-align:center;border-radius:10px;
+  border:1.5px solid var(--border-soft);background:var(--crema);color:var(--tinta);
+  font-family:inherit;font-size:13px;
+}
 
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
 .svc-card{padding:26px 20px;border-radius:18px;background:var(--gris);border-left:4px solid var(--dorado);}

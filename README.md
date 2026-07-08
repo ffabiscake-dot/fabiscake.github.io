@@ -1,7 +1,7 @@
-# Fabi´s Cake — Sitio Web
+# Fabi's Cake — Sitio Web
 
 Sitio web estático (HTML/CSS/JS, sin necesidad de instalar nada) para el catálogo,
-carrito de compras y pedidos por WhatsApp de **Fabi´s Cake**.
+carrito de compras y pedidos por WhatsApp de **Fabi's Cake**.
 
 ## Estructura del proyecto
 

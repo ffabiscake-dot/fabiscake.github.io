@@ -5,7 +5,6 @@ const CATEGORIES = [
   {id:'all', label:'Todos'},
   {id:'cakes', label:'Cakes personalizados'},
   {id:'postres', label:'Postres y bufet'},
-  {id:'bufet', label:'Combos'},
   {id:'ramos', label:'Ramos de rosas'},
   {id:'decoracion', label:'Decoración con globos'},
   {id:'hombre', label:'Regalos hombre'},
@@ -41,9 +40,15 @@ function setCat(id){ activeCat = id; renderPills(); renderGrid(); }
 
 function money(n){ return n.toLocaleString('es'); }
 
+function matchesCat(p, catId){
+  if(catId === 'all') return true;
+  if(Array.isArray(p.cat)) return p.cat.includes(catId);
+  return p.cat === catId;
+}
+
 function renderGrid(){
   const el = document.getElementById('productGrid');
-  const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===activeCat);
+  const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>matchesCat(p, activeCat));
   el.innerHTML = list.map(p => {
     const media = p.img
       ? `<div class="card-media" style="background-image:url('${p.img}')"></div>`
@@ -51,6 +56,12 @@ function renderGrid(){
     const priceLabel = p.unit === 'unidad'
       ? `$${money(p.price)} <small>/ unidad</small>`
       : `$${money(p.price)} <small>CUP</small>`;
+    const addControl = p.unit === 'unidad'
+      ? `<div class="qty-add">
+           <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input">
+           <button class="add-btn" onclick="addToCart(${p.row})">+</button>
+         </div>`
+      : `<button class="add-btn" onclick="addToCart(${p.row})">+</button>`;
     return `<div class="card">
       ${media}
       <div class="card-body">
@@ -58,7 +69,7 @@ function renderGrid(){
         <p>${p.desc}</p>
         <div class="price-row">
           <span class="price">${priceLabel}</span>
-          <button class="add-btn" onclick="addToCart(${p.row})">+</button>
+          ${addControl}
         </div>
       </div>
     </div>`;
@@ -78,8 +89,16 @@ function renderServices(){
 function addToCart(row){
   const p = PRODUCTS.find(x=>x.row===row);
   if(!p) return;
+  let qtyToAdd = 1;
+  if(p.unit === 'unidad'){
+    const input = document.getElementById(`qtyinput-${row}`);
+    if(input){
+      qtyToAdd = parseInt(input.value, 10);
+      if(!qtyToAdd || qtyToAdd < 1) qtyToAdd = 1;
+    }
+  }
   const existing = cart.find(i=>i.row===row);
-  if(existing){ existing.qty++; } else { cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:1}); }
+  if(existing){ existing.qty += qtyToAdd; } else { cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:qtyToAdd}); }
   saveCart();
   openCart();
 }
@@ -154,7 +173,7 @@ function sendOrder(e){
   const notes = document.getElementById('f_notes').value;
 
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
-  let msg = `Hola, deseo realizar el siguiente pedido en Fabi´s Cake:%0A%0A*PRODUCTOS*%0A`;
+  let msg = `Hola, deseo realizar el siguiente pedido en Fabi's Cake:%0A%0A*PRODUCTOS*%0A`;
   cart.forEach(i=>{
     msg += `${i.qty}x ${i.name} ............ $${money(i.price*i.qty)}%0A`;
   });
@@ -170,7 +189,7 @@ function sendOrder(e){
   msg += `Entrega: ${delivery}%0A`;
   msg += `Dirección: ${address}, ${city}%0A`;
   if(notes) msg += `Observaciones: ${notes}%0A`;
-  msg += `%0AEspero confirmación del pedido. ¡Gracias!`;
+  msg += `%0AEsperamos confirmación del pedido. Gracias.`;
 
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
   cart = []; saveCart(); closeModal();
