@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabi´s Cake — Del horno a tu mesa</title>
+<meta name="description" content="Cakes personalizados, bufets, regalos y decoración para eventos en Contramaestre, Santiago de Cuba.">
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="light">
+
+<header>
+  <div class="wrap navbar">
+    <div class="brand"><span class="mark"><img src="assets/logo.jpg" alt="Logo Fabi´s Cake"></span> Fabi<em style="font-style:italic">´s</em> Cake</div>
+    <nav class="links" id="navLinks">
+      <a href="#catalogo" onclick="closeNav()">Catálogo</a>
+      <a href="#servicios" onclick="closeNav()">Servicios</a>
+      <a href="#nosotros" onclick="closeNav()">Nosotros</a>
+      <a href="#contacto" onclick="closeNav()">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Modo oscuro/claro">🌙</button>
+      <button class="icon-btn" onclick="openCart()" title="Carrito">
+        🛒<span class="badge" id="cartCount">0</span>
+      </button>
+      <button class="burger" onclick="toggleNav()">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">✦ Maffo, Contramaestre · Santiago de Cuba</span>
+      <h1>Del horno a tu mesa,<br><em>postres hechos con amor.</em></h1>
+      <p class="lead">Cakes personalizados, bufets, decoraciones y regalos sorpresa para cada celebración. Arma tu pedido y lo confirmamos directo por WhatsApp.</p>
+      <div class="btn-row">
+        <a href="#catalogo" class="btn btn-primary">🎂 Realiza tu pedido</a>
+        <a href="#catalogo" class="btn btn-ghost">Ver catálogo</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>+59</b><span>productos y servicios</span></div>
+        <div class="stat"><b>72h</b><span>anticipación mínima</span></div>
+        <div class="stat"><b>10</b><span>personas en el equipo</span></div>
+      </div>
+    </div>
+    <div class="hero-cake"><img src="assets/logo.jpg" alt="Fabi´s Cake"></div>
+  </div>
+</section>
+<div class="ribbon"></div>
+
+<section id="catalogo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Catálogo</span>
+      <h2>Elige, personaliza y agrega al carrito</h2>
+      <p>Precios en CUP, tomados directamente de nuestra tabla de productos.</p>
+    </div>
+    <div class="pills" id="pills"></div>
+    <div class="grid" id="productGrid"></div>
+  </div>
+</section>
+
+<div class="ribbon ribbon-flip"></div>
+
+<section id="servicios" style="background:var(--gris)">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Servicios</span>
+      <h2>Para que tu evento esté completo</h2>
+      <p>Coordinamos decoración, animación y logística. Cotiza cualquier servicio directo por WhatsApp.</p>
+    </div>
+    <div class="svc-grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<section id="nosotros">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow">Nosotros</span>
+      <h2 style="font-size:32px;margin:0 0 18px;">Nuestra historia y compromiso</h2>
+      <blockquote>Del horno a tu mesa. Postres hechos con amor y combos de comida, listos para regalar y disfrutar.</blockquote>
+      <p style="opacity:.8;line-height:1.6;">Fundado por Tayana Pantoja Ginarte, Fabi´s Cake nació para brindar productos y servicios de celebración con calidad, creatividad y responsabilidad, haciendo realidad las ideas de nuestros clientes en cada ocasión especial.</p>
+      <div class="value-list">
+        <span class="value-chip">Responsabilidad</span>
+        <span class="value-chip">Honestidad</span>
+        <span class="value-chip">Calidad</span>
+        <span class="value-chip">Puntualidad</span>
+        <span class="value-chip">Creatividad</span>
+        <span class="value-chip">Compromiso</span>
+        <span class="value-chip">Respeto</span>
+        <span class="value-chip">Trabajo en equipo</span>
+      </div>
+    </div>
+    <div>
+      <div class="info-card">
+        <h4>Misión</h4>
+        <p>Brindar productos y servicios para celebraciones con la más alta calidad, creatividad y responsabilidad, creando momentos inolvidables para cada ocasión especial.</p>
+      </div>
+      <div class="info-card">
+        <h4>Visión</h4>
+        <p>Ser una empresa reconocida por la excelencia en la organización de eventos y la calidad de nuestros productos, siendo la primera opción para celebraciones en nuestra comunidad.</p>
+      </div>
+      <div class="info-card">
+        <h4>Garantía</h4>
+        <p>Trabajamos con pasión por productos frescos y de alta calidad. Garantizamos puntualidad en las entregas y, ante cualquier inconveniente atribuible a nuestro servicio, una solución rápida y justa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ribbon"></div>
+
+<section id="contacto" style="background:var(--gris)">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="eyebrow">Contacto</span>
+      <h2 style="font-size:28px;margin:0 0 20px;">Hagamos realidad tu celebración</h2>
+      <div class="info-line"><span class="ico">📍</span><span>Localidad Maffo, Municipio Contramaestre, Santiago de Cuba, Cuba</span></div>
+      <div class="info-line"><span class="ico">📱</span><span>WhatsApp: +53 5 2076748</span></div>
+      <div class="info-line"><span class="ico">✉️</span><span>ffabiscake@gmail.com</span></div>
+      <div class="info-line"><span class="ico">🕐</span><span>Todos los días, 8:00 am – 5:00 pm</span></div>
+      <div class="info-line"><span class="ico">🚚</span><span>Entregas a domicilio en Contramaestre (costo según distancia). Pedidos con 72h de anticipación.</span></div>
+      <div class="btn-row" style="margin-top:20px;">
+        <a href="https://www.facebook.com/fabi.s.cake.2023" target="_blank" class="btn btn-ghost">Facebook</a>
+        <a href="https://www.instagram.com/ffabiscake" target="_blank" class="btn btn-ghost">Instagram</a>
+        <a href="https://pin.it/3p5a84Tli" target="_blank" class="btn btn-ghost">Pinterest</a>
+      </div>
+    </div>
+    <a href="https://www.google.com/maps/search/?api=1&query=Contramaestre,Santiago+de+Cuba,Cuba" target="_blank" class="map-card">
+      <span style="font-size:52px;">📍</span>
+      <span style="font-weight:700;font-size:16px;">Maffo, Contramaestre</span>
+      <span style="font-size:13px;opacity:.9;">Santiago de Cuba, Cuba — Ver en Google Maps</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h5>Fabi´s Cake</h5>
+        <p style="font-size:13px;opacity:.75;max-width:280px;line-height:1.6;">Del horno a tu mesa. Postres hechos con amor y combos de comida, listos para regalar y disfrutar.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Explora</h5>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contacto directo</h5>
+        <a href="https://wa.me/5352076748" target="_blank">WhatsApp +53 5 2076748</a>
+        <a href="mailto:ffabiscake@gmail.com">ffabiscake@gmail.com</a>
+        <a href="https://www.instagram.com/ffabiscake" target="_blank">Instagram</a>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Fabi´s Cake — Maffo, Contramaestre, Santiago de Cuba.</div>
+  </div>
+</footer>
+
+<button class="fab-wa" onclick="window.open('https://wa.me/5352076748','_blank')" title="Escríbenos por WhatsApp">💬</button>
+
+<div class="overlay" id="overlay" onclick="closeCart();closeModal();"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Tu carrito</h3>
+    <button class="icon-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot"></div>
+</div>
+
+<div class="modal" id="orderModal">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal()">✕</button>
+    <h3>Agenda tu pedido</h3>
+    <p style="font-size:13px;opacity:.7;margin:0;">Completa tus datos y enviaremos el resumen directo a nuestro WhatsApp.</p>
+    <form id="orderForm" onsubmit="return sendOrder(event)">
+      <div class="form-grid">
+        <div class="full"><label>Nombre completo *</label><input required id="f_name" placeholder="Tu nombre"></div>
+        <div><label>Teléfono *</label><input required id="f_phone" placeholder="+53 5..."></div>
+        <div><label>Correo</label><input id="f_email" type="email" placeholder="tucorreo@mail.com"></div>
+        <div><label>Fecha del evento *</label><input required id="f_date" type="date"></div>
+        <div><label>Hora de entrega *</label><input required id="f_time" type="time"></div>
+        <div class="full"><label>Dirección *</label><input required id="f_address" placeholder="Calle, número, referencia"></div>
+        <div><label>Ciudad</label><input id="f_city" value="Contramaestre"></div>
+        <div>
+          <label>Tipo de evento</label>
+          <select id="f_event">
+            <option>Cumpleaños</option><option>Boda</option><option>XV años</option>
+            <option>Baby Shower</option><option>Aniversario</option><option>Corporativo</option><option>Otro</option>
+          </select>
+        </div>
+        <div><label>Número de invitados</label><input id="f_guests" type="number" min="1" placeholder="Ej. 20"></div>
+        <div>
+          <label>Método de entrega</label>
+          <select id="f_delivery"><option>Entrega a domicilio</option><option>Recoger en el local</option></select>
+        </div>
+        <div class="full"><label>Observaciones</label><textarea id="f_notes" rows="3" placeholder="Colores, dedicatoria, alergias, etc."></textarea></div>
+      </div>
+      <button type="submit" class="btn btn-primary">📲 Enviar pedido por WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
