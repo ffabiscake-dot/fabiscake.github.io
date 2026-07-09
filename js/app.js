@@ -6,11 +6,14 @@ const CATEGORIES = [
   {id:'cakes', label:'Cakes personalizados'},
   {id:'postres', label:'Postres y bufet'},
   {id:'ramos', label:'Ramos de rosas'},
+  {id:'sorpresas', label:'Entretenimiento y sorpresas'},
   {id:'decoracion', label:'Decoración con globos'},
   {id:'hombre', label:'Regalos hombre'},
   {id:'mujer', label:'Regalos mujer'},
   {id:'nino', label:'Regalos niño'},
   {id:'nina', label:'Regalos niña'},
+  {id:'combos_alimentos', label:'Combos de alimentos y bebidas'},
+  {id:'combos_cumple', label:'Combos para cumpleaños'},
 ];
 
 const SERVICES = [
@@ -34,7 +37,7 @@ function saveCart(){ sessionStorage.setItem('fc_cart', JSON.stringify(cart)); re
 /* ===================== RENDER CATÁLOGO ===================== */
 function renderPills(){
   const el = document.getElementById('pills');
-  el.innerHTML = CATEGORIES.map(c => `<div class="pill ${c.id===activeCat?'active':''}" onclick="setCat('${c.id}')">${c.label}</div>`).join('');
+  el.innerHTML = CATEGORIES.map(c => `<button type="button" class="pill ${c.id===activeCat?'active':''}" aria-pressed="${c.id===activeCat}" onclick="setCat('${c.id}')">${c.label}</button>`).join('');
 }
 function setCat(id){ activeCat = id; renderPills(); renderGrid(); }
 
@@ -51,17 +54,30 @@ function renderGrid(){
   const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>matchesCat(p, activeCat));
   el.innerHTML = list.map(p => {
     const media = p.img
-      ? `<div class="card-media" style="background-image:url('${p.img}')"></div>`
+      ? `<div class="card-media" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>`
       : `<div class="card-media">${p.icon}</div>`;
+    if(p.unit === 'cotizar'){
+      return `<div class="card">
+        ${media}
+        <div class="card-body">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <div class="price-row">
+            <span class="price quote">Precio a cotizar</span>
+            <button type="button" class="add-btn quote-btn" onclick="quoteWA('${p.name.replace(/'/g,"")}')">Cotizar</button>
+          </div>
+        </div>
+      </div>`;
+    }
     const priceLabel = p.unit === 'unidad'
-      ? `$${money(p.price)} <small>/ unidad</small>`
+      ? `$${money(p.price)} <small>/ ${p.unit_label || 'unidad'}</small>`
       : `$${money(p.price)} <small>CUP</small>`;
     const addControl = p.unit === 'unidad'
       ? `<div class="qty-add">
            <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input">
-           <button class="add-btn" onclick="addToCart(${p.row})">+</button>
+           <button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>
          </div>`
-      : `<button class="add-btn" onclick="addToCart(${p.row})">+</button>`;
+      : `<button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>`;
     return `<div class="card">
       ${media}
       <div class="card-body">
@@ -165,6 +181,7 @@ function sendOrder(e){
   const email = document.getElementById('f_email').value;
   const date = document.getElementById('f_date').value;
   const time = document.getElementById('f_time').value;
+  const ampm = document.getElementById('f_ampm').value;
   const address = document.getElementById('f_address').value;
   const city = document.getElementById('f_city').value;
   const eventType = document.getElementById('f_event').value;
@@ -183,7 +200,7 @@ function sendOrder(e){
   msg += `Teléfono: ${phone}%0A`;
   if(email) msg += `Correo: ${email}%0A`;
   msg += `Fecha del evento: ${date}%0A`;
-  msg += `Hora: ${time}%0A`;
+  msg += `Hora: ${time} ${ampm}%0A`;
   msg += `Tipo de evento: ${eventType}%0A`;
   if(guests) msg += `Invitados: ${guests}%0A`;
   msg += `Entrega: ${delivery}%0A`;

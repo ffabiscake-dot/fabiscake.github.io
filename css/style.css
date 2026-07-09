@@ -23,6 +23,7 @@
   --border-soft: rgba(255,255,255,0.14);
 }
 *{box-sizing:border-box;}
+:focus-visible{outline:3px solid var(--fucsia);outline-offset:2px;}
 html{scroll-behavior:smooth;}
 body{
   margin:0;
@@ -130,7 +131,7 @@ section{padding:64px 0;}
 .pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;}
 .pill{
   padding:9px 18px;border-radius:100px;font-size:13.5px;font-weight:700;cursor:pointer;
-  background:var(--gris);border:1px solid transparent;transition:all .2s;
+  background:var(--gris);border:1px solid transparent;transition:all .2s;font-family:inherit;color:var(--tinta);
 }
 .pill.active,.pill:hover{background:var(--fucsia);color:#fff;}
 
@@ -155,6 +156,7 @@ section{padding:64px 0;}
 .card-body p{font-size:13px;opacity:.72;margin:0;line-height:1.5;flex:1;}
 .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:8px;}
 .price{font-family:Georgia,serif;font-weight:600;font-size:19px;color:var(--vino);}
+.price.quote{font-size:13px;font-weight:700;color:var(--morado);}
 [data-theme="dark"] .price{color:var(--rosa);}
 .price small{font-size:11px;font-weight:500;opacity:.7;}
 .add-btn{
@@ -163,6 +165,7 @@ section{padding:64px 0;}
   transition:background .2s;flex-shrink:0;
 }
 .add-btn:hover{background:var(--fucsia);color:#fff;}
+.add-btn.quote-btn{width:auto;border-radius:100px;padding:0 16px;font-size:12.5px;font-weight:700;}
 .qty-add{display:flex;align-items:center;gap:6px;flex-shrink:0;}
 .qty-input{
   width:48px;padding:8px 6px;text-align:center;border-radius:10px;

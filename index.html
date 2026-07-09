@@ -3,10 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fabi's Cake — Del horno a tu mesa</title>
-<meta name="description" content="Cakes personalizados, bufets, regalos y decoración para eventos en Contramaestre, Santiago de Cuba.">
+<title>Fabi's Cake | Cakes personalizados en Santiago de Cuba</title>
+<meta name="description" content="Cakes personalizados, postres, regalos personalizados, bufets, mesas dulces y decoración para cumpleaños, bodas, XV años y todo tipo de eventos.">
+<meta name="keywords" content="Fabi's Cake, cakes personalizados, repostería Santiago de Cuba, tortas Contramaestre, postres Cuba, bufets para eventos, decoración de cumpleaños, regalos personalizados, mesas dulces, XV años, bodas, ramos de rosas eternas">
+<meta name="author" content="Fabi's Cake">
+<meta name="robots" content="index, follow">
+<meta name="language" content="Spanish">
+<meta http-equiv="Content-Language" content="es">
+<meta name="theme-color" content="#d6478e">
+<link rel="canonical" href="https://ffabiscake-dot.github.io/fabiscake.github.io/">
 <link rel="icon" href="assets/logo.jpg">
+<link rel="apple-touch-icon" href="assets/logo.jpg">
 <link rel="stylesheet" href="css/style.css">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fabi's Cake | Cakes personalizados en Santiago de Cuba">
+<meta property="og:description" content="Cakes personalizados, postres, regalos personalizados, bufets, mesas dulces y decoración para cumpleaños, bodas, XV años y todo tipo de eventos.">
+<meta property="og:url" content="https://ffabiscake-dot.github.io/fabiscake.github.io/">
+<meta property="og:image" content="https://ffabiscake-dot.github.io/fabiscake.github.io/assets/social-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fabi's Cake — cakes personalizados, postres, regalos y bufets">
+<meta property="og:site_name" content="Fabi's Cake">
+<meta property="og:locale" content="es_ES">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fabi's Cake | Cakes personalizados en Santiago de Cuba">
+<meta name="twitter:description" content="Cakes personalizados, postres, regalos personalizados, bufets, mesas dulces y decoración para cumpleaños, bodas, XV años y todo tipo de eventos.">
+<meta name="twitter:image" content="https://ffabiscake-dot.github.io/fabiscake.github.io/assets/social-preview.jpg">
+<meta name="twitter:image:alt" content="Fabi's Cake — cakes personalizados, postres, regalos y bufets">
+
+<!-- Datos estructurados (SEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Fabi's Cake",
+  "image": "https://ffabiscake-dot.github.io/fabiscake.github.io/assets/social-preview.jpg",
+  "url": "https://ffabiscake-dot.github.io/fabiscake.github.io/",
+  "telephone": "+53 5 2076748",
+  "servesCuisine": "Repostería",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Maffo, Contramaestre",
+    "addressRegion": "Santiago de Cuba",
+    "addressCountry": "CU"
+  }
+}
+</script>
 </head>
 <body data-theme="light">
 
@@ -20,11 +67,11 @@
       <a href="#contacto" onclick="closeNav()">Contacto</a>
     </nav>
     <div class="nav-actions">
-      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Modo oscuro/claro">🌙</button>
-      <button class="icon-btn" onclick="openCart()" title="Carrito">
+      <button type="button" class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Modo oscuro/claro" aria-label="Cambiar modo oscuro/claro">🌙</button>
+      <button type="button" class="icon-btn" onclick="openCart()" title="Carrito" aria-label="Abrir carrito de compras">
         🛒<span class="badge" id="cartCount">0</span>
       </button>
-      <button class="burger" onclick="toggleNav()">☰</button>
+      <button type="button" class="burger" onclick="toggleNav()" aria-label="Abrir menú de navegación">☰</button>
     </div>
   </div>
 </header>
@@ -161,13 +208,13 @@
   </div>
 </footer>
 
-<button class="fab-wa" onclick="window.open('https://wa.me/5352076748','_blank')" title="Escríbenos por WhatsApp">💬</button>
+<button type="button" class="fab-wa" onclick="window.open('https://wa.me/5352076748','_blank')" title="Escríbenos por WhatsApp" aria-label="Escríbenos por WhatsApp">💬</button>
 
 <div class="overlay" id="overlay" onclick="closeCart();closeModal();"></div>
 <div class="drawer" id="cartDrawer">
   <div class="drawer-head">
     <h3>Tu carrito</h3>
-    <button class="icon-btn" onclick="closeCart()">✕</button>
+    <button type="button" class="icon-btn" onclick="closeCart()" aria-label="Cerrar carrito">✕</button>
   </div>
   <div class="drawer-body" id="cartBody"></div>
   <div class="drawer-foot" id="cartFoot"></div>
@@ -175,7 +222,7 @@
 
 <div class="modal" id="orderModal">
   <div class="modal-card">
-    <button class="close" onclick="closeModal()">✕</button>
+    <button type="button" class="close" onclick="closeModal()" aria-label="Cerrar formulario de pedido">✕</button>
     <h3>Agenda tu pedido</h3>
     <p style="font-size:13px;opacity:.7;margin:0;">Completa tus datos y enviaremos el resumen directo a nuestro WhatsApp.</p>
     <form id="orderForm" onsubmit="return sendOrder(event)">
@@ -184,7 +231,16 @@
         <div><label>Teléfono *</label><input required id="f_phone" placeholder="+53 5..."></div>
         <div><label>Correo</label><input id="f_email" type="email" placeholder="tucorreo@mail.com"></div>
         <div><label>Fecha del evento *</label><input required id="f_date" type="date"></div>
-        <div><label>Hora de entrega *</label><input required id="f_time" type="time"></div>
+        <div>
+          <label>Hora de entrega *</label>
+          <div style="display:flex;gap:8px;">
+            <input required id="f_time" type="time" style="flex:1;">
+            <select id="f_ampm" style="width:78px;flex-shrink:0;">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+        </div>
         <div class="full"><label>Dirección *</label><input required id="f_address" placeholder="Calle, número, referencia"></div>
         <div><label>Ciudad</label><input id="f_city" value="Contramaestre"></div>
         <div>
