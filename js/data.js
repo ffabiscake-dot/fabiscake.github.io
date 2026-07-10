@@ -884,7 +884,7 @@ const PRODUCTS = [
   "name": "Refresco gaseado",
   "cat": "combos_alimentos",
   "desc": "24 unidades · Sabores según disponibilidad",
-  "price": 9600,
+  "price": 11500,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
