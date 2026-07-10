@@ -430,6 +430,17 @@ const PRODUCTS = [
  },
  {
   "row": 40,
+  "name": "Helado",
+  "cat": "postres",
+  "desc": "Disfruta de la textura más suave y cremosa con nuestro helado de vainilla tradicional.",
+  "price": 3000,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🥮",
+  "img": "assets/products/helado-40.jpg"
+ },
+ {
+  "row": 41,
   "name": "Pastelito",
   "cat": "postres",
   "desc": "Pastelito crujientes y elaboradas con ingredientes de alta calidad. Nuestros pastelitos artesanales en forma de flor están exquisito dulce que aporta el equilibrio perfecto entre textura y sabor. ideal para compartir en reuniones, celebraciones o regalar a alguien especial.",
@@ -437,10 +448,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/pastelito-40.jpg"
+  "img": "assets/products/pastelito-41.jpg"
  },
  {
-  "row": 41,
+  "row": 42,
   "name": "Panes",
   "cat": "postres",
   "desc": "Panes artesanales suaves y frescos, con un ligero toque de ajonjolí. El complemento perfecto para nuestros combos de bufet, ideales para cualquier celebración o evento especial.",
@@ -448,10 +459,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/panes-41.jpg"
+  "img": "assets/products/panes-42.jpg"
  },
  {
-  "row": 42,
+  "row": 43,
   "name": "Donas de Chocolate",
   "cat": "postres",
   "desc": "Esponjosas donas elaboradas con masa suave y fresca, cubiertas con una deliciosa capa de chocolate y decoradas con coloridas grageas. El postre perfecto para endulzar cualquier celebración, mesa de postres, bufet o compartir en familia.",
@@ -459,10 +470,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/donas-de-chocolate-42.jpg"
+  "img": "assets/products/donas-de-chocolate-43.jpg"
  },
  {
-  "row": 43,
+  "row": 44,
   "name": "Rosquillas",
   "cat": "postres",
   "desc": "Rosquillas deliciosas donas caseras, elaboradas con ingredientes frescos y una receta tradicional que les brinda una textura suave por dentro y un dorado perfecto por fuera",
@@ -470,10 +481,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/rosquillas-43.jpg"
+  "img": "assets/products/rosquillas-44.jpg"
  },
  {
-  "row": 44,
+  "row": 45,
   "name": "Empanaditas",
   "cat": "postres",
   "desc": "Deliciosas empanaditas de masa crujiente y dorada, rellenas con ingredientes seleccionados y preparadas al momento. Ideales como aperitivo, para bufets, fiestas y eventos, ofreciendo un sabor casero que encanta a todos.",
@@ -481,10 +492,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/empanaditas-44.jpg"
+  "img": "assets/products/empanaditas-45.jpg"
  },
  {
-  "row": 45,
+  "row": 46,
   "name": "Croqueta",
   "cat": "postres",
   "desc": "Deliciosas croquetas, elaboradas con una receta casera, doradas hasta alcanzar el punto perfecto y con un relleno suave y lleno de sabor.",
@@ -492,10 +503,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/croqueta-45.jpg"
+  "img": "assets/products/croqueta-46.jpg"
  },
  {
-  "row": 46,
+  "row": 47,
   "name": "Churros",
   "cat": "postres",
   "desc": "Disfruta de nuestros deliciosos churros, preparados con una receta tradicional, dorados a la perfección y cubiertos con una fina capa de azúcar.",
@@ -503,10 +514,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/churros-46.jpg"
+  "img": "assets/products/churros-47.jpg"
  },
  {
-  "row": 47,
+  "row": 48,
   "name": "Bolitas de queso",
   "cat": "postres",
   "desc": "Bolitas de queso, elaboradas con una receta casera y fritas hasta lograr un dorado perfecto. Crujientes por fuera, suaves por dentro y con un delicioso sabor a queso que conquista en cada bocado.",
@@ -514,10 +525,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
-  "img": "assets/products/bolitas-de-queso-47.jpg"
+  "img": "assets/products/bolitas-de-queso-48.jpg"
  },
  {
-  "row": 48,
+  "row": 49,
   "name": "Ensalada fría",
   "cat": "postres",
   "desc": "Ensalada fría 8 Libras Disfruta de nuestra deliciosa ensalada fría, preparada con pasta, jamón, queso, aceitunas y un suave aderezo cremoso que combina perfectamente cada ingrediente.",
@@ -525,10 +536,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🥮",
-  "img": "assets/products/ensalada-fria-48.jpg"
+  "img": "assets/products/ensalada-fria-49.jpg"
  },
  {
-  "row": 49,
+  "row": 50,
   "name": "Pasta",
   "cat": "postres",
   "desc": "1lib",
@@ -536,10 +547,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "libra",
   "icon": "🥮",
-  "img": "assets/products/pasta-49.jpg"
+  "img": "assets/products/pasta-50.jpg"
  },
  {
-  "row": 50,
+  "row": 51,
   "name": "Ramos",
   "cat": "ramos",
   "desc": "Ramo pequeño · Presentación · - 7 rosas eternas pequeñas · - 1 mariposa",
@@ -547,10 +558,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramos-50.jpg"
+  "img": "assets/products/ramos-51.jpg"
  },
  {
-  "row": 51,
+  "row": 52,
   "name": "Ramo de novia",
   "cat": "ramos",
   "desc": "Presentación · - 15 rosas · - mariposa · - beso de ángel",
@@ -558,10 +569,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-de-novia-51.jpg"
+  "img": "assets/products/ramo-de-novia-52.jpg"
  },
  {
-  "row": 52,
+  "row": 53,
   "name": "Ramo",
   "cat": "ramos",
   "desc": "Presentación · - 10 rosas eternas · - 1 mariposa",
@@ -569,10 +580,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-52.jpg"
+  "img": "assets/products/ramo-53.jpg"
  },
  {
-  "row": 53,
+  "row": 54,
   "name": "Ramo",
   "cat": "ramos",
   "desc": "Presentación · - 10 rosas eternas · - 1 mariposa",
@@ -580,10 +591,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-53.jpg"
+  "img": "assets/products/ramo-54.jpg"
  },
  {
-  "row": 54,
+  "row": 55,
   "name": "Ramo de girasoles",
   "cat": "ramos",
   "desc": "Presentación · - 15 girasoles eternos · - frase decorativa \"happy birthday\" · Color disponible · - amarillo",
@@ -591,10 +602,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-de-girasoles-54.jpg"
+  "img": "assets/products/ramo-de-girasoles-55.jpg"
  },
  {
-  "row": 55,
+  "row": 56,
   "name": "Ramo de rosas eternas",
   "cat": "ramos",
   "desc": "Presentación · - 8 rosas eternas · - 1 peluche",
@@ -602,10 +613,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-de-rosas-eternas-55.jpg"
+  "img": "assets/products/ramo-de-rosas-eternas-56.jpg"
  },
  {
-  "row": 56,
+  "row": 57,
   "name": "Ramo de rosas eternas",
   "cat": "ramos",
   "desc": "Presentación · - 10 rosas eternas · - malla · - 1 happy birthday · - 1 lazo de perlas · - hojas decorativas · Color disponible",
@@ -613,10 +624,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-de-rosas-eternas-56.jpg"
+  "img": "assets/products/ramo-de-rosas-eternas-57.jpg"
  },
  {
-  "row": 57,
+  "row": 58,
   "name": "Ramo buchón",
   "cat": "ramos",
   "desc": "Presentación · - 7 rosas eternas · - una mariposa · - 10 mil pesos",
@@ -624,10 +635,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-buchon-57.jpg"
+  "img": "assets/products/ramo-buchon-58.jpg"
  },
  {
-  "row": 58,
+  "row": 59,
   "name": "Ramo de 15 añera",
   "cat": "ramos",
   "desc": "Presentación · - 15 rosas eternas · - 1 corona decorativa · - 1 frase \" happy birthday\"",
@@ -635,10 +646,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🌹",
-  "img": "assets/products/ramo-de-15-anera-58.jpg"
+  "img": "assets/products/ramo-de-15-anera-59.jpg"
  },
  {
-  "row": 59,
+  "row": 60,
   "name": "Sorpresa con disfraz",
   "cat": "sorpresas",
   "desc": "Puede agregar a sus regalos un momento mágico con nuestras entregas sorpresas, con disfraces y animaciones. · Canciones, dedicatorias, fotos y videos para inmortalizar el momento",
@@ -646,10 +657,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎭",
-  "img": "assets/products/sorpresa-con-disfraz-59.jpg"
+  "img": "assets/products/sorpresa-con-disfraz-60.jpg"
  },
  {
-  "row": 60,
+  "row": 61,
   "name": "Mariachi",
   "cat": "sorpresas",
   "desc": "Si lo que desea es dar un toque único a su sorpresa de cumpleaños nuestros mariachis harán su mejor show · Un repertorio de canciones para alegrar su celebración.",
@@ -657,10 +668,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎭",
-  "img": "assets/products/mariachi-60.jpg"
+  "img": "assets/products/mariachi-61.jpg"
  },
  {
-  "row": 61,
+  "row": 62,
   "name": "Decoración con globos sencilla",
   "cat": "decoracion",
   "desc": "100 a 150 globos",
@@ -668,10 +679,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎈",
-  "img": "assets/products/decoracion-con-globos-sencilla-61.jpg"
+  "img": "assets/products/decoracion-con-globos-sencilla-62.jpg"
  },
  {
-  "row": 62,
+  "row": 63,
   "name": "Decoración para cumpleaños (set principal y alrededores)",
   "cat": "decoracion",
   "desc": "Set principal y alrededores · 200 a 250 globos · Detalles personalizados",
@@ -679,10 +690,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎈",
-  "img": "assets/products/decoracion-para-cumpleanos-set-principal-y-alrededores-62.jpg"
+  "img": "assets/products/decoracion-para-cumpleanos-set-principal-y-alrededores-63.jpg"
  },
  {
-  "row": 63,
+  "row": 64,
   "name": "Decoración interior (set principal)",
   "cat": "decoracion",
   "desc": "Set principal · 150 a 200 globos",
@@ -690,10 +701,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎈",
-  "img": "assets/products/decoracion-interior-set-principal-63.jpg"
+  "img": "assets/products/decoracion-interior-set-principal-64.jpg"
  },
  {
-  "row": 64,
+  "row": 65,
   "name": "Decoración de espacios grandes para 15 años",
   "cat": "decoracion",
   "desc": "Set principal y sus alrededores. · Globos 400 a 450. · Flores. · Cortinas. · Manteles. · Moño para sillas.",
@@ -701,10 +712,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎈",
-  "img": "assets/products/decoracion-de-espacios-grandes-para-15-anos-64.jpg"
+  "img": "assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg"
  },
  {
-  "row": 65,
+  "row": 66,
   "name": "Carne de cerdo asada Piernas",
   "cat": "combos_alimentos",
   "desc": "Piernas, lomos asados de 8 libra en adelante.",
@@ -712,10 +723,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/carne-de-cerdo-asada-piernas-65.jpg"
+  "img": "assets/products/carne-de-cerdo-asada-piernas-66.jpg"
  },
  {
-  "row": 66,
+  "row": 67,
   "name": "Jamón de pollo",
   "cat": "combos_alimentos",
   "desc": "Pollo hecho jamón · calidad extrema · Compra mínima 5 libra",
@@ -723,10 +734,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "libra",
   "icon": "🍗",
-  "img": "assets/products/jamon-de-pollo-66.jpg"
+  "img": "assets/products/jamon-de-pollo-67.jpg"
  },
  {
-  "row": 67,
+  "row": 68,
   "name": "Paquetes de pollo",
   "cat": "combos_alimentos",
   "desc": "Muslo o Contramuslo · Según disponibilidad.",
@@ -734,10 +745,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "paquete",
   "icon": "🍗",
-  "img": "assets/products/paquetes-de-pollo-67.jpg"
+  "img": "assets/products/paquetes-de-pollo-68.jpg"
  },
  {
-  "row": 68,
+  "row": 69,
   "name": "Paquete de arroz",
   "cat": "combos_alimentos",
   "desc": "1kg · Precio:",
@@ -745,10 +756,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "paquete",
   "icon": "🍗",
-  "img": "assets/products/paquete-de-arroz-68.jpg"
+  "img": "assets/products/paquete-de-arroz-69.jpg"
  },
  {
-  "row": 69,
+  "row": 70,
   "name": "Galletas de soda",
   "cat": "combos_alimentos",
   "desc": "7 paquetes",
@@ -756,10 +767,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/galletas-de-soda-69.jpg"
+  "img": "assets/products/galletas-de-soda-70.jpg"
  },
  {
-  "row": 70,
+  "row": 71,
   "name": "Fili de huevo",
   "cat": "combos_alimentos",
   "desc": "30 unidades",
@@ -767,10 +778,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/fili-de-huevo-70.jpg"
+  "img": "assets/products/fili-de-huevo-71.jpg"
  },
  {
-  "row": 71,
+  "row": 72,
   "name": "Yogurt natural",
   "cat": "combos_alimentos",
   "desc": "Sin azúcar añadido · 2 litro.",
@@ -778,10 +789,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "2 litros",
   "icon": "🍗",
-  "img": "assets/products/yogurt-natural-71.jpg"
+  "img": "assets/products/yogurt-natural-72.jpg"
  },
  {
-  "row": 72,
+  "row": 73,
   "name": "Mayonesa casera",
   "cat": "combos_alimentos",
   "desc": "350g.",
@@ -789,10 +800,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/mayonesa-casera-72.jpg"
+  "img": "assets/products/mayonesa-casera-73.jpg"
  },
  {
-  "row": 73,
+  "row": 74,
   "name": "Pan suave",
   "cat": "combos_alimentos",
   "desc": "Formato en barra",
@@ -800,10 +811,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🍗",
-  "img": "assets/products/pan-suave-73.jpg"
+  "img": "assets/products/pan-suave-74.jpg"
  },
  {
-  "row": 74,
+  "row": 75,
   "name": "Azúcar blanca",
   "cat": "combos_alimentos",
   "desc": "Venta mínima 5 libra",
@@ -811,10 +822,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "1 libra",
   "icon": "🍗",
-  "img": "assets/products/azucar-blanca-74.jpg"
+  "img": "assets/products/azucar-blanca-75.jpg"
  },
  {
-  "row": 75,
+  "row": 76,
   "name": "Combo para cumpleaños (20 personas)",
   "cat": "combos_cumple",
   "desc": "20 personas · Incluye · 20 Croquetas fritas · 20 churros · 20 empanadillas · 20 mini donas · 20panecillos con pasta · 20 rosquitas de azúcar",
@@ -822,10 +833,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
-  "img": "assets/products/combo-para-cumpleanos-20-personas-75.jpg"
+  "img": "assets/products/combo-para-cumpleanos-20-personas-76.jpg"
  },
  {
-  "row": 76,
+  "row": 77,
   "name": "Combo para cumpleaños (30 personas)",
   "cat": "combos_cumple",
   "desc": "30 personas · Incluye · 30 Croquetas fritas · 30 churros · 30 empanadillas · 30 mini donas · 30panecillos con pasta · 30 rosquitas de azúcar",
@@ -833,10 +844,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
-  "img": "assets/products/combo-para-cumpleanos-30-personas-76.jpg"
+  "img": "assets/products/combo-para-cumpleanos-30-personas-77.jpg"
  },
  {
-  "row": 77,
+  "row": 78,
   "name": "Combo para cumpleaños (75 personas)",
   "cat": "combos_cumple",
   "desc": "75personas · Incluye · 75Croquetas fritas · 75churros · 75 empanadillas · 75mini donas · 75panecillos con pasta · 75 rosquitas de azúcar · :",
@@ -844,10 +855,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
-  "img": "assets/products/combo-para-cumpleanos-75-personas-77.jpg"
+  "img": "assets/products/combo-para-cumpleanos-75-personas-78.jpg"
  },
  {
-  "row": 78,
+  "row": 79,
   "name": "Combo de confituras",
   "cat": "combos_cumple",
   "desc": "Combo surtido de confituras · Varias opciones · Según disponibilidad.",
@@ -855,10 +866,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
-  "img": "assets/products/combo-de-confituras-78.jpg"
+  "img": "assets/products/combo-de-confituras-79.jpg"
  },
  {
-  "row": 79,
+  "row": 80,
   "name": "Pomos de refresco",
   "cat": "combos_alimentos",
   "desc": "1.5lit · Sabores según disponibilidad",
@@ -866,10 +877,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/pomos-de-refresco-79.jpg"
+  "img": "assets/products/pomos-de-refresco-80.jpg"
  },
  {
-  "row": 80,
+  "row": 81,
   "name": "Malta guajira",
   "cat": "combos_alimentos",
   "desc": "Compra mínima 5 unidades",
@@ -877,10 +888,10 @@ const PRODUCTS = [
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🍗",
-  "img": "assets/products/malta-guajira-80.jpg"
+  "img": "assets/products/malta-guajira-81.jpg"
  },
  {
-  "row": 81,
+  "row": 82,
   "name": "Refresco gaseado",
   "cat": "combos_alimentos",
   "desc": "24 unidades · Sabores según disponibilidad",
@@ -888,10 +899,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/refresco-gaseado-81.jpg"
+  "img": "assets/products/refresco-gaseado-82.jpg"
  },
  {
-  "row": 82,
+  "row": 83,
   "name": "Cerveza Hollandia",
   "cat": "combos_alimentos",
   "desc": "24 unidades",
@@ -899,10 +910,10 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/cerveza-hollandia-82.jpg"
+  "img": "assets/products/cerveza-hollandia-83.jpg"
  },
  {
-  "row": 83,
+  "row": 84,
   "name": "Botella de whisky",
   "cat": "combos_alimentos",
   "desc": "Puede escoger en el momento entre las ofertas según disponibilidad.",
@@ -910,6 +921,6 @@ const PRODUCTS = [
   "unit": "pedido",
   "unit_label": null,
   "icon": "🍗",
-  "img": "assets/products/botella-de-whisky-83.jpg"
+  "img": "assets/products/botella-de-whisky-84.jpg"
  }
 ];
