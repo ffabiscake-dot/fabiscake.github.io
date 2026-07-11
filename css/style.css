@@ -245,6 +245,8 @@ footer a:hover{opacity:1;}
 .row-total{display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px;}
 .row-total b{font-family:Georgia,serif;font-size:20px;color:var(--fucsia);}
 [data-theme="dark"] .row-total b{color:var(--rosa);}
+.delivery-note{font-size:12.5px;line-height:1.5;opacity:.85;background:var(--gris);border-left:3px solid var(--fucsia);padding:8px 10px;border-radius:8px;margin-bottom:12px;}
+[data-theme="dark"] .delivery-note{background:rgba(255,255,255,.06);}
 .empty-cart{text-align:center;padding:60px 10px;opacity:.6;font-size:14px;}
 
 .modal{
