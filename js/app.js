@@ -154,7 +154,6 @@ function renderCart(){
   }).join('');
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
-    <div class="delivery-note">🚚 Servicio a domicilio con costo adicional según distancia, se cobra al entregar el pedido.</div>
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
     <div class="row-total"><span>Envío</span><span>Según distancia</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
