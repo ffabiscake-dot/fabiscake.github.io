@@ -154,6 +154,13 @@ function renderCart(){
   }).join('');
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
+    <div class="delivery-note">
+      <span class="ico">🚚</span>
+      <div>
+        <b>Entrega a domicilio</b>
+        <p>Recibe tus pedidos en la comodidad de tu hogar. El servicio de domicilio tiene un costo adicional que varía según la distancia de entrega.</p>
+      </div>
+    </div>
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
     <div class="row-total"><span>Envío</span><span>Según distancia</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
@@ -218,21 +225,8 @@ function quoteWA(productName){
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 }
 
-/* ===================== UI GENERAL ===================== */
-function toggleTheme(){
-  const body = document.body;
-  const isDark = body.getAttribute('data-theme')==='dark';
-  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
-  localStorage.setItem('fc_theme', isDark ? 'light' : 'dark');
-}
-function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
-function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
-
-/* ===================== INIT ===================== */
+/* ===================== INIT (catálogo, carrito) ===================== */
 (function init(){
-  const savedTheme = localStorage.getItem('fc_theme');
-  if(savedTheme==='dark'){ document.body.setAttribute('data-theme','dark'); document.getElementById('themeBtn').textContent='☀️'; }
   renderPills();
   renderGrid();
   renderServices();
