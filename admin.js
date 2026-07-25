@@ -97,15 +97,26 @@ function listenToProducts() {
   });
 }
 
+const CATEGORY_LABELS = {
+  cakes: "Cakes personalizados",
+  postres: "Postres y bufet",
+  ramos: "Ramos de rosas",
+  sorpresas: "Entretenimiento y sorpresas",
+  decoracion: "Decoración con globos",
+  hombre: "Regalos hombre",
+  mujer: "Regalos mujer",
+  nino: "Regalos niño",
+  nina: "Regalos niña",
+  combos_alimentos: "Combos de alimentos y bebidas",
+  combos_cumple: "Combos para cumpleaños"
+};
+
 function populateCategoryFilter() {
   const cats = [...new Set(allProducts.map(p => p.categoria).filter(Boolean))].sort();
   const current = categoryFilter.value;
   categoryFilter.innerHTML = '<option value="">Todas las categorías</option>' +
-    cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+    cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(CATEGORY_LABELS[c] || c)}</option>`).join("");
   categoryFilter.value = current;
-
-  const datalist = $("categoria-list");
-  datalist.innerHTML = cats.map(c => `<option value="${escapeHtml(c)}">`).join("");
 }
 
 function renderGrid() {
@@ -126,7 +137,7 @@ function renderGrid() {
         <p class="product-card-name">${escapeHtml(p.nombre || 'Sin nombre')}</p>
         <p class="product-card-price">$${Number(p.precio || 0).toFixed(2)}</p>
         <div class="product-card-badges">
-          <span class="badge badge-cat">${escapeHtml(p.categoria || 'Sin categoría')}</span>
+          <span class="badge badge-cat">${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria || 'Sin categoría')}</span>
           ${p.estado === 'Agotado' ? '<span class="badge badge-agotado">Agotado</span>' : ''}
           ${p.destacado ? '<span class="badge badge-destacado">★ Destacado</span>' : ''}
         </div>
@@ -174,7 +185,10 @@ function openEditModal(id) {
   $("f-nombre").value = p.nombre || "";
   $("f-descripcion").value = p.descripcion || "";
   $("f-precio").value = p.precio ?? "";
-  $("f-categoria").value = p.categoria || "";
+  $("f-categoria").value = p.categoria || "cakes";
+  $("f-unidad").value = p.unidad || "unidad";
+  $("f-unidad-etiqueta").value = p.unidadEtiqueta || "";
+  $("f-icono").value = p.icono || "🎂";
   $("f-estado").value = p.estado || "Disponible";
   $("f-destacado").checked = !!p.destacado;
 
@@ -227,7 +241,10 @@ productForm.addEventListener("submit", async (e) => {
       nombre: $("f-nombre").value.trim(),
       descripcion: $("f-descripcion").value.trim(),
       precio: parseFloat($("f-precio").value) || 0,
-      categoria: $("f-categoria").value.trim(),
+      categoria: $("f-categoria").value,
+      unidad: $("f-unidad").value,
+      unidadEtiqueta: $("f-unidad-etiqueta").value.trim(),
+      icono: $("f-icono").value.trim() || "🎂",
       estado: $("f-estado").value,
       destacado: $("f-destacado").checked,
       imagenPrincipal: mainImageUrl,
