@@ -1,0 +1,25 @@
+{
+  "name": "Fabi's Cake",
+  "short_name": "Fabi's Cake",
+  "description": "Cakes personalizados, postres y decoración de eventos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf7f8",
+  "theme_color": "#E84393",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
