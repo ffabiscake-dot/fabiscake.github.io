@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Migrar productos a Firestore · Fabi's Cake</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="admin-main" style="max-width:700px;margin:0 auto;padding:20px;">
+  <h1>Migración única: data.js → Firestore</h1>
+  <p>Esta página se usa <strong>una sola vez</strong> para copiar tus productos actuales
+  (los que tenías en <code>js/data.js</code>) hacia la base de datos Firestore.
+  Después de migrar, puedes borrar esta página o dejarla (está protegida por tu inicio de sesión).</p>
+
+  <ol>
+    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administrador.</li>
+    <li>Abre tu archivo <code>js/data.js</code> actual, copia el array de productos y pégalo abajo
+      convertido a formato JSON (ver ejemplo).</li>
+    <li>Revisa que cada producto tenga: nombre, descripcion, precio, categoria, imagen (URL existente
+      de tu carpeta assets/products/), estado y destacado.</li>
+    <li>Presiona "Migrar a Firestore".</li>
+  </ol>
+
+  <p><strong>Ejemplo de formato esperado:</strong></p>
+  <pre style="background:#f3eef1;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;">[
+  {
+    "nombre": "Torta para XV años",
+    "descripcion": "Torta personalizada de tres pisos.",
+    "precio": 1500,
+    "categoria": "Tortas",
+    "imagen": "assets/products/torta-para-15-anos-4.jpg",
+    "estado": "Disponible",
+    "destacado": true
+  }
+]</pre>
+
+  <label for="json-input">Pega aquí el JSON de tus productos:</label>
+  <textarea id="json-input" class="input" rows="12" placeholder="[ ... ]"></textarea>
+
+  <div style="margin-top:16px;display:flex;gap:10px;">
+    <button id="migrate-btn" class="btn btn-primary">Migrar a Firestore</button>
+    <span id="migrate-status" style="align-self:center;color:#8a8291;"></span>
+  </div>
+
+  <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
+    Debes iniciar sesión como administrador en admin.html antes de migrar.
+  </div>
+</div>
+
+<script type="module">
+import { ADMIN_EMAIL } from "../js/firebase-config.js";
+import { auth, db, onAuthStateChanged, collection, addDoc, serverTimestamp } from "../js/firebase-init.js";
+
+const btn = document.getElementById("migrate-btn");
+const status = document.getElementById("migrate-status");
+const warning = document.getElementById("login-warning");
+
+let isAdmin = false;
+onAuthStateChanged(auth, (user) => {
+  isAdmin = !!(user && user.email === ADMIN_EMAIL);
+  warning.style.display = isAdmin ? "none" : "block";
+  btn.disabled = !isAdmin;
+});
+
+btn.addEventListener("click", async () => {
+  if (!isAdmin) return;
+  let products;
+  try {
+    products = JSON.parse(document.getElementById("json-input").value);
+    if (!Array.isArray(products)) throw new Error("El JSON debe ser un arreglo [ ... ]");
+  } catch (e) {
+    status.textContent = "JSON inválido: " + e.message;
+    return;
+  }
+
+  btn.disabled = true;
+  let done = 0;
+  for (const p of products) {
+    try {
+      await addDoc(collection(db, "products"), {
+        nombre: p.nombre || "",
+        descripcion: p.descripcion || "",
+        precio: Number(p.precio) || 0,
+        categoria: p.categoria || "Otros",
+        estado: p.estado || "Disponible",
+        destacado: !!p.destacado,
+        imagenPrincipal: p.imagen || p.imagenPrincipal || "",
+        imagenes: p.imagenes || [],
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      done++;
+      status.textContent = `Migrados ${done}/${products.length}...`;
+    } catch (e) {
+      status.textContent = `Error en producto "${p.nombre}": ${e.message}`;
+      break;
+    }
+  }
+  if (done === products.length) {
+    status.textContent = `✔ Migración completa: ${done} productos agregados.`;
+  }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>
