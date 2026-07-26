@@ -16,18 +16,21 @@
 
   <ol>
     <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administradora.</li>
-    <li>Regresa a esta página.</li>
-    <li>Toca "Elegir archivo" y selecciona el archivo <code>productos_import.json</code> que te compartí.</li>
+    <li>Regresa a esta página — el catálogo (<code>productos_import.json</code>) se carga automáticamente.</li>
     <li>Presiona "Importar a Firestore". Verás el progreso producto por producto.</li>
   </ol>
 
-  <label for="file-input">Archivo JSON de productos:</label>
-  <input type="file" id="file-input" accept="application/json,.json" class="input">
+  <p id="auto-status" style="color:#8a8291;">Buscando productos_import.json en esta misma carpeta...</p>
 
-  <div style="margin-top:16px;display:flex;gap:10px;">
+  <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
     <button id="migrate-btn" class="btn btn-primary" disabled>Importar a Firestore</button>
-    <span id="migrate-status" style="align-self:center;color:#8a8291;"></span>
+    <span id="migrate-status" style="color:#8a8291;"></span>
   </div>
+
+  <p style="margin-top:10px;font-size:13px;color:#8a8291;">
+    ¿Prefieres cargar otro archivo distinto? <button type="button" id="show-file-picker" class="btn btn-ghost btn-sm">Elegir archivo manualmente</button>
+  </p>
+  <input type="file" id="file-input" accept="application/json,.json" class="input" style="margin-top:8px;" hidden>
 
   <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
     Debes iniciar sesión como administradora en admin.html antes de importar.
@@ -48,6 +51,24 @@ const results = document.getElementById("results");
 
 let isAdmin = false;
 let selectedProducts = null;
+
+const autoStatus = document.getElementById("auto-status");
+const showFilePickerBtn = document.getElementById("show-file-picker");
+
+showFilePickerBtn.addEventListener("click", () => fileInput.click());
+
+async function autoLoadProducts() {
+  try {
+    const res = await fetch("./productos_import.json");
+    if (!res.ok) throw new Error("No se encontró el archivo en esta carpeta.");
+    selectedProducts = await res.json();
+    autoStatus.textContent = `✔ Se encontraron ${selectedProducts.length} productos en productos_import.json, listos para importar.`;
+  } catch (e) {
+    autoStatus.textContent = "No se pudo cargar productos_import.json automáticamente (" + e.message + "). Usa 'Elegir archivo manualmente'.";
+  }
+  updateButtonState();
+}
+autoLoadProducts();
 
 onAuthStateChanged(auth, (user) => {
   isAdmin = !!(user && user.email === ADMIN_EMAIL);
