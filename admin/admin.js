@@ -3,11 +3,10 @@
 // ============================================================
 import { ADMIN_EMAIL } from "../js/firebase-config.js";
 import {
-  auth, db, storage,
+  auth, db,
   onAuthStateChanged, signInWithEmailAndPassword, signOut,
   collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
-  query, orderBy, onSnapshot, serverTimestamp,
-  ref, uploadBytes, getDownloadURL, deleteObject
+  query, orderBy, onSnapshot, serverTimestamp
 } from "../js/firebase-init.js";
 
 // ---------- Referencias DOM ----------
@@ -224,15 +223,17 @@ productForm.addEventListener("submit", async (e) => {
   try {
     let mainImageUrl = existingMainImageUrl;
     if (currentMainImageBlob) {
-      mainImageUrl = await uploadImageBlob(currentMainImageBlob, "products");
+      showUploadProgress(true, "Procesando imagen...");
+      mainImageUrl = await blobToBase64(currentMainImageBlob);
+      showUploadProgress(false);
     }
 
     let extraUrls = [...existingExtraUrls];
     if (currentExtraImageBlobs.length) {
-      showUploadProgress(true, "Subiendo imágenes adicionales...");
+      showUploadProgress(true, "Procesando imágenes adicionales...");
       for (const blob of currentExtraImageBlobs) {
-        const url = await uploadImageBlob(blob, "products/extra");
-        extraUrls.push(url);
+        const dataUrl = await blobToBase64(blob);
+        extraUrls.push(dataUrl);
       }
       showUploadProgress(false);
     }
@@ -288,18 +289,7 @@ $("confirm-delete").addEventListener("click", async () => {
   btn.disabled = true;
   btn.textContent = "Eliminando...";
   try {
-    const p = allProducts.find(x => x.id === pendingDeleteId);
     await deleteDoc(doc(db, "products", pendingDeleteId));
-    // Intentamos borrar también las imágenes en Storage (best-effort).
-    if (p) {
-      const urls = [p.imagenPrincipal, ...(p.imagenes || [])].filter(Boolean);
-      for (const url of urls) {
-        try {
-          const path = decodeStoragePath(url);
-          if (path) await deleteObject(ref(storage, path));
-        } catch (_) { /* si ya no existe, se ignora */ }
-      }
-    }
     showToast("Producto eliminado", "success");
     confirmModal.hidden = true;
     closeProductModal();
@@ -345,6 +335,10 @@ function handleMainImageSelected(file) {
 
 function handleExtraImageSelected(file) {
   if (!file) return;
+  if (existingExtraUrls.length + currentExtraImageBlobs.length >= 2) {
+    showToast("Máximo 2 imágenes adicionales por producto (para no exceder el límite gratuito de la base de datos).", "error");
+    return;
+  }
   openCropModal(file, async (blob) => {
     currentExtraImageBlobs.push(blob);
     renderExtraPreviews();
@@ -378,18 +372,18 @@ function renderExtraPreviews() {
   });
 }
 
-// ---------- Subir un blob ya recortado/comprimido a Storage ----------
-async function uploadImageBlob(blob, folder) {
-  showUploadProgress(true, "Subiendo imagen...");
-  try {
-    const filename = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.jpg`;
-    const storageRef = ref(storage, filename);
-    await uploadBytes(storageRef, blob, { contentType: "image/jpeg" });
-    const url = await getDownloadURL(storageRef);
-    return url;
-  } finally {
-    showUploadProgress(false);
-  }
+// ---------- Convertir un blob ya recortado/comprimido a base64 ----------
+// (En vez de subirlo a Firebase Storage —que exige plan de pago—,
+// lo guardamos directo como texto dentro del documento de Firestore,
+// que es gratis. Por eso comprimimos fuerte y limitamos la cantidad
+// de fotos por producto.)
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
 
 function showUploadProgress(show, text) {
@@ -493,13 +487,13 @@ $("crop-confirm").addEventListener("click", async () => {
 
   ctx.drawImage(cropImage, sx, sy, sSize, sSize, 0, 0, OUTPUT_SIZE, OUTPUT_SIZE);
 
-  const blob = await compressCanvas(canvas);
+  const blob = await compressCanvas(canvas, 120); // 120KB máx. por imagen (se guardan dentro de Firestore, no en Storage)
   if (cropCallback) await cropCallback(blob);
   cropModal.hidden = true;
 });
 
-// Comprime iterativamente hasta quedar por debajo de ~350KB.
-function compressCanvas(canvas, targetKB = 350) {
+// Comprime iterativamente hasta quedar por debajo de targetKB.
+function compressCanvas(canvas, targetKB = 120) {
   return new Promise((resolve) => {
     let quality = 0.85;
     function tryCompress() {

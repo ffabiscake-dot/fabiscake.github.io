@@ -9,44 +9,31 @@
 </head>
 <body>
 <div class="admin-main" style="max-width:700px;margin:0 auto;padding:20px;">
-  <h1>Migración única: data.js → Firestore</h1>
-  <p>Esta página se usa <strong>una sola vez</strong> para copiar tus productos actuales
-  (los que tenías en <code>js/data.js</code>) hacia la base de datos Firestore.
-  Después de migrar, puedes borrar esta página o dejarla (está protegida por tu inicio de sesión).</p>
+  <h1>Importar catálogo a Firestore</h1>
+  <p>Esta página se usa para cargar de una vez tu catálogo completo (nombre, descripción,
+  precio, categoría y foto de cada producto) hacia la base de datos. Puedes usarla las
+  veces que necesites para agregar lotes nuevos de productos.</p>
 
   <ol>
-    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administrador.</li>
-    <li>Abre tu archivo <code>js/data.js</code> actual, copia el array de productos y pégalo abajo
-      convertido a formato JSON (ver ejemplo).</li>
-    <li>Revisa que cada producto tenga: nombre, descripcion, precio, categoria, imagen (URL existente
-      de tu carpeta assets/products/), estado y destacado.</li>
-    <li>Presiona "Migrar a Firestore".</li>
+    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administradora.</li>
+    <li>Regresa a esta página.</li>
+    <li>Toca "Elegir archivo" y selecciona el archivo <code>productos_import.json</code> que te compartí.</li>
+    <li>Presiona "Importar a Firestore". Verás el progreso producto por producto.</li>
   </ol>
 
-  <p><strong>Ejemplo de formato esperado:</strong></p>
-  <pre style="background:#f3eef1;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;">[
-  {
-    "nombre": "Torta para XV años",
-    "descripcion": "Torta personalizada de tres pisos.",
-    "precio": 1500,
-    "categoria": "Tortas",
-    "imagen": "assets/products/torta-para-15-anos-4.jpg",
-    "estado": "Disponible",
-    "destacado": true
-  }
-]</pre>
-
-  <label for="json-input">Pega aquí el JSON de tus productos:</label>
-  <textarea id="json-input" class="input" rows="12" placeholder="[ ... ]"></textarea>
+  <label for="file-input">Archivo JSON de productos:</label>
+  <input type="file" id="file-input" accept="application/json,.json" class="input">
 
   <div style="margin-top:16px;display:flex;gap:10px;">
-    <button id="migrate-btn" class="btn btn-primary">Migrar a Firestore</button>
+    <button id="migrate-btn" class="btn btn-primary" disabled>Importar a Firestore</button>
     <span id="migrate-status" style="align-self:center;color:#8a8291;"></span>
   </div>
 
   <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
-    Debes iniciar sesión como administrador en admin.html antes de migrar.
+    Debes iniciar sesión como administradora en admin.html antes de importar.
   </div>
+
+  <div id="results" style="margin-top:20px;font-size:14px;color:#8a8291;"></div>
 </div>
 
 <script type="module">
@@ -56,51 +43,68 @@ import { auth, db, onAuthStateChanged, collection, addDoc, serverTimestamp } fro
 const btn = document.getElementById("migrate-btn");
 const status = document.getElementById("migrate-status");
 const warning = document.getElementById("login-warning");
+const fileInput = document.getElementById("file-input");
+const results = document.getElementById("results");
 
 let isAdmin = false;
+let selectedProducts = null;
+
 onAuthStateChanged(auth, (user) => {
   isAdmin = !!(user && user.email === ADMIN_EMAIL);
   warning.style.display = isAdmin ? "none" : "block";
-  btn.disabled = !isAdmin;
+  updateButtonState();
 });
 
-btn.addEventListener("click", async () => {
-  if (!isAdmin) return;
-  let products;
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  status.textContent = "Leyendo archivo...";
   try {
-    products = JSON.parse(document.getElementById("json-input").value);
-    if (!Array.isArray(products)) throw new Error("El JSON debe ser un arreglo [ ... ]");
+    const text = await file.text();
+    selectedProducts = JSON.parse(text);
+    if (!Array.isArray(selectedProducts)) throw new Error("El archivo debe contener un arreglo [ ... ]");
+    status.textContent = `Archivo cargado: ${selectedProducts.length} productos listos para importar.`;
   } catch (e) {
-    status.textContent = "JSON inválido: " + e.message;
-    return;
+    selectedProducts = null;
+    status.textContent = "Error leyendo el archivo: " + e.message;
   }
+  updateButtonState();
+});
 
+function updateButtonState() {
+  btn.disabled = !(isAdmin && selectedProducts && selectedProducts.length);
+}
+
+btn.addEventListener("click", async () => {
+  if (!isAdmin || !selectedProducts) return;
   btn.disabled = true;
   let done = 0;
-  for (const p of products) {
+  let errors = 0;
+  for (const p of selectedProducts) {
     try {
       await addDoc(collection(db, "products"), {
         nombre: p.nombre || "",
         descripcion: p.descripcion || "",
         precio: Number(p.precio) || 0,
-        categoria: p.categoria || "Otros",
+        categoria: p.categoria || "cakes",
+        unidad: p.unidad || "unidad",
+        unidadEtiqueta: p.unidadEtiqueta || "",
+        icono: p.icono || "🎂",
         estado: p.estado || "Disponible",
         destacado: !!p.destacado,
-        imagenPrincipal: p.imagen || p.imagenPrincipal || "",
-        imagenes: p.imagenes || [],
+        imagenPrincipal: p.imagenPrincipal || "",
+        imagenes: Array.isArray(p.imagenes) ? p.imagenes : [],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
       done++;
-      status.textContent = `Migrados ${done}/${products.length}...`;
+      status.textContent = `Importando... ${done}/${selectedProducts.length}`;
     } catch (e) {
-      status.textContent = `Error en producto "${p.nombre}": ${e.message}`;
-      break;
+      errors++;
+      results.innerHTML += `<p style="color:#e05353">Error en "${p.nombre}": ${e.message}</p>`;
     }
   }
-  if (done === products.length) {
-    status.textContent = `✔ Migración completa: ${done} productos agregados.`;
-  }
+  status.textContent = `✔ Importación completa: ${done} productos agregados${errors ? `, ${errors} con error` : ""}.`;
   btn.disabled = false;
 });
 </script>
