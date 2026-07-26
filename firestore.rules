@@ -12,7 +12,7 @@ service cloud.firestore {
       // Solo el administrador autenticado con el correo autorizado
       // puede crear, editar o borrar productos.
       allow create, update, delete: if request.auth != null
-                    && request.auth.token.email == "admin@fabiscake.com";
+                    && request.auth.token.email == "ffabiscake@gmail.com";
     }
 
     // Bloquea cualquier otra colección por defecto.

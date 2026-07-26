@@ -1,6 +1,14 @@
 # Fabi's Cake — Panel de Administración
 ## Guía completa de instalación, publicación y uso desde tu Android
 
+> **Actualización:** por ahora las fotos se guardan directamente dentro de
+> Firestore (en vez de Firebase Storage), para no depender de una tarjeta
+> de crédito/débito (Storage exige el plan de pago "Blaze"). Esto significa
+> que **puedes saltarte por completo el paso de activar Storage**. Si más
+> adelante consigues una tarjeta y quieres pasar a Storage (mejor para
+> catálogos muy grandes con muchas fotos), avísame y hacemos el cambio.
+
+
 Esta guía asume que tu sitio actual vive en el repositorio
 `ffabiscake-dot/fabiscake.github.io`, con esta estructura:
 
