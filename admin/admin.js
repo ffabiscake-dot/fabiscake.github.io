@@ -17,7 +17,7 @@ import {
 
 // Configuración de tu proyecto Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBxMVxqi0CFru50VQPDk7RYA136qBT3Bs4",
+  apiKey: "AIzaSyBxMVxqi0CFru50vQPDk7RYA136qBT38a4",
   authDomain: "fabi-s-cake-b8d4a.firebaseapp.com",
   databaseURL: "https://fabi-s-cake-b8d4a-default-rtdb.firebaseio.com",
   projectId: "fabi-s-cake-b8d4a",
