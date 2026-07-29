@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { 
   getFirestore, 
   collection, 
-  getDocs, 
   addDoc, 
   doc, 
   updateDoc, 
@@ -60,6 +59,7 @@ const imgPreview = document.getElementById('main-image-preview');
 
 let productosLocales = [];
 let productoAEliminarId = null;
+let unsubscribeProductos = null;
 
 // Vista previa de imagen al pegar URL
 imgUrlInput.addEventListener('input', () => {
@@ -79,6 +79,11 @@ onAuthStateChanged(auth, (user) => {
     adminApp.hidden = false;
     escucharProductos();
   } else {
+    // Cancelar la suscripción al cerrar sesión para evitar fugas de memoria
+    if (unsubscribeProductos) {
+      unsubscribeProductos();
+      unsubscribeProductos = null;
+    }
     loginScreen.hidden = false;
     adminApp.hidden = true;
   }
@@ -102,20 +107,31 @@ loginForm.addEventListener('submit', async (e) => {
 // Logout
 logoutBtn.addEventListener('click', () => signOut(auth));
 
-// Obtener Productos en tiempo real
+// Obtener Productos en tiempo real (con manejo de errores y limpieza)
 function escucharProductos() {
   loadingIndicator.hidden = false;
-  onSnapshot(collection(db, "productos"), (snapshot) => {
-    productosLocales = [];
-    snapshot.forEach((docSnap) => {
-      productosLocales.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    loadingIndicator.hidden = true;
-    renderProductos(productosLocales);
-  });
+  
+  if (unsubscribeProductos) unsubscribeProductos();
+
+  unsubscribeProductos = onSnapshot(
+    collection(db, "productos"),
+    (snapshot) => {
+      productosLocales = [];
+      snapshot.forEach((docSnap) => {
+        productosLocales.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      loadingIndicator.hidden = true;
+      renderProductos(productosLocales);
+    },
+    (err) => {
+      loadingIndicator.hidden = true;
+      console.error("Error en Firestore:", err);
+      alert("Error al cargar productos: " + err.message);
+    }
+  );
 }
 
-// Renderizar Tarjetas de Productos
+// Renderizar Tarjetas de Productos (Seguro contra XSS)
 function renderProductos(lista) {
   productGrid.innerHTML = '';
   if (lista.length === 0) {
@@ -128,15 +144,37 @@ function renderProductos(lista) {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.style.cssText = 'border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:10px; background:#fff;';
-    card.innerHTML = `
-      <img src="${p.imagenPrincipal || 'https://via.placeholder.com/150'}" style="width:100%; height:150px; object-fit:cover; border-radius:5px;">
-      <h3 style="margin:10px 0 5px 0;">${p.nombre}</h3>
-      <p style="color:#666; font-size:14px;">${p.descripcion || ''}</p>
-      <p><strong>Precio:</strong> $${p.precio} | <strong>Cat:</strong> ${p.categoria}</p>
-      <button class="btn btn-secondary btn-editar" style="margin-top:8px;">✏️ Editar</button>
-    `;
 
-    card.querySelector('.btn-editar').addEventListener('click', () => abrirModalEdicion(p));
+    const img = document.createElement('img');
+    img.src = p.imagenPrincipal || 'https://via.placeholder.com/150';
+    img.style.cssText = 'width:100%; height:150px; object-fit:cover; border-radius:5px;';
+
+    const h3 = document.createElement('h3');
+    h3.style.cssText = 'margin:10px 0 5px 0;';
+    h3.textContent = p.nombre || '';
+
+    const desc = document.createElement('p');
+    desc.style.cssText = 'color:#666; font-size:14px;';
+    desc.textContent = p.descripcion || '';
+
+    const info = document.createElement('p');
+    info.innerHTML = `<strong>Precio:</strong> $${Number(p.precio || 0)} | <strong>Cat:</strong> `;
+    const catSpan = document.createElement('span');
+    catSpan.textContent = p.categoria || 'General';
+    info.appendChild(catSpan);
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-secondary btn-editar';
+    editBtn.style.marginTop = '8px';
+    editBtn.textContent = '✏️ Editar';
+    editBtn.addEventListener('click', () => abrirModalEdicion(p));
+
+    card.appendChild(img);
+    card.appendChild(h3);
+    card.appendChild(desc);
+    card.appendChild(info);
+    card.appendChild(editBtn);
+
     productGrid.appendChild(card);
   });
 }
