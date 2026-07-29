@@ -10,14 +10,11 @@
 <meta name="robots" content="index, follow">
 <meta name="language" content="Spanish">
 <meta http-equiv="Content-Language" content="es">
-<meta name="theme-color" content="#E84393">
+<meta name="theme-color" content="#d6478e">
 <link rel="canonical" href="https://ffabiscake-dot.github.io/fabiscake.github.io/">
 <link rel="icon" href="assets/logo.jpg">
 <link rel="apple-touch-icon" href="assets/logo.jpg">
 <link rel="stylesheet" href="css/style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -62,21 +59,16 @@
 </head>
 <body data-theme="light">
 
-<div class="top-banner">🎂 Cakes personalizados • Bodas • Cumpleaños • XV Años • Entregas en Contramaestre, Santiago de Cuba</div>
-
 <header>
   <div class="wrap navbar">
     <div class="brand"><span class="mark"><img src="assets/logo.jpg" alt="Logo Fabi's Cake"></span> Fabi's Cake</div>
     <nav class="links" id="navLinks">
       <a href="#catalogo" onclick="closeNav()">Catálogo</a>
       <a href="#servicios" onclick="closeNav()">Servicios</a>
-      <a href="#galeria" onclick="closeNav()">Galería</a>
       <a href="#nosotros" onclick="closeNav()">Nosotros</a>
       <a href="#contacto" onclick="closeNav()">Contacto</a>
     </nav>
     <div class="nav-actions">
-      <a href="https://wa.me/5352076748" target="_blank" class="wa-nav-btn">💬 WhatsApp</a>
-      <a href="assets/app/Fabis_Cake.apk" download class="icon-btn" title="Descargar app (Android)" aria-label="Descargar app para Android">📲</a>
       <button type="button" class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Modo oscuro/claro" aria-label="Cambiar modo oscuro/claro">🌙</button>
       <button type="button" class="icon-btn" onclick="openCart()" title="Carrito" aria-label="Abrir carrito de compras">
         🛒<span class="badge" id="cartCount">0</span>
@@ -96,47 +88,23 @@
         <a href="#catalogo" class="btn btn-primary">🎂 Realiza tu pedido</a>
         <a href="#catalogo" class="btn btn-ghost">Ver catálogo</a>
       </div>
-      <a href="assets/app/Fabis_Cake.apk" download class="btn btn-app">
-        <span class="btn-app-ico">🤖</span>
-        <span class="btn-app-text">
-          <small>Descarga nuestra app</small>
-          <b>Android · APK · 1.1 MB</b>
-        </span>
-      </a>
       <div class="stats">
         <div class="stat"><b>+59</b><span>productos y servicios</span></div>
         <div class="stat"><b>72h</b><span>anticipación mínima</span></div>
         <div class="stat"><b>10</b><span>personas en el equipo</span></div>
       </div>
     </div>
-    <div class="hero-cake"><img src="assets/hero-cake.jpg" alt="Cake personalizado morado y dorado para XV años, Fabi's Cake"></div>
+    <div class="hero-cake"><img src="assets/logo.jpg" alt="Fabi's Cake"></div>
   </div>
 </section>
 <div class="ribbon"></div>
-
-<section style="padding:56px 0 64px;">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Cómo funciona</span>
-      <h2>De la idea a tu mesa en 4 pasos</h2>
-    </div>
-    <div class="steps">
-      <div class="step"><div class="num">1</div><h4>Escoge</h4><p>Explora el catálogo y elige tu cake, postre o servicio.</p></div>
-      <span class="step-arrow">→</span>
-      <div class="step"><div class="num">2</div><h4>Personaliza</h4><p>Cuéntanos colores, tema y dedicatoria para tu evento.</p></div>
-      <span class="step-arrow">→</span>
-      <div class="step"><div class="num">3</div><h4>Confirma</h4><p>Agenda fecha y hora, y confirmamos todo por WhatsApp.</p></div>
-      <span class="step-arrow">→</span>
-      <div class="step"><div class="num">4</div><h4>Disfruta</h4><p>Recibe tu pedido a tiempo y celebra sin preocupaciones.</p></div>
-    </div>
-  </div>
-</section>
 
 <section id="catalogo">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Catálogo</span>
       <h2>Elige, personaliza y agrega al carrito</h2>
+      <p>Precios en CUP, tomados directamente de nuestra tabla de productos.</p>
     </div>
     <div class="pills" id="pills"></div>
     <div class="grid" id="productGrid"></div>
@@ -155,30 +123,6 @@
     <div class="svc-grid" id="servicesGrid"></div>
   </div>
 </section>
-
-<div class="ribbon ribbon-flip"></div>
-
-<section id="galeria">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Galería</span>
-      <h2>Trabajos reales de Fabi's Cake</h2>
-      <p>Una muestra de cakes y montajes entregados a nuestros clientes.</p>
-    </div>
-    <div class="gallery-grid">
-      <a href="assets/products/torta-para-15-anos-4.jpg" target="_blank"><img src="assets/products/torta-para-15-anos-4.jpg" loading="lazy" alt="Torta para XV años"></a>
-      <a href="assets/products/cake-premium-12.jpg" target="_blank"><img src="assets/products/cake-premium-12.jpg" loading="lazy" alt="Cake premium personalizado"></a>
-      <a href="assets/products/torta-tres-pisos-17.jpg" target="_blank"><img src="assets/products/torta-tres-pisos-17.jpg" loading="lazy" alt="Torta de tres pisos"></a>
-      <a href="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" target="_blank"><img src="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" loading="lazy" alt="Decoración de XV años"></a>
-      <a href="assets/products/cake-tematico-totalmente-personalizado-18.jpg" target="_blank"><img src="assets/products/cake-tematico-totalmente-personalizado-18.jpg" loading="lazy" alt="Cake temático personalizado"></a>
-      <a href="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" target="_blank"><img src="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" loading="lazy" alt="Pastel para bodas o XV años"></a>
-      <a href="assets/products/ramo-de-novia-52.jpg" target="_blank"><img src="assets/products/ramo-de-novia-52.jpg" loading="lazy" alt="Ramo de novia"></a>
-      <a href="assets/products/cesta-presentacion-34.jpg" target="_blank"><img src="assets/products/cesta-presentacion-34.jpg" loading="lazy" alt="Cesta de regalo"></a>
-    </div>
-  </div>
-</section>
-
-<div class="ribbon"></div>
 
 <section id="nosotros">
   <div class="wrap about-grid">
@@ -233,11 +177,10 @@
         <a href="https://pin.it/3p5a84Tli" target="_blank" class="btn btn-ghost">Pinterest</a>
       </div>
     </div>
-    <a href="https://www.google.com/maps/search/?api=1&query=Contramaestre,Santiago+de+Cuba,Cuba" target="_blank" class="map-card" style="background-image:url('assets/mapa-ubicacion.jpg')">
-      <span class="map-label">
-        <b>📍 Maffo, Contramaestre</b>
-        <small>Santiago de Cuba, Cuba — Ver en Google Maps</small>
-      </span>
+    <a href="https://www.google.com/maps/search/?api=1&query=Contramaestre,Santiago+de+Cuba,Cuba" target="_blank" class="map-card">
+      <span style="font-size:52px;">📍</span>
+      <span style="font-weight:700;font-size:16px;">Maffo, Contramaestre</span>
+      <span style="font-size:13px;opacity:.9;">Santiago de Cuba, Cuba — Ver en Google Maps</span>
     </a>
   </div>
 </section>
@@ -253,15 +196,7 @@
         <h5>Explora</h5>
         <a href="#catalogo">Catálogo</a>
         <a href="#servicios">Servicios</a>
-        <a href="#galeria">Galería</a>
         <a href="#nosotros">Nosotros</a>
-        <a href="#contacto">Contacto</a>
-      </div>
-      <div class="foot-col">
-        <h5>Legal</h5>
-        <a href="privacidad.html">Política de Privacidad</a>
-        <a href="terminos.html">Términos y Condiciones</a>
-        <a href="cookies.html">Política de Cookies</a>
         <a href="#contacto">Contacto</a>
       </div>
       <div class="foot-col">
@@ -269,7 +204,6 @@
         <a href="https://wa.me/5352076748" target="_blank">WhatsApp +53 5 2076748</a>
         <a href="mailto:ffabiscake@gmail.com">ffabiscake@gmail.com</a>
         <a href="https://www.instagram.com/ffabiscake" target="_blank">Instagram</a>
-        <a href="assets/app/Fabis_Cake.apk" download>📲 Descargar app (Android)</a>
       </div>
     </div>
     <div class="foot-bottom">© 2026 Fabi's Cake — Maffo, Contramaestre, Santiago de Cuba.</div>
@@ -277,14 +211,6 @@
 </footer>
 
 <button type="button" class="fab-wa" onclick="window.open('https://wa.me/5352076748','_blank')" title="Escríbenos por WhatsApp" aria-label="Escríbenos por WhatsApp">💬</button>
-
-<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Aviso de cookies">
-  <p>Utilizamos cookies para mejorar tu experiencia de navegación. Al continuar navegando aceptas nuestra <a href="cookies.html">Política de Cookies</a>.</p>
-  <div class="cookie-actions">
-    <button type="button" class="btn btn-ghost" onclick="configureCookies()">Configurar</button>
-    <button type="button" class="btn btn-primary" onclick="acceptCookies()">Aceptar</button>
-  </div>
-</div>
 
 <div class="overlay" id="overlay" onclick="closeCart();closeModal();"></div>
 <div class="drawer" id="cartDrawer">
@@ -338,7 +264,6 @@
   </div>
 </div>
 
-<script src="js/site.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 </body>
