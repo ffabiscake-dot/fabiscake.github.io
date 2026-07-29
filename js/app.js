@@ -51,23 +51,13 @@ function matchesCat(p, catId){
 
 function renderGrid(){
   const el = document.getElementById('productGrid');
-  // CAMBIO: PRODUCTS ahora puede no existir todavía mientras carga Firestore.
-  const source = (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) ? PRODUCTS : [];
-  const list = activeCat==='all' ? source : source.filter(p=>matchesCat(p, activeCat));
+  const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>matchesCat(p, activeCat));
   el.innerHTML = list.map(p => {
     const media = p.img
       ? `<div class="card-media" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>`
       : `<div class="card-media">${p.icon}</div>`;
-
-    // CAMBIO: insignia de "Agotado" y "Destacado" (nuevo, no rompe nada existente).
-    const badges = `
-      ${p.estado === 'Agotado' ? '<span class="badge-agotado" style="position:absolute;top:8px;left:8px;background:#e05353;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;">Agotado</span>' : ''}
-      ${p.destacado ? '<span class="badge-destacado" style="position:absolute;top:8px;right:8px;background:#fff2cc;color:#8a6d00;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;">★ Destacado</span>' : ''}
-    `;
-
     if(p.unit === 'cotizar'){
-      return `<div class="card" style="position:relative">
-        ${badges}
+      return `<div class="card">
         ${media}
         <div class="card-body">
           <h3>${p.name}</h3>
@@ -82,17 +72,13 @@ function renderGrid(){
     const priceLabel = p.unit === 'unidad'
       ? `$${money(p.price)} <small>/ ${p.unit_label || 'unidad'}</small>`
       : `$${money(p.price)} <small>CUP</small>`;
-
-    // CAMBIO: si está agotado, se deshabilita el botón de agregar.
-    const disabledAttr = p.estado === 'Agotado' ? 'disabled style="opacity:.5;pointer-events:none;"' : '';
     const addControl = p.unit === 'unidad'
       ? `<div class="qty-add">
-           <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input" ${disabledAttr}>
-           <button type="button" class="add-btn" onclick="addToCart('${p.row}')" ${disabledAttr}>+</button>
+           <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input">
+           <button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>
          </div>`
-      : `<button type="button" class="add-btn" onclick="addToCart('${p.row}')" ${disabledAttr}>+</button>`;
-    return `<div class="card" style="position:relative">
-      ${badges}
+      : `<button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>`;
+    return `<div class="card">
       ${media}
       <div class="card-body">
         <h3>${p.name}</h3>
@@ -117,10 +103,8 @@ function renderServices(){
 
 /* ===================== CARRITO ===================== */
 function addToCart(row){
-  // CAMBIO: PRODUCTS ya no es una constante fija, se lee del global actualizado por Firestore.
-  const p = PRODUCTS.find(x=>String(x.row)===String(row));
+  const p = PRODUCTS.find(x=>x.row===row);
   if(!p) return;
-  if(p.estado === 'Agotado') return;
   let qtyToAdd = 1;
   if(p.unit === 'unidad'){
     const input = document.getElementById(`qtyinput-${row}`);
@@ -129,7 +113,7 @@ function addToCart(row){
       if(!qtyToAdd || qtyToAdd < 1) qtyToAdd = 1;
     }
   }
-  const existing = cart.find(i=>String(i.row)===String(row));
+  const existing = cart.find(i=>i.row===row);
   if(existing){ existing.qty += qtyToAdd; } else { cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:qtyToAdd}); }
   saveCart();
   openCart();
@@ -150,9 +134,8 @@ function renderCart(){
     foot.innerHTML = '';
     return;
   }
-  const source = (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) ? PRODUCTS : [];
   body.innerHTML = cart.map((i,idx)=>{
-    const p = source.find(x=>String(x.row)===String(i.row));
+    const p = PRODUCTS.find(x=>x.row===i.row);
     const bg = p && p.img ? `style="background-image:url('${p.img}')"` : '';
     return `
     <div class="cart-item">
@@ -171,13 +154,6 @@ function renderCart(){
   }).join('');
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
-    <div class="delivery-note">
-      <span class="ico">🚚</span>
-      <div>
-        <b>Entrega a domicilio</b>
-        <p>Recibe tus pedidos en la comodidad de tu hogar. El servicio de domicilio tiene un costo adicional que varía según la distancia de entrega.</p>
-      </div>
-    </div>
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
     <div class="row-total"><span>Envío</span><span>Según distancia</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
@@ -242,17 +218,23 @@ function quoteWA(productName){
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 }
 
-/* ===================== INIT (catálogo, carrito) ===================== */
+/* ===================== UI GENERAL ===================== */
+function toggleTheme(){
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme')==='dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('fc_theme', isDark ? 'light' : 'dark');
+}
+function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
+
+/* ===================== INIT ===================== */
 (function init(){
+  const savedTheme = localStorage.getItem('fc_theme');
+  if(savedTheme==='dark'){ document.body.setAttribute('data-theme','dark'); document.getElementById('themeBtn').textContent='☀️'; }
   renderPills();
+  renderGrid();
   renderServices();
   renderCart();
-
-  // CAMBIO: el catálogo ya no viene de data.js (síncrono), sino de
-  // Firestore vía products-loader.js (asíncrono). Pintamos el grid
-  // en cuanto los productos estén listos, y cada vez que se actualicen.
-  if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
-    renderGrid(); // ya había datos en cache al momento de correr este script
-  }
-  window.addEventListener('products:ready', renderGrid);
 })();
