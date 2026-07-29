@@ -23,7 +23,8 @@ const firebaseConfig = {
   projectId: "fabi-s-cake-b8d4a",
   storageBucket: "fabi-s-cake-b8d4a.firebasestorage.app",
   messagingSenderId: "827286701975",
-  appId: "1:827286701975:web:49318a0a4fe5acad1d66d2"
+  appId: "1:827286701975:web:49318a0a4fe5aead1d66d2",
+  measurementId: "G-YJK7WCNW8L"
 };
 
 // Inicializar Firebase
