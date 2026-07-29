@@ -14,7 +14,7 @@
 <!-- ================= PANTALLA DE LOGIN ================= -->
 <div id="login-screen" class="login-screen">
   <form id="login-form" class="login-card">
-    <img src="../assets/logo.jpg" alt="Fabi's Cake" class="login-logo" onerror="this.style.display='none'">
+    <img src="../assets/logo.jpg" alt="Fabi's Cake" class="login-logo">
     <h1>Panel de Administración</h1>
     <p class="login-sub">Fabi's Cake</p>
 
@@ -34,6 +34,7 @@
 
   <header class="admin-header">
     <div class="admin-header-left">
+      <img src="../assets/logo.jpg" alt="" class="admin-logo">
       <span>Fabi's Cake · Admin</span>
     </div>
     <button id="logout-btn" class="btn btn-ghost">Cerrar sesión</button>
@@ -46,18 +47,6 @@
       <input type="search" id="search-input" class="input" placeholder="🔍 Buscar producto...">
       <select id="category-filter" class="input">
         <option value="">Todas las categorías</option>
-        <option value="General">General</option>
-        <option value="cakes">Cakes personalizados</option>
-        <option value="postres">Postres y bufet</option>
-        <option value="ramos">Ramos de rosas</option>
-        <option value="sorpresas">Entretenimiento y sorpresas</option>
-        <option value="decoracion">Decoración con globos</option>
-        <option value="hombre">Regalos hombre</option>
-        <option value="mujer">Regalos mujer</option>
-        <option value="nino">Regalos niño</option>
-        <option value="nina">Regalos niña</option>
-        <option value="combos_alimentos">Combos de alimentos y bebidas</option>
-        <option value="combos_cumple">Combos para cumpleaños</option>
       </select>
       <button id="new-product-btn" class="btn btn-primary">+ Nuevo producto</button>
     </div>
@@ -81,10 +70,22 @@
     <form id="product-form" class="modal-body">
       <input type="hidden" id="product-id">
 
-      <label for="f-imagen-url">URL de la imagen (Postimages)</label>
-      <input type="url" id="f-imagen-url" class="input" placeholder="https://i.postimg.cc/..." required>
-      <div style="margin-top: 5px; margin-bottom: 15px;">
-        <img id="main-image-preview" class="image-preview" hidden alt="Vista previa" style="max-height: 150px; border-radius: 8px;">
+      <label>Imagen principal</label>
+      <div class="image-uploader">
+        <img id="main-image-preview" class="image-preview" hidden alt="Vista previa">
+        <div class="image-uploader-buttons">
+          <button type="button" class="btn btn-secondary" id="btn-camera">📷 Cámara</button>
+          <button type="button" class="btn btn-secondary" id="btn-gallery">🖼️ Galería</button>
+        </div>
+        <input type="file" id="input-camera" accept="image/*" capture="environment" hidden>
+        <input type="file" id="input-gallery" accept="image/*" hidden>
+      </div>
+
+      <label>Imágenes adicionales (opcional)</label>
+      <div class="extra-images">
+        <div id="extra-images-preview" class="extra-images-preview"></div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-add-extra">+ Agregar imagen</button>
+        <input type="file" id="input-extra" accept="image/*" multiple hidden>
       </div>
 
       <label for="f-nombre">Nombre</label>
@@ -96,12 +97,11 @@
       <div class="form-row">
         <div class="form-col">
           <label for="f-precio">Precio (CUP)</label>
-          <input type="number" id="f-precio" class="input" min="0" step="1" required>
+          <input type="number" id="f-precio" class="input" min="0" step="0.01" required>
         </div>
         <div class="form-col">
           <label for="f-categoria">Categoría</label>
           <select id="f-categoria" class="input" required>
-            <option value="General">General</option>
             <option value="cakes">Cakes personalizados</option>
             <option value="postres">Postres y bufet</option>
             <option value="ramos">Ramos de rosas</option>
@@ -119,17 +119,40 @@
 
       <div class="form-row">
         <div class="form-col">
-          <label class="checkbox-label">
-            <input type="checkbox" id="f-disponible" checked>
-            Disponible
-          </label>
+          <label for="f-unidad">Se vende por</label>
+          <select id="f-unidad" class="input">
+            <option value="unidad">Unidad (con contador +/-)</option>
+            <option value="cotizar">A cotizar (sin precio fijo)</option>
+          </select>
         </div>
         <div class="form-col">
+          <label for="f-unidad-etiqueta">Etiqueta de unidad</label>
+          <input type="text" id="f-unidad-etiqueta" class="input" placeholder="Ej: libra, combo, docena">
+        </div>
+      </div>
+
+      <label for="f-icono">Ícono (emoji, se usa solo si no hay foto)</label>
+      <input type="text" id="f-icono" class="input" maxlength="4" placeholder="🎂" value="🎂">
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="f-estado">Estado</label>
+          <select id="f-estado" class="input">
+            <option value="Disponible">Disponible</option>
+            <option value="Agotado">Agotado</option>
+          </select>
+        </div>
+        <div class="form-col form-col-checkbox">
           <label class="checkbox-label">
             <input type="checkbox" id="f-destacado">
             Producto destacado
           </label>
         </div>
+      </div>
+
+      <div id="upload-progress" class="upload-progress" hidden>
+        <div class="upload-progress-bar" id="upload-progress-bar"></div>
+        <span id="upload-progress-text">Subiendo imagen...</span>
       </div>
 
       <div class="modal-footer">
@@ -143,11 +166,33 @@
   </div>
 </div>
 
+<!-- ================= MODAL: RECORTAR IMAGEN ================= -->
+<div id="crop-modal" class="modal-overlay" hidden>
+  <div class="modal modal-crop">
+    <div class="modal-header">
+      <h2>Recortar imagen</h2>
+      <button id="crop-close" class="btn-icon" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="crop-body">
+      <div id="crop-stage" class="crop-stage">
+        <img id="crop-image" alt="">
+        <div class="crop-frame"></div>
+      </div>
+      <input type="range" id="crop-zoom" min="1" max="3" step="0.01" value="1">
+      <p class="crop-hint">Arrastra para mover · desliza para hacer zoom</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" id="crop-cancel">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="crop-confirm">Usar esta imagen</button>
+    </div>
+  </div>
+</div>
+
 <!-- ================= MODAL: CONFIRMAR ELIMINACIÓN ================= -->
 <div id="confirm-modal" class="modal-overlay" hidden>
   <div class="modal modal-confirm">
     <h2>¿Eliminar este producto?</h2>
-    <p>Esta acción no se puede deshacer. El producto se eliminará permanentemente de Firestore.</p>
+    <p>Esta acción no se puede deshacer. El producto y sus imágenes se eliminarán permanentemente.</p>
     <div class="modal-footer">
       <button type="button" class="btn btn-ghost" id="confirm-cancel">Cancelar</button>
       <button type="button" class="btn btn-danger" id="confirm-delete">Sí, eliminar</button>
@@ -155,7 +200,7 @@
   </div>
 </div>
 
-<!-- ================= TOAST / MENSAJES ================= -->
+<!-- ================= TOAST ================= -->
 <div id="toast" class="toast" hidden></div>
 
 <script type="module" src="admin.js"></script>
