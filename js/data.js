@@ -158,7 +158,7 @@ const PRODUCTS = [
   "name": "Torta tres leche",
   "cat": "cakes",
   "desc": "Torta tres leche · Relleno fanguito y trozos de chocolate · Cobertura de chocolate opcional",
-  "price": 6500,
+  "price": 7500,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎂",
