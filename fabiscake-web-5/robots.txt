@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ffabiscake-dot.github.io/fabiscake.github.io/sitemap.xml
