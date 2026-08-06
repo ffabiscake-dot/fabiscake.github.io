@@ -14,6 +14,14 @@
 <link rel="canonical" href="https://ffabiscake-dot.github.io/fabiscake.github.io/">
 <link rel="icon" href="assets/logo.jpg">
 <link rel="apple-touch-icon" href="assets/logo.jpg">
+<link rel="apple-touch-icon" sizes="192x192" href="assets/logo.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fabi's Cake">
+<meta name="application-name" content="Fabi's Cake">
+<meta name="msapplication-TileColor" content="#E84393">
+<meta name="msapplication-tap-highlight" content="no">
+<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="css/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,7 +83,7 @@
       <a href="#contacto" onclick="closeNav()">Contacto</a>
     </nav>
     <div class="nav-actions">
-      <a href="https://wa.me/5352076748" target="_blank" class="wa-nav-btn">💬 WhatsApp</a>
+      <a href="https://wa.me/5352076748" target="_blank" class="wa-nav-btn">🟢 WhatsApp</a>
       <a href="assets/app/Fabis_Cake.apk" download class="icon-btn" title="Descargar app (Android)" aria-label="Descargar app para Android">📲</a>
       <button type="button" class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Modo oscuro/claro" aria-label="Cambiar modo oscuro/claro">🌙</button>
       <button type="button" class="icon-btn" onclick="openCart()" title="Carrito" aria-label="Abrir carrito de compras">
@@ -88,28 +96,33 @@
 
 <section class="hero">
   <div class="wrap hero-grid">
-    <div>
+    <div class="hero-content">
       <span class="eyebrow">✦ Maffo, Contramaestre · Santiago de Cuba</span>
       <h1>Del horno a tu mesa,<br><em>postres hechos con amor.</em></h1>
       <p class="lead">Cakes personalizados, bufets, decoraciones y regalos sorpresa para cada celebración. Arma tu pedido y lo confirmamos directo por WhatsApp.</p>
       <div class="btn-row">
-        <a href="#catalogo" class="btn btn-primary">🎂 Realiza tu pedido</a>
+        <a href="https://wa.me/5352076748?text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido" target="_blank" class="btn btn-primary">💬 Pedir por WhatsApp</a>
         <a href="#catalogo" class="btn btn-ghost">Ver catálogo</a>
       </div>
-      <a href="assets/app/Fabis_Cake.apk" download class="btn btn-app">
-        <span class="btn-app-ico">🤖</span>
-        <span class="btn-app-text">
-          <small>Descarga nuestra app</small>
-          <b>Android · APK · 1.1 MB</b>
+      <div class="hero-badges">
+        <a href="assets/app/Fabis_Cake.apk" download class="hero-badge">
+          <span>📲</span>
+          <span>Descargar app Android</span>
+        </a>
+        <span class="hero-badge">
+          <span>⭐</span>
+          <span>+59 productos</span>
         </span>
-      </a>
-      <div class="stats">
-        <div class="stat"><b>+59</b><span>productos y servicios</span></div>
-        <div class="stat"><b>72h</b><span>anticipación mínima</span></div>
-        <div class="stat"><b>10</b><span>personas en el equipo</span></div>
       </div>
     </div>
-    <div class="hero-cake"><img src="assets/hero-cake.jpg" alt="Cake personalizado morado y dorado para XV años, Fabi's Cake"></div>
+    <div class="hero-visual">
+      <div class="hero-cake">
+        <img src="assets/hero-cake.jpg" alt="Cake personalizado morado y dorado para XV años, Fabi's Cake">
+      </div>
+      <div class="hero-float hero-float-1">🎂</div>
+      <div class="hero-float hero-float-2">🎈</div>
+      <div class="hero-float hero-float-3">🌹</div>
+    </div>
   </div>
 </section>
 <div class="ribbon"></div>
@@ -166,14 +179,26 @@
       <p>Una muestra de cakes y montajes entregados a nuestros clientes.</p>
     </div>
     <div class="gallery-grid">
-      <a href="assets/products/torta-para-15-anos-4.jpg" target="_blank"><img src="assets/products/torta-para-15-anos-4.jpg" loading="lazy" alt="Torta para XV años"></a>
-      <a href="assets/products/cake-premium-12.jpg" target="_blank"><img src="assets/products/cake-premium-12.jpg" loading="lazy" alt="Cake premium personalizado"></a>
-      <a href="assets/products/torta-tres-pisos-17.jpg" target="_blank"><img src="assets/products/torta-tres-pisos-17.jpg" loading="lazy" alt="Torta de tres pisos"></a>
-      <a href="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" target="_blank"><img src="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" loading="lazy" alt="Decoración de XV años"></a>
-      <a href="assets/products/cake-tematico-totalmente-personalizado-18.jpg" target="_blank"><img src="assets/products/cake-tematico-totalmente-personalizado-18.jpg" loading="lazy" alt="Cake temático personalizado"></a>
-      <a href="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" target="_blank"><img src="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" loading="lazy" alt="Pastel para bodas o XV años"></a>
-      <a href="assets/products/ramo-de-novia-52.jpg" target="_blank"><img src="assets/products/ramo-de-novia-52.jpg" loading="lazy" alt="Ramo de novia"></a>
-      <a href="assets/products/cesta-presentacion-34.jpg" target="_blank"><img src="assets/products/cesta-presentacion-34.jpg" loading="lazy" alt="Cesta de regalo"></a>
+
+      <a href="assets/products/cake-premium-12.jpg" target="_blank" data-title="Cake Premium"><img src="assets/products/cake-premium-12.jpg" loading="lazy" alt="Cake premium personalizado"></a>
+
+
+      <a href="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" target="_blank" data-title="Pastel Bodas"><img src="assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg" loading="lazy" alt="Pastel para bodas o XV años"></a>
+      <a href="assets/products/cake-en-forma-de-corazon-92.jpg" target="_blank" data-title="Cake Corazón"><img src="assets/products/cake-en-forma-de-corazon-92.jpg" loading="lazy" alt="Cake en forma de corazón"></a>
+      <a href="assets/products/cake-rectangular-93.jpg" target="_blank" data-title="Cake Rectangular"><img src="assets/products/cake-rectangular-93.jpg" loading="lazy" alt="Cake rectangular"></a>
+      <a href="assets/products/cake-rectangular-de-2-pisos-14.jpg" target="_blank" data-title="Cake 2 Pisos"><img src="assets/products/cake-rectangular-de-2-pisos-14.jpg" loading="lazy" alt="Cake rectangular de 2 pisos"></a>
+      <a href="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" target="_blank" data-title="Decoración XV Años"><img src="assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg" loading="lazy" alt="Decoración de XV años"></a>
+      <a href="assets/products/decoracion-con-globos-sencilla-61.jpg" target="_blank" data-title="Decoración Globos"><img src="assets/products/decoracion-con-globos-sencilla-61.jpg" loading="lazy" alt="Decoración con globos"></a>
+      <a href="assets/products/decoracion-interior-set-principal-58.jpg" target="_blank" data-title="Decoración Interior"><img src="assets/products/decoracion-interior-set-principal-58.jpg" loading="lazy" alt="Decoración interior set principal"></a>
+      <a href="assets/products/ramo-de-novia-52.jpg" target="_blank" data-title="Ramo Novia"><img src="assets/products/ramo-de-novia-52.jpg" loading="lazy" alt="Ramo de novia"></a>
+      <a href="assets/products/ramo-de-rosas-eternas-52.jpg" target="_blank" data-title="Ramo Rosas Eternas"><img src="assets/products/ramo-de-rosas-eternas-52.jpg" loading="lazy" alt="Ramo de rosas eternas"></a>
+      <a href="assets/products/ramo-buchon-54.jpg" target="_blank" data-title="Ramo Buchón"><img src="assets/products/ramo-buchon-54.jpg" loading="lazy" alt="Ramo buchón"></a>
+      <a href="assets/products/ancheta-32.jpg" target="_blank" data-title="Ancheta"><img src="assets/products/ancheta-32.jpg" loading="lazy" alt="Ancheta de regalo"></a>
+      <a href="assets/products/ancheta-de-mujer-25.jpg" target="_blank" data-title="Ancheta Mujer"><img src="assets/products/ancheta-de-mujer-25.jpg" loading="lazy" alt="Ancheta para mujer"></a>
+      <a href="assets/products/cesta-presentacion-34.jpg" target="_blank" data-title="Cesta Regalo"><img src="assets/products/cesta-presentacion-34.jpg" loading="lazy" alt="Cesta de regalo"></a>
+      <a href="assets/products/cesta-de-confituras-95.jpg" target="_blank" data-title="Cesta Confituras"><img src="assets/products/cesta-de-confituras-95.jpg" loading="lazy" alt="Cesta de confituras"></a>
+      <a href="assets/products/combo-para-cumpleanos-20-personas-75.jpg" target="_blank" data-title="Combo Cumpleaños"><img src="assets/products/combo-para-cumpleanos-20-personas-75.jpg" loading="lazy" alt="Combo para cumpleaños"></a>
+      <a href="assets/products/sorpresa-con-disfraz-59.jpg" target="_blank" data-title="Sorpresa Disfraz"><img src="assets/products/sorpresa-con-disfraz-59.jpg" loading="lazy" alt="Sorpresa con disfraz"></a>
     </div>
   </div>
 </section>
@@ -276,7 +301,22 @@
   </div>
 </footer>
 
-<button type="button" class="fab-wa" onclick="window.open('https://wa.me/5352076748','_blank')" title="Escríbenos por WhatsApp" aria-label="Escríbenos por WhatsApp">💬</button>
+<!-- Botón flotante WhatsApp -->
+<a href="https://wa.me/5352076748?text=Hola,%20quiero%20hacer%20un%20pedido%20en%20Fabis%20Cake."
+   class="fab-wa"
+   id="fabWhatsapp"
+   target="_blank"
+   rel="noopener noreferrer"
+   title="Contáctanos por WhatsApp"
+   aria-label="Contáctanos por WhatsApp">
+  <img src="assets/whatsapp-icon.png"
+       alt="WhatsApp"
+       loading="lazy"
+       width="70"
+       height="70"
+       decoding="async">
+  <span class="fab-wa-tooltip" aria-hidden="true">💬 Contáctanos por WhatsApp</span>
+</a>
 
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Aviso de cookies">
   <p>Utilizamos cookies para mejorar tu experiencia de navegación. Al continuar navegando aceptas nuestra <a href="cookies.html">Política de Cookies</a>.</p>
@@ -341,5 +381,29 @@
 <script src="js/site.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => {
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              if (confirm('Hay una nueva versión disponible. ¿Deseas actualizar?')) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            }
+          });
+        });
+      })
+      .catch(err => console.log('SW registration failed:', err));
+  });
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) { refreshing = true; window.location.reload(); }
+  });
+}
+</script>
 </body>
 </html>
