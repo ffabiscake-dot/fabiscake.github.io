@@ -155,7 +155,7 @@ function renderCart(){
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
-    <div class="row-total"><span>Envío</span><span>Según distancia</span></div>
+    <div class="row-total" style="background:var(--rosa-suave);padding:10px 14px;border-radius:12px;margin-top:8px;"><span style="font-weight:700;">Entrega a domicilio</span><span style="font-weight:600;color:var(--fucsia);">Costo adicional según distancia</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:10px;" onclick="openOrderModal()">Continuar pedido</button>`;
 }
@@ -237,4 +237,28 @@ function closeNav(){ document.getElementById('navLinks').classList.remove('open'
   renderGrid();
   renderServices();
   renderCart();
+  initFabWhatsapp();
 })();
+
+/* ===================== BOTÓN FLOTANTE WHATSAPP ===================== */
+function initFabWhatsapp(){
+  const fab = document.getElementById('fabWhatsapp');
+  if(!fab) return;
+  let tooltipTimeout;
+  function showTooltip(){
+    const tip = fab.querySelector('.fab-wa-tooltip');
+    if(tip){ tip.style.opacity='1'; tip.style.visibility='visible'; }
+  }
+  function hideTooltip(){
+    const tip = fab.querySelector('.fab-wa-tooltip');
+    if(tip){ tip.style.opacity=''; tip.style.visibility=''; }
+  }
+  fab.addEventListener('touchstart', function(){
+    showTooltip();
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(hideTooltip, 3000);
+  }, {passive:true});
+  fab.addEventListener('focus', showTooltip);
+  fab.addEventListener('blur', hideTooltip);
+  fab.addEventListener('mouseleave', hideTooltip);
+}

@@ -70,7 +70,7 @@ const PRODUCTS = [
   "name": "Torta chocolate especial",
   "cat": "cakes",
   "desc": "Torta chocolate especial · Rellenos · Nutella · Fanguito · Trozos de chocolate · 22cmx8cm",
-  "price": 7000,
+  "price": 7500,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎂",
@@ -155,9 +155,9 @@ const PRODUCTS = [
  },
  {
   "row": 15,
-  "name": "Torta tres leche",
+  "name": "Torta tres leches",
   "cat": "cakes",
-  "desc": "Torta tres leche · Relleno fanguito y trozos de chocolate · Cobertura de chocolate opcional",
+  "desc": "Torta tres leches · Relleno fanguito y trozos de chocolate · Cobertura de chocolate opcional",
   "price": 7500,
   "unit": "pedido",
   "unit_label": null,
@@ -210,6 +210,39 @@ const PRODUCTS = [
  },
  {
   "row": 20,
+  "name": "Cake en forma de corazón",
+  "cat": "cakes",
+  "desc": "Delicado pastel en forma de corazón, decorado con un elegante acabado en crema color rosa, detalles dorados, una hermosa corona y un lazo blanco que le dan un toque de princesa.",
+  "price": 9000,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🎂",
+  "img": "assets/products/cake-en-forma-de-corazon-92.jpg"
+ },
+ {
+  "row": 21,
+  "name": "Cake rectangular",
+  "cat": "cakes",
+  "desc": "Cake rectangular · Totalmente personalizado",
+  "price": 12500,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🎂",
+  "img": "assets/products/cake-rectangular-93.jpg"
+ },
+ {
+  "row": 22,
+  "name": "Cake rectangular",
+  "cat": "cakes",
+  "desc": "Celebra los momentos más especiales con un pastel personalizado, decorado con un increíble tema de dinosaurios.",
+  "price": 18500,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🎂",
+  "img": "assets/products/cake-rectangular-94.jpg"
+ },
+ {
+  "row": 30,
   "name": "Ancheta desayuno sorpresa",
   "cat": "hombre",
   "desc": "Ancheta desayuno sorpresa · Presentación: · - Panetela · - Malta · - Cangrejito · - Hamburguesa · - Confitura · Color disponible · - verde · - azul · - rojo · - negro",
@@ -220,7 +253,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-desayuno-sorpresa-20.jpg"
  },
  {
-  "row": 21,
+  "row": 31,
   "name": "Ancheta de hombre",
   "cat": "hombre",
   "desc": "Ancheta de hombre · Presentación: · - Panetela · - Confitura · -Color disponible · - azul · - negro · - rojo · - verde",
@@ -231,7 +264,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-hombre-21.jpg"
  },
  {
-  "row": 22,
+  "row": 32,
   "name": "Ancheta de hombre",
   "cat": "hombre",
   "desc": "Ancheta de hombre · Presentación · - Confitura · Color disponible: · - negro · - azul · - verde · - rojo",
@@ -242,7 +275,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-hombre-22.jpg"
  },
  {
-  "row": 23,
+  "row": 33,
   "name": "Cesta de hombre",
   "cat": "hombre",
   "desc": "Cesta de hombre · Presentación · - Botella de Ron · - confitura · Color disponible · - verde · - azul · - rojo",
@@ -253,7 +286,7 @@ const PRODUCTS = [
   "img": "assets/products/cesta-de-hombre-23.jpg"
  },
  {
-  "row": 24,
+  "row": 34,
   "name": "Ancheta de hombre",
   "cat": "hombre",
   "desc": "Ancheta de hombre · Presentación: · - Sidra · - Nutella · - Confitura · Colores disponibles: · - negro · - verde · - azul · - dorado · - rojo",
@@ -264,7 +297,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-hombre-24.jpg"
  },
  {
-  "row": 25,
+  "row": 40,
   "name": "Ancheta mujer",
   "cat": "mujer",
   "desc": "Ancheta mujer · Presentación · - Planeta · - Confitura · Color disponible · - rojo · - rosado · - morado · - amarillo · - naranja",
@@ -275,7 +308,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-mujer-25.jpg"
  },
  {
-  "row": 26,
+  "row": 41,
   "name": "Ancheta de mujer",
   "cat": "mujer",
   "desc": "Ancheta de mujer · Presentación · - Panetela · - Peluche · - confitura · Color disponible · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -286,7 +319,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-mujer-26.jpg"
  },
  {
-  "row": 27,
+  "row": 42,
   "name": "Ancheta mujer",
   "cat": "mujer",
   "desc": "Ancheta mujer · Presentación · - panetela · - confitura · - taza personalizada · Color disponible · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -297,7 +330,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-mujer-27.jpg"
  },
  {
-  "row": 28,
+  "row": 43,
   "name": "Ancheta de mujer",
   "cat": "mujer",
   "desc": "Ancheta de mujer · Presentación: · - Panetela · - Taza personalizada · - peluche · - confituras · Color disponible · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -308,18 +341,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-mujer-28.jpg"
  },
  {
-  "row": 29,
-  "name": "Ancheta temática de niño",
-  "cat": "nino",
-  "desc": "Ancheta temática de niño · Presentación · - mini panetela · - confituras · Color disponible · - azul · - rojo · - verde",
-  "price": 10500,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🧸",
-  "img": "assets/products/ancheta-tematica-de-nino-29.jpg"
- },
- {
-  "row": 30,
+  "row": 44,
   "name": "Ancheta mujer con perfume",
   "cat": "mujer",
   "desc": "Ancheta mujer · Presentación · - panetela · - perfume · - Confitura · Color disponible · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -330,7 +352,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-mujer-presentacion-30.jpg"
  },
  {
-  "row": 31,
+  "row": 45,
   "name": "Ancheta mujer.",
   "cat": "mujer",
   "desc": "Ancheta mujer. · Presentación · - flores · - colonia · - taza personalizada · - confitura · Color disponible · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -341,7 +363,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-mujer-31.jpg"
  },
  {
-  "row": 32,
+  "row": 46,
   "name": "Ancheta mujer",
   "cat": "mujer",
   "desc": "Ancheta mujer · Presentación · - Sidra · - Panetela · - Nutella · - refresco · - confitura · Colores disponibles · - Rojo · - rosado · - morado · - amarillo · - naranja",
@@ -352,7 +374,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-mujer-32.jpg"
  },
  {
-  "row": 33,
+  "row": 47,
   "name": "Ancheta",
   "cat": "mujer",
   "desc": "Presentación · - peluche · - Flores · - Confitura",
@@ -363,7 +385,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-33.jpg"
  },
  {
-  "row": 34,
+  "row": 48,
   "name": "Cesta Presentación",
   "cat": "mujer",
   "desc": "Cesta · Presentación · - confitura · Colores disponibles · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -374,7 +396,18 @@ const PRODUCTS = [
   "img": "assets/products/cesta-presentacion-34.jpg"
  },
  {
-  "row": 35,
+  "row": 50,
+  "name": "Ancheta temática de niño",
+  "cat": "nino",
+  "desc": "Ancheta temática de niño · Presentación · - mini panetela · - confituras · Color disponible · - azul · - rojo · - verde",
+  "price": 10500,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🧸",
+  "img": "assets/products/ancheta-tematica-de-nino-29.jpg"
+ },
+ {
+  "row": 60,
   "name": "Ancheta temática de niña",
   "cat": "nina",
   "desc": "Ancheta temática de niña · Presentación · - panetela · - peluche · - Confitura · Colores disponibles · - rosado · - morado · - rojo · - amarillo · - naranja",
@@ -385,7 +418,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-tematica-de-nina-35.jpg"
  },
  {
-  "row": 36,
+  "row": 61,
   "name": "Cesta grande de niña",
   "cat": "nina",
   "desc": "Cesta grande de niña · Presentación · - confitura · - peluche · Colores disponibles · - rojo · - rosado · - amarillo · - morado · - naranja",
@@ -396,7 +429,7 @@ const PRODUCTS = [
   "img": "assets/products/cesta-grande-de-nina-36.jpg"
  },
  {
-  "row": 37,
+  "row": 62,
   "name": "Ancheta de niña",
   "cat": "nina",
   "desc": "Ancheta de niña · Presentación · - panetela · - Confitura · Color disponible · - rosado · - morado · - amarillo · - rojo · - naranja",
@@ -407,7 +440,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-nina-37.jpg"
  },
  {
-  "row": 38,
+  "row": 63,
   "name": "Ancheta globo burbuja de niña",
   "cat": "nina",
   "desc": "Ancheta globo burbuja de niña · Presentación · - peluche · - confitura · - globo burbuja · Color disponible · - rojo · - rosado · - morado · - amarillo · - naranja",
@@ -418,7 +451,7 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-globo-burbuja-de-nina-38.jpg"
  },
  {
-  "row": 39,
+  "row": 64,
   "name": "Ancheta de niña",
   "cat": "nina",
   "desc": "Ancheta de niña · Presentación · - flores · - peluche · - Nutella · - Confitura · Color disponible · - rojo · - rosado · - morado · - naranja · - amarillo · - negro y blanco",
@@ -429,7 +462,18 @@ const PRODUCTS = [
   "img": "assets/products/ancheta-de-nina-39.jpg"
  },
  {
-  "row": 40,
+  "row": 70,
+  "name": "Cesta de confituras",
+  "cat": "mujer",
+  "desc": "Cesta de confituras tamaño grande con detalle de globo de corazón, y mariposas · Incluye un perfume de su elección.",
+  "price": 14000,
+  "unit": "pedido",
+  "unit_label": null,
+  "icon": "🎁",
+  "img": "assets/products/cesta-de-confituras-95.jpg"
+ },
+ {
+  "row": 80,
   "name": "Helado",
   "cat": "postres",
   "desc": "Disfruta de la textura más suave y cremosa con nuestro helado de vainilla tradicional.",
@@ -440,7 +484,7 @@ const PRODUCTS = [
   "img": "assets/products/helado-40.jpg"
  },
  {
-  "row": 41,
+  "row": 81,
   "name": "Pastelito",
   "cat": "postres",
   "desc": "Pastelito crujientes y elaboradas con ingredientes de alta calidad. Nuestros pastelitos artesanales en forma de flor están exquisito dulce que aporta el equilibrio perfecto entre textura y sabor. ideal para compartir en reuniones, celebraciones o regalar a alguien especial.",
@@ -451,7 +495,7 @@ const PRODUCTS = [
   "img": "assets/products/pastelito-41.jpg"
  },
  {
-  "row": 42,
+  "row": 82,
   "name": "Panes",
   "cat": "postres",
   "desc": "Panes artesanales suaves y frescos, con un ligero toque de ajonjolí. El complemento perfecto para nuestros combos de bufet, ideales para cualquier celebración o evento especial.",
@@ -462,7 +506,7 @@ const PRODUCTS = [
   "img": "assets/products/panes-42.jpg"
  },
  {
-  "row": 43,
+  "row": 83,
   "name": "Pan de Gloria",
   "cat": "postres",
   "desc": "Pan de Gloria artesanal, esponjoso y dorado. Disfruta de estos clásicos dulces en espiral con su inconfundible cobertura de azúcar crujiente. Ideal para el desayuno o la merienda.",
@@ -473,7 +517,7 @@ const PRODUCTS = [
   "img": "assets/products/pan-de-gloria-43.jpg"
  },
  {
-  "row": 44,
+  "row": 84,
   "name": "Palitroques",
   "cat": "postres",
   "desc": "Palitroques artesanales hechos a mano. Crujientes por fuera y suaves por dentro. El snack perfecto para compartir o acompañar tus platos favoritos.",
@@ -484,7 +528,7 @@ const PRODUCTS = [
   "img": "assets/products/palitroques-44.jpg"
  },
  {
-  "row": 45,
+  "row": 85,
   "name": "Cangrejitos",
   "cat": "postres",
   "desc": "Cangrejitos en forma de medialuna, de un color amarillo dorado y con un toque de relleno o mermelada roja en el centro, recién horneados.",
@@ -495,18 +539,18 @@ const PRODUCTS = [
   "img": "assets/products/cangrejitos-45.jpg"
  },
  {
-  "row": 46,
+  "row": 86,
   "name": "Donas de Chocolate",
   "cat": "postres",
   "desc": "Esponjosas donas elaboradas con masa suave y fresca, cubiertas con una deliciosa capa de chocolate y decoradas con coloridas grageas. El postre perfecto para endulzar cualquier celebración, mesa de postres, bufet o compartir en familia.",
-  "price": 60,
+  "price": 70,
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
   "img": "assets/products/donas-de-chocolate-46.jpg"
  },
  {
-  "row": 47,
+  "row": 87,
   "name": "Rosquillas",
   "cat": "postres",
   "desc": "Rosquillas deliciosas donas caseras, elaboradas con ingredientes frescos y una receta tradicional que les brinda una textura suave por dentro y un dorado perfecto por fuera",
@@ -517,7 +561,7 @@ const PRODUCTS = [
   "img": "assets/products/rosquillas-47.jpg"
  },
  {
-  "row": 48,
+  "row": 88,
   "name": "Empanaditas",
   "cat": "postres",
   "desc": "Deliciosas empanaditas de masa crujiente y dorada, rellenas con ingredientes seleccionados y preparadas al momento. Ideales como aperitivo, para bufets, fiestas y eventos, ofreciendo un sabor casero que encanta a todos.",
@@ -528,7 +572,7 @@ const PRODUCTS = [
   "img": "assets/products/empanaditas-48.jpg"
  },
  {
-  "row": 49,
+  "row": 89,
   "name": "Croqueta",
   "cat": "postres",
   "desc": "Deliciosas croquetas, elaboradas con una receta casera, doradas hasta alcanzar el punto perfecto y con un relleno suave y lleno de sabor.",
@@ -539,7 +583,7 @@ const PRODUCTS = [
   "img": "assets/products/croqueta-49.jpg"
  },
  {
-  "row": 50,
+  "row": 90,
   "name": "Churros",
   "cat": "postres",
   "desc": "Disfruta de nuestros deliciosos churros, preparados con una receta tradicional, dorados a la perfección y cubiertos con una fina capa de azúcar.",
@@ -550,7 +594,7 @@ const PRODUCTS = [
   "img": "assets/products/churros-50.jpg"
  },
  {
-  "row": 51,
+  "row": 91,
   "name": "Bolitas de queso",
   "cat": "postres",
   "desc": "Bolitas de queso, elaboradas con una receta casera y fritas hasta lograr un dorado perfecto. Crujientes por fuera, suaves por dentro y con un delicioso sabor a queso que conquista en cada bocado.",
@@ -561,7 +605,7 @@ const PRODUCTS = [
   "img": "assets/products/bolitas-de-queso-51.jpg"
  },
  {
-  "row": 52,
+  "row": 92,
   "name": "Ensalada fría",
   "cat": "postres",
   "desc": "Ensalada fría 8 Libras Disfruta de nuestra deliciosa ensalada fría, preparada con pasta, jamón, queso, aceitunas y un suave aderezo cremoso que combina perfectamente cada ingrediente.",
@@ -572,7 +616,7 @@ const PRODUCTS = [
   "img": "assets/products/ensalada-fria-52.jpg"
  },
  {
-  "row": 53,
+  "row": 93,
   "name": "Pasta",
   "cat": "postres",
   "desc": "Pasta para el pan · 1lib",
@@ -583,7 +627,7 @@ const PRODUCTS = [
   "img": "assets/products/pasta-53.jpg"
  },
  {
-  "row": 54,
+  "row": 100,
   "name": "Ramos",
   "cat": "ramos",
   "desc": "Ramo (7 rosas pequeñas) · Incluye · Hojas artificiales. · Decoración con media perla. Forrado decorativo. Mariposa. Florecitas beso de ángel (blancas).",
@@ -594,7 +638,7 @@ const PRODUCTS = [
   "img": "assets/products/ramos-54.jpg"
  },
  {
-  "row": 55,
+  "row": 101,
   "name": "Ramo de novia",
   "cat": "ramos",
   "desc": "Ramo de novia o 15 añera · Incluye · (15 rosas) · Decoración con media perla. Mariposa. Florecitas beso de ángel (blancas).",
@@ -605,7 +649,7 @@ const PRODUCTS = [
   "img": "assets/products/ramo-de-novia-55.jpg"
  },
  {
-  "row": 56,
+  "row": 102,
   "name": "Ramos",
   "cat": "ramos",
   "desc": "Ramos de rosas eternas de -15 rosas · -Mayas · -Forrado decorativo · -Decoración de media perla · -Una Mariposa · -Una Corona · -Florecita beso de Ángel",
@@ -616,7 +660,7 @@ const PRODUCTS = [
   "img": "assets/products/ramos-56.jpg"
  },
  {
-  "row": 57,
+  "row": 103,
   "name": "Ramo",
   "cat": "ramos",
   "desc": "Ramo (10 rosas) · Presentación · Hojas artificiales. · Decoración con media perla. Forrado decorativo. Mariposa. Florecitas beso de ángel (blancas). · Malla con bordes.",
@@ -627,7 +671,7 @@ const PRODUCTS = [
   "img": "assets/products/ramo-57.jpg"
  },
  {
-  "row": 58,
+  "row": 104,
   "name": "Ramo",
   "cat": "ramos",
   "desc": "Ramo (5 rosas) · Incluye · Hojas artificiales. · Decoración con media perla. Forrado decorativo. Mariposa. Florecitas beso de ángel (blancas).",
@@ -638,7 +682,7 @@ const PRODUCTS = [
   "img": "assets/products/ramo-58.jpg"
  },
  {
-  "row": 59,
+  "row": 105,
   "name": "Ramo de girasoles",
   "cat": "ramos",
   "desc": "Ramo de girasoles para 15 añera · Presentación · - 15 girasoles eternos · - frase decorativa \"happy birthday\" · Color disponible · - amarillo Forrado decorativo. Mariposa.",
@@ -649,10 +693,10 @@ const PRODUCTS = [
   "img": "assets/products/ramo-de-girasoles-59.jpg"
  },
  {
-  "row": 60,
+  "row": 106,
   "name": "Ramo de rosas eternas",
   "cat": "ramos",
-  "desc": "Ramo de 8 rosas eternas y peluche · Incluye · Hojas artificiales. · Forrado decorativo. Mariposa. Florecitas beso de ángel (blancas).",
+  "desc": "Ramo de 8 rosas eternas y peluche · Incluye · Hojas artificiales. · Forrado decorativo. Mariposa. Florecitas boca de ángel (blancas).",
   "price": 12500,
   "unit": "pedido",
   "unit_label": null,
@@ -660,10 +704,10 @@ const PRODUCTS = [
   "img": "assets/products/ramo-de-rosas-eternas-60.jpg"
  },
  {
-  "row": 61,
+  "row": 107,
   "name": "Ramo buchón",
   "cat": "ramos",
-  "desc": "Ramo buchón · Presentación · - 7 rosas eternas · - 1 mariposa · - 10 mil pesos · - Florecitas beso de ángel (blancas). · Forrado decorativo",
+  "desc": "Ramo buchón · Presentación · - 7 rosas eternas · - 1 mariposa · - 10 mil pesos · - Florecitas boca de ángel (blancas). · Forrado decorativo",
   "price": 18500,
   "unit": "pedido",
   "unit_label": null,
@@ -671,7 +715,7 @@ const PRODUCTS = [
   "img": "assets/products/ramo-buchon-61.jpg"
  },
  {
-  "row": 62,
+  "row": 108,
   "name": "Ramos de rosas eternas",
   "cat": "ramos",
   "desc": "Ramos de rosas eternas · -3 rosas · Forrado decorativo · -Decoración con media perla · -Hojitas artificiales · -Una mariposa",
@@ -682,7 +726,7 @@ const PRODUCTS = [
   "img": "assets/products/ramos-de-rosas-eternas-62.jpg"
  },
  {
-  "row": 63,
+  "row": 109,
   "name": "Ramos",
   "cat": "ramos",
   "desc": "Ramo de 8 rosas · -Hojas artificiales · -Maya · -Florecitas beso de ángel · -Una Mariposa · -Decoración con media perla",
@@ -693,7 +737,7 @@ const PRODUCTS = [
   "img": "assets/products/ramos-63.jpg"
  },
  {
-  "row": 64,
+  "row": 110,
   "name": "Sorpresa con disfraz.",
   "cat": "sorpresas",
   "desc": "Puede agregar a sus regalos un momento mágico con nuestras entregas sorpresas, con disfraces y animaciones. · Canciones, dedicatorias, fotos y videos para inmortalizar el momento",
@@ -704,7 +748,7 @@ const PRODUCTS = [
   "img": "assets/products/sorpresa-con-disfraz-64.jpg"
  },
  {
-  "row": 65,
+  "row": 111,
   "name": "Mariachi",
   "cat": "sorpresas",
   "desc": "Si lo que desea es dar un toque único a su sorpresa de cumpleaños nuestros mariachis harán su mejor show · Un repertorio de canciones para alegrar su celebración.",
@@ -715,7 +759,7 @@ const PRODUCTS = [
   "img": "assets/products/mariachi-65.jpg"
  },
  {
-  "row": 66,
+  "row": 120,
   "name": "Decoración con globos sencilla",
   "cat": "decoracion",
   "desc": "Decoración con globos sencilla · 100 a 150 globos",
@@ -726,7 +770,7 @@ const PRODUCTS = [
   "img": "assets/products/decoracion-con-globos-sencilla-66.jpg"
  },
  {
-  "row": 67,
+  "row": 121,
   "name": "Decoración para cumpleaños Set principal y alrededores",
   "cat": "decoracion",
   "desc": "Decoración para cumpleaños · Set principal y alrededores · 200 a 250 globos · Detalles personalizados",
@@ -737,7 +781,7 @@ const PRODUCTS = [
   "img": "assets/products/decoracion-para-cumpleanos-set-principal-y-alrededores-67.jpg"
  },
  {
-  "row": 68,
+  "row": 122,
   "name": "Decoración interior Set principal",
   "cat": "decoracion",
   "desc": "Decoración interior · Set principal · 150 a 200 globos",
@@ -748,7 +792,7 @@ const PRODUCTS = [
   "img": "assets/products/decoracion-interior-set-principal-68.jpg"
  },
  {
-  "row": 69,
+  "row": 123,
   "name": "Decoración de espacios grandes para 15 años.",
   "cat": "decoracion",
   "desc": "Decoración de espacios grandes para 15 años. · Set principal y sus alrededores. · Globos 400 a 450. · Flores. · Cortinas. · Manteles. · Moño para sillas.",
@@ -759,40 +803,7 @@ const PRODUCTS = [
   "img": "assets/products/decoracion-de-espacios-grandes-para-15-anos-69.jpg"
  },
  {
-  "row": 70,
-  "name": "Carne de cerdo asada Piernas.",
-  "cat": "combos_alimentos",
-  "desc": "Carne de cerdo asada · Piernas, lomos asados de 8 libra en adelante.",
-  "price": 1800,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/carne-de-cerdo-asada-piernas-70.jpg"
- },
- {
-  "row": 71,
-  "name": "Jamón de Pollo.",
-  "cat": "combos_alimentos",
-  "desc": "Pollo hecho jamón · calidad extrema · Compra mínima 5 libra",
-  "price": 1700,
-  "unit": "unidad",
-  "unit_label": "libra",
-  "icon": "🍗",
-  "img": "assets/products/jamon-de-pollo-71.jpg"
- },
- {
-  "row": 72,
-  "name": "Paquetes de pollo",
-  "cat": "combos_alimentos",
-  "desc": "Paquetes de pollo 10 libra · Muslo o Contramuslo · Según disponibilidad.",
-  "price": 8500,
-  "unit": "unidad",
-  "unit_label": "paquete",
-  "icon": "🍗",
-  "img": "assets/products/paquetes-de-pollo-72.jpg"
- },
- {
-  "row": 73,
+  "row": 130,
   "name": "Paquete de arroz",
   "cat": "combos_alimentos",
   "desc": "Paquete de arroz · 1kg · Precio:",
@@ -803,7 +814,7 @@ const PRODUCTS = [
   "img": "assets/products/paquete-de-arroz-73.jpg"
  },
  {
-  "row": 74,
+  "row": 131,
   "name": "Galletas de soda.",
   "cat": "combos_alimentos",
   "desc": "Galletas de soda · 7 paquetes",
@@ -814,40 +825,7 @@ const PRODUCTS = [
   "img": "assets/products/galletas-de-soda-74.jpg"
  },
  {
-  "row": 75,
-  "name": "Fili de huevo",
-  "cat": "combos_alimentos",
-  "desc": "Fili de huevo · 30 unidades",
-  "price": 6000,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/fili-de-huevo-75.jpg"
- },
- {
-  "row": 76,
-  "name": "Yogurt natural.",
-  "cat": "combos_alimentos",
-  "desc": "Yogurt natural · Sin azúcar añadido · 2 litro.",
-  "price": 1000,
-  "unit": "unidad",
-  "unit_label": "2 litros",
-  "icon": "🍗",
-  "img": "assets/products/yogurt-natural-76.jpg"
- },
- {
-  "row": 77,
-  "name": "Mayonesa casera.",
-  "cat": "combos_alimentos",
-  "desc": "Mayonesa casera · 350g.",
-  "price": 1500,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/mayonesa-casera-77.jpg"
- },
- {
-  "row": 78,
+  "row": 132,
   "name": "Pan suave",
   "cat": "combos_alimentos",
   "desc": "Pan suave · Formato en barra",
@@ -858,7 +836,7 @@ const PRODUCTS = [
   "img": "assets/products/pan-suave-78.jpg"
  },
  {
-  "row": 79,
+  "row": 133,
   "name": "Azúcar blanca",
   "cat": "combos_alimentos",
   "desc": "Azúcar blanca · Venta mínima 5 libra",
@@ -869,7 +847,7 @@ const PRODUCTS = [
   "img": "assets/products/azucar-blanca-79.jpg"
  },
  {
-  "row": 80,
+  "row": 140,
   "name": "Combo para cumpleaños 20 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 20 personas · Incluye · 20 Croquetas fritas · 20 churros · 20 empanadillas · 20 mini donas · 20panecillos con pasta · 20 rosquitas de azúcar",
@@ -880,10 +858,10 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-20-personas-80.jpg"
  },
  {
-  "row": 81,
+  "row": 141,
   "name": "Combo para cumpleaños 30 personas",
   "cat": "combos_cumple",
-  "desc": "Combo para cumpleaños · 30 personas · Incluye · 30 Croquetas fritas · 30 churros · 30 empanadillas · 30 mini donas · 30panecillos con pasta · 30 rosquitas de azúcar",
+  "desc": "Combo para cumpleaños · 30 personas · Incluye · 30 croquetas fritas · 30 churros · 30 empanadillas · 30 mini donas · 30panecillos con pasta · 30 rosquitas de azúcar",
   "price": 13350,
   "unit": "pedido",
   "unit_label": null,
@@ -891,7 +869,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-30-personas-81.jpg"
  },
  {
-  "row": 82,
+  "row": 142,
   "name": "Combo para cumpleaños 40 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 40 personas · Incluye · 40 Croquetas fritas · 40 churros · 40 empanadillas · 40 mini donas · 40panecillos con pasta · 40 rosquitas de azúcar",
@@ -902,7 +880,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-40-personas-82.jpg"
  },
  {
-  "row": 83,
+  "row": 143,
   "name": "Combo para cumpleaños 50 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 50 personas · Incluye · 50 Croquetas fritas · 50 churros · 50 empanadillas · 50 mini donas · 50 panecillos con pasta · 50 rosquitas de azúcar",
@@ -913,7 +891,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-50-personas-83.jpg"
  },
  {
-  "row": 84,
+  "row": 144,
   "name": "Combo para cumpleaños 75 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 75personas · Incluye · 75Croquetas fritas · 75churros · 75 empanadillas · 75mini donas · 75panecillos con pasta · 75 rosquitas de azúcar",
@@ -924,7 +902,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-75-personas-84.jpg"
  },
  {
-  "row": 85,
+  "row": 145,
   "name": "Combo para cumpleaños 100 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 100 personas · Incluye · 100 Croquetas fritas · 100 churros · 100 empanadillas · 100 mini donas · 100 panecillos con pasta · 100 rosquitas de azúcar",
@@ -935,7 +913,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-para-cumpleanos-100-personas-85.jpg"
  },
  {
-  "row": 86,
+  "row": 146,
   "name": "Combo de confituras",
   "cat": "combos_cumple",
   "desc": "Combo surtido de confituras · Varias opciones · Según disponibilidad.",
@@ -946,51 +924,7 @@ const PRODUCTS = [
   "img": "assets/products/combo-de-confituras-86.jpg"
  },
  {
-  "row": 87,
-  "name": "Pomos de refresco",
-  "cat": "combos_alimentos",
-  "desc": "Pomos de refresco · 1.5lit · Sabores según disponibilidad",
-  "price": 2000,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/pomos-de-refresco-87.jpg"
- },
- {
-  "row": 88,
-  "name": "Malta guajira",
-  "cat": "combos_alimentos",
-  "desc": "Malta guajira · Compra mínima 5 unidades",
-  "price": 650,
-  "unit": "unidad",
-  "unit_label": "unidad",
-  "icon": "🍗",
-  "img": "assets/products/malta-guajira-88.jpg"
- },
- {
-  "row": 89,
-  "name": "Refresco gaseado",
-  "cat": "combos_alimentos",
-  "desc": "Refresco gaseado · 24 unidades · Sabores según disponibilidad",
-  "price": 11500,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/refresco-gaseado-89.jpg"
- },
- {
-  "row": 90,
-  "name": "Cerveza Hollandia.",
-  "cat": "combos_alimentos",
-  "desc": "Cerveza hollandia · 24 unidades",
-  "price": 12000,
-  "unit": "pedido",
-  "unit_label": null,
-  "icon": "🍗",
-  "img": "assets/products/cerveza-hollandia-90.jpg"
- },
- {
-  "row": 91,
+  "row": 150,
   "name": "Botella de whisky",
   "cat": "combos_alimentos",
   "desc": "Botella de Whisky · Puede escoger en el momento entre las ofertas según disponibilidad.",
