@@ -1,0 +1,65 @@
+{
+  "id": "/",
+  "name": "Fabi's Cake — Cakes personalizados y decoración de eventos",
+  "short_name": "Fabi's Cake",
+  "description": "Cakes personalizados, postres, regalos personalizados, bufets, mesas dulces y decoración para cumpleaños, bodas, XV años y todo tipo de eventos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#faf7f8",
+  "theme_color": "#E84393",
+  "orientation": "portrait-primary",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["food", "shopping", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-fallback.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/social-preview.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Fabi's Cake — Catálogo de productos"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver catálogo",
+      "short_name": "Catálogo",
+      "url": "/#catalogo",
+      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
+    },
+    {
+      "name": "Contactar por WhatsApp",
+      "short_name": "WhatsApp",
+      "url": "https://wa.me/5352076748",
+      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
+    },
+    {
+      "name": "Servicios",
+      "short_name": "Servicios",
+      "url": "/#servicios",
+      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
+    }
+  ],
+  "related_applications": [],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}
