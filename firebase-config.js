@@ -11,15 +11,15 @@
 // ============================================================
 
 export const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyBxMVxqi0CFru50vQPDk7RYA136qBT38a4",
+  authDomain: "fabi-s-cake-b8d4a.firebaseapp.com",
+  projectId: "fabi-s-cake-b8d4a",
+  storageBucket: "fabi-s-cake-b8d4a.firebasestorage.app",
+  messagingSenderId: "827286701975",
+  appId: "1:827286701975:web:49318a0a4fe5aead1d66d2"
 };
 
 // Correo del único administrador autorizado.
 // Debe coincidir EXACTAMENTE con el usuario que crees en
 // Firebase Authentication (paso 4 de INSTRUCCIONES.md).
-export const ADMIN_EMAIL = "admin@fabiscake.com";
+export const ADMIN_EMAIL = "ffabiscake@gmail.com";
