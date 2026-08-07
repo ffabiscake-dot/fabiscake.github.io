@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Migrar productos a Firestore · Fabi's Cake</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="admin-main" style="max-width:700px;margin:0 auto;padding:20px;">
+  <h1>Importar catálogo a Firestore</h1>
+  <p>Esta página se usa para cargar de una vez tu catálogo completo (nombre, descripción,
+  precio, categoría y foto de cada producto) hacia la base de datos. Puedes usarla las
+  veces que necesites para agregar lotes nuevos de productos.</p>
+
+  <ol>
+    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administradora.</li>
+    <li>Regresa a esta página — el catálogo (<code>productos_import.json</code>) se carga automáticamente.</li>
+    <li>Presiona "Importar a Firestore". Verás el progreso producto por producto.</li>
+  </ol>
+
+  <p id="auto-status" style="color:#8a8291;">Buscando productos_import.json en esta misma carpeta...</p>
+
+  <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
+    <button id="migrate-btn" class="btn btn-primary" disabled>Importar a Firestore</button>
+    <span id="migrate-status" style="color:#8a8291;"></span>
+  </div>
+
+  <p style="margin-top:10px;font-size:13px;color:#8a8291;">
+    ¿Prefieres cargar otro archivo distinto? <button type="button" id="show-file-picker" class="btn btn-ghost btn-sm">Elegir archivo manualmente</button>
+  </p>
+  <input type="file" id="file-input" accept="application/json,.json" class="input" style="margin-top:8px;" hidden>
+
+  <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
+    Debes iniciar sesión como administradora en admin.html antes de importar.
+  </div>
+
+  <div id="results" style="margin-top:20px;font-size:14px;color:#8a8291;"></div>
+</div>
+
+<script type="module">
+import { ADMIN_EMAIL } from "../js/firebase-config.js";
+import { auth, db, onAuthStateChanged, collection, addDoc, serverTimestamp } from "../js/firebase-init.js";
+
+const btn = document.getElementById("migrate-btn");
+const status = document.getElementById("migrate-status");
+const warning = document.getElementById("login-warning");
+const fileInput = document.getElementById("file-input");
+const results = document.getElementById("results");
+
+let isAdmin = false;
+let selectedProducts = null;
+
+const autoStatus = document.getElementById("auto-status");
+const showFilePickerBtn = document.getElementById("show-file-picker");
+
+showFilePickerBtn.addEventListener("click", () => fileInput.click());
+
+async function autoLoadProducts() {
+  try {
+    const res = await fetch("./productos_import.json");
+    if (!res.ok) throw new Error("No se encontró el archivo en esta carpeta.");
+    selectedProducts = await res.json();
+    autoStatus.textContent = `✔ Se encontraron ${selectedProducts.length} productos en productos_import.json, listos para importar.`;
+  } catch (e) {
+    autoStatus.textContent = "No se pudo cargar productos_import.json automáticamente (" + e.message + "). Usa 'Elegir archivo manualmente'.";
+  }
+  updateButtonState();
+}
+autoLoadProducts();
+
+onAuthStateChanged(auth, (user) => {
+  isAdmin = !!(user && user.email === ADMIN_EMAIL);
+  warning.style.display = isAdmin ? "none" : "block";
+  updateButtonState();
+});
+
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  status.textContent = "Leyendo archivo...";
+  try {
+    const text = await file.text();
+    selectedProducts = JSON.parse(text);
+    if (!Array.isArray(selectedProducts)) throw new Error("El archivo debe contener un arreglo [ ... ]");
+    status.textContent = `Archivo cargado: ${selectedProducts.length} productos listos para importar.`;
+  } catch (e) {
+    selectedProducts = null;
+    status.textContent = "Error leyendo el archivo: " + e.message;
+  }
+  updateButtonState();
+});
+
+function updateButtonState() {
+  btn.disabled = !(isAdmin && selectedProducts && selectedProducts.length);
+}
+
+btn.addEventListener("click", async () => {
+  if (!isAdmin || !selectedProducts) return;
+  btn.disabled = true;
+  let done = 0;
+  let errors = 0;
+  for (const p of selectedProducts) {
+    try {
+      await addDoc(collection(db, "products"), {
+        nombre: p.nombre || "",
+        descripcion: p.descripcion || "",
+        precio: Number(p.precio) || 0,
+        categoria: p.categoria || "cakes",
+        unidad: p.unidad || "unidad",
+        unidadEtiqueta: p.unidadEtiqueta || "",
+        icono: p.icono || "🎂",
+        estado: p.estado || "Disponible",
+        destacado: !!p.destacado,
+        imagenPrincipal: p.imagenPrincipal || "",
+        imagenes: Array.isArray(p.imagenes) ? p.imagenes : [],
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      done++;
+      status.textContent = `Importando... ${done}/${selectedProducts.length}`;
+    } catch (e) {
+      errors++;
+      results.innerHTML += `<p style="color:#e05353">Error en "${p.nombre}": ${e.message}</p>`;
+    }
+  }
+  status.textContent = `✔ Importación completa: ${done} productos agregados${errors ? `, ${errors} con error` : ""}.`;
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>
