@@ -175,8 +175,8 @@ section{padding:64px 0;}
 }
 .card:hover{transform:translateY(-6px);box-shadow:var(--shadow);}
 .card-media{
-  height:170px;background:linear-gradient(135deg, var(--rosa-suave), var(--rosa));
-  background-size:cover;background-position:center;
+  height:200px;background:linear-gradient(135deg, var(--rosa-suave), var(--rosa));
+  background-size:contain;background-repeat:no-repeat;background-position:center;
   display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;
 }
 .card-media .tag{
