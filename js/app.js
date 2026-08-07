@@ -234,11 +234,27 @@ function closeNav(){ document.getElementById('navLinks').classList.remove('open'
   const savedTheme = localStorage.getItem('fc_theme');
   if(savedTheme==='dark'){ document.body.setAttribute('data-theme','dark'); document.getElementById('themeBtn').textContent='☀️'; }
   renderPills();
-  renderGrid();
   renderServices();
   renderCart();
   initFabWhatsapp();
+
+  // El catálogo se pinta aquí (con data.js como respaldo) y de nuevo cada
+  // vez que Firestore envía datos actualizados (products-loader.js).
+  renderGridIfReady();
+
+  // Cuando products-loader.js recibe (o reutiliza el caché de) los productos
+  // desde Firestore, re-renderiza el catálogo en tiempo real.
+  window.addEventListener('products:ready', () => {
+    renderPills();
+    renderGrid();
+  });
 })();
+
+function renderGridIfReady(){
+  // Si aún no hay productos (ni data.js ni Firestore), muestra vacío sin errores.
+  if(!Array.isArray(window.PRODUCTS)) return;
+  renderGrid();
+}
 
 /* ===================== BOTÓN FLOTANTE WHATSAPP ===================== */
 function initFabWhatsapp(){
