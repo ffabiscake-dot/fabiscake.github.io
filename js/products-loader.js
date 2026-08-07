@@ -10,7 +10,7 @@
 // ============================================================
 import { db, collection, query, orderBy, onSnapshot } from "./firebase-init.js";
 
-const CACHE_KEY = "fabiscake_products_cache_v1";
+const CACHE_KEY = "fabiscake_products_cache_v2";
 
 function mapDoc(docSnap) {
   const d = docSnap.data();
@@ -35,20 +35,38 @@ function dispatchProducts(products, fromCache) {
   window.dispatchEvent(new CustomEvent("products:ready", { detail: { products, fromCache } }));
 }
 
+// Si Firestore viene VACÍA (aún no migras tus productos o borraste todo),
+// conservamos el catálogo de respaldo de js/data.js para que la página
+// nunca se quede sin productos a la vista.
+function hasFallback() {
+  return Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0;
+}
+
+function applyFirestoreProducts(products) {
+  if (!products.length && hasFallback()) {
+    console.warn("Firestore no tiene productos (o no se migraron). Se muestra el catálogo de respaldo de data.js.");
+    return;
+  }
+  localStorage.setItem(CACHE_KEY, JSON.stringify(products));
+  dispatchProducts(products, false);
+}
+
 // Pinta de inmediato lo último guardado (carga rápida / offline).
 const cached = localStorage.getItem(CACHE_KEY);
 if (cached) {
   try { dispatchProducts(JSON.parse(cached), true); } catch (_) {}
 }
 
-const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+// Importa en orden ascendente (más antiguo primero) para respetar el orden
+// del catálogo original (los Cakes van primero). Si quieres que los productos
+// nuevos aparezcan primero, cambia "asc" por "desc".
+const q = query(collection(db, "products"), orderBy("createdAt", "asc"));
 
 onSnapshot(q, (snapshot) => {
-  const products = [];
-  snapshot.forEach((docSnap) => products.push(mapDoc(docSnap)));
-  localStorage.setItem(CACHE_KEY, JSON.stringify(products));
-  dispatchProducts(products, false);
-}, (error) => {
-  console.error("No se pudieron cargar los productos desde Firestore:", error);
+    const products = [];
+    snapshot.forEach((docSnap) => products.push(mapDoc(docSnap)));
+    applyFirestoreProducts(products);
+  }, (error) => {
+  console.error("No se pudieron cargar los productos desde Firestore (usando respaldo data.js):", error);
 });
 
