@@ -3,6 +3,7 @@ const WHATSAPP_NUMBER = "5352076748"; // +53 5 2076748
 
 const CATEGORIES = [
   {id:'all', label:'Todos'},
+  {id:'destacados', label:'⭐ Destacados'},
   {id:'cakes', label:'Cakes personalizados'},
   {id:'postres', label:'Postres y bufet'},
   {id:'ramos', label:'Ramos de rosas'},
@@ -45,6 +46,7 @@ function money(n){ return n.toLocaleString('es'); }
 
 function matchesCat(p, catId){
   if(catId === 'all') return true;
+  if(catId === 'destacados') return !!p.destacado;
   if(Array.isArray(p.cat)) return p.cat.includes(catId);
   return p.cat === catId;
 }
@@ -75,9 +77,9 @@ function renderGrid(){
     const addControl = p.unit === 'unidad'
       ? `<div class="qty-add">
            <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input">
-           <button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>
+           <button type="button" class="add-btn" onclick="addToCart('${p.row}')">+</button>
          </div>`
-      : `<button type="button" class="add-btn" onclick="addToCart(${p.row})">+</button>`;
+      : `<button type="button" class="add-btn" onclick="addToCart('${p.row}')">+</button>`;
     return `<div class="card">
       ${media}
       <div class="card-body">
@@ -103,7 +105,7 @@ function renderServices(){
 
 /* ===================== CARRITO ===================== */
 function addToCart(row){
-  const p = PRODUCTS.find(x=>x.row===row);
+  const p = PRODUCTS.find(x=>String(x.row)===String(row));
   if(!p) return;
   let qtyToAdd = 1;
   if(p.unit === 'unidad'){
