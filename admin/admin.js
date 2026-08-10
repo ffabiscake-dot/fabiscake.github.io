@@ -83,7 +83,7 @@ $("logout-btn").addEventListener("click", () => signOut(auth));
 // ============================================================
 function listenToProducts() {
   loadingIndicator.hidden = false;
-  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  const q = query(collection(db, "products"), orderBy("orden", "asc"), orderBy("createdAt", "asc"));
   onSnapshot(q, (snapshot) => {
     allProducts = [];
     snapshot.forEach((d) => allProducts.push({ id: d.id, ...d.data() }));
@@ -190,6 +190,7 @@ function openEditModal(id) {
   $("f-icono").value = p.icono || "🎂";
   $("f-estado").value = p.estado || "Disponible";
   $("f-destacado").checked = !!p.destacado;
+  $("f-orden").value = (typeof p.orden === "number") ? p.orden : "";
 
   currentMainImageBlob = null;
   currentExtraImageBlobs = [];
@@ -252,6 +253,18 @@ productForm.addEventListener("submit", async (e) => {
       imagenes: extraUrls,
       updatedAt: serverTimestamp()
     };
+
+    const ordenRaw = $("f-orden").value.trim();
+    if (ordenRaw !== "") {
+      payload.orden = parseInt(ordenRaw, 10) || 0;
+    } else {
+      // Producto sin posición explícita: se agrega al final.
+      // (también aplica a ediciones de productos viejos que no tienen "orden")
+      const maxOrden = allProducts.reduce((m, p) => Math.max(m, typeof p.orden === "number" ? p.orden : -1), -1);
+      payload.orden = maxOrden + 1;
+    }
+    // Si es edición con posición en blanco, igual se mueve al final (así los
+    // productos viejos sin "orden" quedan visibles en la web, que ordena por "orden").
 
     if (id) {
       await updateDoc(doc(db, "products", id), payload);
