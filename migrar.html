@@ -39,6 +39,13 @@
   <label for="json-input">Pega aquí el JSON de tus productos:</label>
   <textarea id="json-input" class="input" rows="12" placeholder="[ ... ]"></textarea>
 
+  <div style="margin-top:10px;">
+    <label>
+      <input type="checkbox" id="clear-first">
+      Vaciar el catálogo (borrar todos los productos) antes de importar — úsalo para reimportar con el orden correcto sin duplicados.
+    </label>
+  </div>
+
   <div style="margin-top:16px;display:flex;gap:10px;">
     <button id="migrate-btn" class="btn btn-primary">Migrar a Firestore</button>
     <span id="migrate-status" style="align-self:center;color:#8a8291;"></span>
@@ -51,7 +58,7 @@
 
 <script type="module">
 import { ADMIN_EMAIL } from "../js/firebase-config.js";
-import { auth, db, onAuthStateChanged, collection, addDoc, serverTimestamp } from "../js/firebase-init.js";
+import { auth, db, onAuthStateChanged, collection, addDoc, getDocs, deleteDoc, serverTimestamp } from "../js/firebase-init.js";
 
 const btn = document.getElementById("migrate-btn");
 const status = document.getElementById("migrate-status");
@@ -76,8 +83,15 @@ btn.addEventListener("click", async () => {
   }
 
   btn.disabled = true;
+  // Opcional: borrar todos los productos existentes antes de importar,
+  // para reimportar el catálogo con el orden correcto sin duplicados.
+  if (document.getElementById("clear-first") && document.getElementById("clear-first").checked) {
+    status.textContent = "Vacando catálogo...";
+    const snap = await getDocs(collection(db, "products"));
+    await Promise.all(snap.docs.map(d => deleteDoc(d.ref)));
+  }
   let done = 0;
-  for (const p of products) {
+  for (const [i, p] of products.entries()) {
     try {
       await addDoc(collection(db, "products"), {
         nombre: p.nombre || "",
@@ -86,6 +100,7 @@ btn.addEventListener("click", async () => {
         categoria: p.categoria || "Otros",
         estado: p.estado || "Disponible",
         destacado: !!p.destacado,
+        orden: i,                                   // posición fija en el catálogo
         imagenPrincipal: p.imagen || p.imagenPrincipal || "",
         imagenes: p.imagenes || [],
         createdAt: serverTimestamp(),
