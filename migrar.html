@@ -90,17 +90,27 @@
     var d = document.getElementById("diag");
     if (d) d.textContent = msg;
   }
+  // Causa 1: archivo abierto con doble clic (file://) -> los módulos están bloqueados.
+  if (location.protocol === "file:") {
+    diag("✖ Abriste el archivo LOCAL (file://).\nDEBES abrir esta URL en el navegador:\nhttps://ffabiscake-dot.github.io/fabiscake.github.io/migrar.html");
+  }
   window.addEventListener("error", function (e) {
     diag("⚠ Error del script: " + (e.message || "desconocido"));
   });
   window.addEventListener("unhandledrejection", function (e) {
     diag("⚠ Error de Firebase: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
   });
-  // Si el módulo de Firebase no se ejecutó en 4 segundos, avisamos.
+  // Si el módulo de Firebase no se ejecutó en 4 segundos, probamos gstatic.com.
   setTimeout(function () {
-    if (!window.__MIGRAR_MODULE_OK) {
-      diag("⚠ El módulo de Firebase NO cargó.\nCausa posible: abriste el archivo con doble clic (usa la URL https://...migrar.html) o tu navegador bloquea gstatic.com.");
-    }
+    if (window.__MIGRAR_MODULE_OK) return;
+    // Causa 2: gstatic.com (CDN de Firebase) bloqueado por la red/VPN.
+    fetch("https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js")
+      .then(function () {
+        diag("⚠ El módulo de Firebase NO cargó, pero gstatic.com SÍ responde.\nCausa: un error interno del script. Pulsa F12 y dime el error de la pestaña Console.");
+      })
+      .catch(function () {
+        diag("⚠ El módulo de Firebase NO cargó y gstatic.com NO responde.\nCausa: tu red/VPN bloquea gstatic.com.\nSolución: enciende Proton VPN (o pruébalo conectado) y recarga con Ctrl+F5.");
+      });
   }, 4000);
 </script>
 
