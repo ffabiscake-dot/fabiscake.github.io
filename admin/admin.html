@@ -7,7 +7,7 @@
 <title>Panel de Administración · Fabi's Cake</title>
 <link rel="manifest" href="../manifest.json">
 <meta name="theme-color" content="#E84393">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=7">
 </head>
 <body>
 
@@ -150,6 +150,14 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-col">
+          <label for="f-orden">Posición (número, opcional)</label>
+          <input type="number" id="f-orden" class="input" min="0" step="1" placeholder="Ej: 1, 2, 3...">
+          <small style="opacity:.6;">Si lo dejas vacío, el producto conserva su lugar actual (o se agrega al final si es nuevo).</small>
+        </div>
+      </div>
+
       <div id="upload-progress" class="upload-progress" hidden>
         <div class="upload-progress-bar" id="upload-progress-bar"></div>
         <span id="upload-progress-text">Subiendo imagen...</span>
@@ -203,6 +211,6 @@
 <!-- ================= TOAST ================= -->
 <div id="toast" class="toast" hidden></div>
 
-<script type="module" src="admin.js"></script>
+<script type="module" src="admin.js?v=7"></script>
 </body>
 </html>
