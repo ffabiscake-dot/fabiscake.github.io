@@ -39,6 +39,11 @@
   <label for="json-input">Pega aquí el JSON de tus productos:</label>
   <textarea id="json-input" class="input" rows="12" placeholder="[ ... ]"></textarea>
 
+  <div style="margin-top:10px;display:flex;align-items:center;gap:10px;">
+    <input type="file" id="json-file" accept=".json,.txt,application/json,text/plain">
+    <span style="color:#8a8291;font-size:13px;">O selecciona el archivo y se pega solo (evita errores al copiar).</span>
+  </div>
+
   <div style="margin-top:10px;">
     <label>
       <input type="checkbox" id="clear-first">
@@ -63,6 +68,19 @@ import { auth, db, onAuthStateChanged, collection, addDoc, getDocs, deleteDoc, s
 const btn = document.getElementById("migrate-btn");
 const status = document.getElementById("migrate-status");
 const warning = document.getElementById("login-warning");
+
+// Cargar el archivo JSON seleccionado directamente en el cuadro de texto.
+document.getElementById("json-file").addEventListener("change", (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.getElementById("json-input").value = reader.result;
+    status.textContent = `✔ Archivo cargado: ${file.name}`;
+  };
+  reader.onerror = () => { status.textContent = "No se pudo leer el archivo."; };
+  reader.readAsText(file);
+});
 
 let isAdmin = false;
 onAuthStateChanged(auth, (user) => {
