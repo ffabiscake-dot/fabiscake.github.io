@@ -43,6 +43,28 @@
     <input type="file" id="json-file" accept=".json,.txt,application/json,text/plain">
     <span style="color:#8a8291;font-size:13px;">O selecciona el archivo y se pega solo (evita errores al copiar).</span>
   </div>
+  <div id="file-status" style="margin-top:6px;color:#8a8291;font-size:13px;"></div>
+
+  <script>
+    // Script independiente (no usa Firebase): si algo del módulo falla,
+    // este botón igual debe funcionar.
+    document.getElementById("json-file").addEventListener("change", (e) => {
+      var fileStatus = document.getElementById("file-status");
+      var file = e.target.files && e.target.files[0];
+      if (!file) { fileStatus.textContent = "No se seleccionó ningún archivo."; return; }
+      fileStatus.textContent = "Leyendo " + file.name + " (" + (file.size / 1024 / 1024).toFixed(1) + " MB)...";
+      var reader = new FileReader();
+      reader.onload = function () {
+        document.getElementById("json-input").value = reader.result;
+        fileStatus.textContent = "✔ Archivo cargado: " + file.name + " (" + reader.result.length + " caracteres).";
+      };
+      reader.onerror = function () {
+        fileStatus.textContent = "✖ No se pudo leer el archivo: " + reader.error;
+      };
+      try { reader.readAsText(file); }
+      catch (err) { fileStatus.textContent = "✖ Error: " + err.message; }
+    });
+  </script>
 
   <div style="margin-top:10px;">
     <label>
@@ -68,19 +90,6 @@ import { auth, db, onAuthStateChanged, collection, addDoc, getDocs, deleteDoc, s
 const btn = document.getElementById("migrate-btn");
 const status = document.getElementById("migrate-status");
 const warning = document.getElementById("login-warning");
-
-// Cargar el archivo JSON seleccionado directamente en el cuadro de texto.
-document.getElementById("json-file").addEventListener("change", (e) => {
-  const file = e.target.files && e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    document.getElementById("json-input").value = reader.result;
-    status.textContent = `✔ Archivo cargado: ${file.name}`;
-  };
-  reader.onerror = () => { status.textContent = "No se pudo leer el archivo."; };
-  reader.readAsText(file);
-});
 
 let isAdmin = false;
 onAuthStateChanged(auth, (user) => {
