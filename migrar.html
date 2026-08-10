@@ -81,11 +81,34 @@
   <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
     Debes iniciar sesión como administrador en admin.html antes de migrar.
   </div>
+  <div id="diag" style="margin-top:10px;color:#e05353;font-weight:600;white-space:pre-wrap;"></div>
 </div>
+
+<script>
+  // ===== DIAGNÓSTICO (funciona aunque Firebase falle) =====
+  function diag(msg) {
+    var d = document.getElementById("diag");
+    if (d) d.textContent = msg;
+  }
+  window.addEventListener("error", function (e) {
+    diag("⚠ Error del script: " + (e.message || "desconocido"));
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    diag("⚠ Error de Firebase: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+  // Si el módulo de Firebase no se ejecutó en 4 segundos, avisamos.
+  setTimeout(function () {
+    if (!window.__MIGRAR_MODULE_OK) {
+      diag("⚠ El módulo de Firebase NO cargó.\nCausa posible: abriste el archivo con doble clic (usa la URL https://...migrar.html) o tu navegador bloquea gstatic.com.");
+    }
+  }, 4000);
+</script>
 
 <script type="module">
 import { ADMIN_EMAIL } from "js/firebase-config.js";
 import { auth, db, onAuthStateChanged, collection, addDoc, getDocs, deleteDoc, serverTimestamp } from "js/firebase-init.js";
+
+window.__MIGRAR_MODULE_OK = true;
 
 const btn = document.getElementById("migrate-btn");
 const status = document.getElementById("migrate-status");
@@ -96,6 +119,7 @@ onAuthStateChanged(auth, (user) => {
   isAdmin = !!(user && user.email === ADMIN_EMAIL);
   warning.style.display = isAdmin ? "none" : "block";
   btn.disabled = !isAdmin;
+  if (!isAdmin) status.textContent = "No has iniciado sesión como administrador (ffabiscake@gmail.com).";
 });
 
 btn.addEventListener("click", async () => {
