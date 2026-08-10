@@ -10,7 +10,7 @@
 // ============================================================
 import { db, collection, query, orderBy, onSnapshot } from "./firebase-init.js";
 
-const CACHE_KEY = "fabiscake_products_cache_v2";
+const CACHE_KEY = "fabiscake_products_cache_v3";
 
 function mapDoc(docSnap) {
   const d = docSnap.data();
