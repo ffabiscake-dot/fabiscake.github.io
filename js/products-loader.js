@@ -26,7 +26,8 @@ function mapDoc(docSnap) {
     cat: d.categoria || "cakes",                    // debe ser un id válido de CATEGORIES
     imagenes: Array.isArray(d.imagenes) ? d.imagenes : [],
     estado: d.estado || "Disponible",               // "Disponible" | "Agotado"
-    destacado: !!d.destacado
+    destacado: !!d.destacado,
+    orden: typeof d.orden === "number" ? d.orden : 0
   };
 }
 
@@ -57,10 +58,10 @@ if (cached) {
   try { dispatchProducts(JSON.parse(cached), true); } catch (_) {}
 }
 
-// Importa en orden ascendente (más antiguo primero) para respetar el orden
-// del catálogo original (los Cakes van primero). Si quieres que los productos
-// nuevos aparezcan primero, cambia "asc" por "desc".
-const q = query(collection(db, "products"), orderBy("createdAt", "asc"));
+// Ordena primero por "orden" (número fijo de posición, que la migración y el
+// admin asignan) y usa createdAt solo como desempate. Así, editar un producto
+// NUNCA lo mueve de su lugar en el catálogo.
+const q = query(collection(db, "products"), orderBy("orden", "asc"), orderBy("createdAt", "asc"));
 
 onSnapshot(q, (snapshot) => {
     const products = [];
