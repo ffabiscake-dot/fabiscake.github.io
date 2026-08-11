@@ -3,8 +3,8 @@
   "name": "Fabi's Cake — Cakes personalizados y decoración de eventos",
   "short_name": "Fabi's Cake",
   "description": "Cakes personalizados, postres, regalos personalizados, bufets, mesas dulces y decoración para cumpleaños, bodas, XV años y todo tipo de eventos.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "index.html",
+  "scope": "./",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#faf7f8",
@@ -41,20 +41,14 @@
     {
       "name": "Ver catálogo",
       "short_name": "Catálogo",
-      "url": "/#catalogo",
-      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
-    },
-    {
-      "name": "Contactar por WhatsApp",
-      "short_name": "WhatsApp",
-      "url": "https://wa.me/5352076748",
-      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
+      "url": "index.html#catalogo",
+      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192", "type": "image/jpeg"}]
     },
     {
       "name": "Servicios",
       "short_name": "Servicios",
-      "url": "/#servicios",
-      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192"}]
+      "url": "index.html#servicios",
+      "icons": [{"src": "assets/logo.jpg", "sizes": "192x192", "type": "image/jpeg"}]
     }
   ],
   "related_applications": [],
