@@ -2,31 +2,36 @@
 const WHATSAPP_NUMBER = "5352076748"; // +53 5 2076748
 
 const CATEGORIES = [
-  {id:'all', label:'Todos'},
-  {id:'destacados', label:'⭐ Destacados'},
-  {id:'cakes', label:'Cakes personalizados'},
-  {id:'postres', label:'Postres y bufet'},
-  {id:'ramos', label:'Ramos de rosas'},
-  {id:'sorpresas', label:'Entretenimiento y sorpresas'},
-  {id:'decoracion', label:'Decoración con globos'},
-  {id:'hombre', label:'Regalos hombre'},
-  {id:'mujer', label:'Regalos mujer'},
-  {id:'nino', label:'Regalos niño'},
-  {id:'nina', label:'Regalos niña'},
-  {id:'combos_alimentos', label:'Combos de alimentos y bebidas'},
-  {id:'combos_cumple', label:'Combos para cumpleaños'},
+  {id:'all', label:'Todos', sub:[]},
+  {id:'destacados', label:'⭐ Destacados', sub:[]},
+  {id:'cakes', label:'Cakes', sub:['cakes']},
+  {id:'postres', label:'Postres', sub:['postres']},
+  {id:'regalos', label:'Regalos', sub:['hombre','mujer','nino','nina']},
+  {id:'flores', label:'Flores', sub:['ramos']},
+  {id:'combos', label:'Combos', sub:['combos_alimentos','combos_cumple']},
+  {id:'celebraciones', label:'Celebraciones', sub:['decoracion','sorpresas']},
 ];
 
+const ICONS = {
+  globos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="4.5"/><circle cx="15.5" cy="10" r="3.5"/><path d="M8.5 12 7.4 20.5"/><path d="M8.5 12l1.1 1.2 1.1-1.2"/><path d="M15.5 13.5 14.6 20.5"/></svg>',
+  pastel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18h15"/><path d="M5.5 18v-2.5a6.5 6.5 0 0 1 13 0V18"/><path d="M12 8.5V5.5"/><path d="M9.5 4 12 1.5 14.5 4"/><path d="M8 11.5h.01M12 13h.01M16 11.5h.01"/></svg>',
+  anillos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13.5" r="3.5"/><circle cx="15" cy="13.5" r="3.5"/><path d="m12 3 1.7 2.4L12 7.8l-1.7-2.4z"/></svg>',
+  corona: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18"/><path d="M4.2 17 5.8 7l3.9 3.3L12 4.5l2.3 5.8L18.2 7l1.6 10"/></svg>',
+  bebe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11.5" r="7.5"/><path d="M12 4a2.6 2.6 0 0 0-2.5 2.6c0 .6.2 1.1.5 1.6"/><circle cx="9.3" cy="12" r=".6" fill="currentColor" stroke="none"/><circle cx="14.7" cy="12" r=".6" fill="currentColor" stroke="none"/><path d="M9.6 15.3c1 .7 3.8.7 4.8 0"/></svg>',
+  edificio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="9.5" height="17" rx="1"/><path d="M14.5 8.5h4.5v12"/><path d="M8 8h3.5"/><path d="M8 12h3.5"/><path d="M8 16h3.5"/><path d="M17 12h.01M17 16h.01"/></svg>',
+  calendario: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15.5" rx="2"/><path d="M4 9.5h16"/><path d="M8.5 3v4"/><path d="M15.5 3v4"/></svg>',
+  mascara: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5c0-3.2 1.6-5.2 8-5.2s8 2 8 5.2-1.6 5.8-8 5.8-8-2.6-8-5.8z"/><circle cx="9" cy="11.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="11.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  caramelo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.7 6.8a3.3 3.3 0 0 1 6.6 0 3.3 3.3 0 0 1-6.6 0z"/><path d="M12 15v6"/><path d="m12 21-2.6-2.4"/></svg>',
+};
+
 const SERVICES = [
-  {ico:'🎈', name:'Decoración con globos', desc:'Arcos, columnas y arreglos temáticos para cualquier celebración.'},
-  {ico:'🎂', name:'Decoración de cumpleaños', desc:'Ambientación completa acorde al tema elegido.'},
-  {ico:'💍', name:'Decoración de bodas', desc:'Montaje elegante para tu día especial.'},
-  {ico:'👑', name:'Decoración de XV años', desc:'Escenografía a la medida para la quinceañera.'},
-  {ico:'🍼', name:'Baby Shower', desc:'Decoración tierna y personalizada para la futura mamá.'},
-  {ico:'🎊', name:'Aniversarios y eventos corporativos', desc:'Ambientación profesional para toda ocasión.'},
-  {ico:'📋', name:'Organización de eventos', desc:'Coordinación integral de tu celebración de principio a fin.'},
-  {ico:'🦸', name:'Entrega con personajes disfrazados', desc:'Sorprende con la entrega de regalos y cakes por un personaje.'},
-  {ico:'🍬', name:'Mesa de dulces / Candy Bar', desc:'Montaje de mesa dulce con packaging a juego con tu evento.'},
+  {icon:ICONS.globos, name:'Decoración con globos', desc:'Arcos, columnas y arreglos personalizados para darle vida a tu celebración.', featured:true, img:'assets/products/decoracion-con-globos-sencilla-61.jpg'},
+  {icon:ICONS.pastel, name:'Decoración de cumpleaños', desc:'Ambientación completa y personalizada para celebrar un día inolvidable.', featured:true, img:'assets/products/decoracion-interior-set-principal-68.jpg'},
+  {icon:ICONS.anillos, name:'Decoración de bodas', desc:'Decoración elegante y romántica diseñada para tu día especial.', featured:true, img:'assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg'},
+  {icon:ICONS.corona, name:'Decoración de XV años', desc:'Creamos una ambientación única para celebrar tus quince años.', featured:true, img:'assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg'},
+  {icon:ICONS.calendario, name:'Organización de eventos', desc:'Coordinamos cada detalle para que disfrutes tu evento sin preocupaciones.'},
+  {icon:ICONS.mascara, name:'Entrega con personajes disfrazados', desc:'Una sorpresa especial para niños y adultos con personajes para tu celebración.'},
+  {icon:ICONS.caramelo, name:'Mesa de dulces / Candy Bar', desc:'Una mesa dulce personalizada que combina sabor, decoración y estilo.'},
 ];
 
 /* ===================== ESTADO ===================== */
@@ -47,8 +52,10 @@ function money(n){ return n.toLocaleString('es'); }
 function matchesCat(p, catId){
   if(catId === 'all') return true;
   if(catId === 'destacados') return !!p.destacado;
-  if(Array.isArray(p.cat)) return p.cat.includes(catId);
-  return p.cat === catId;
+  const cat = CATEGORIES.find(c=>c.id===catId);
+  const allowed = cat && cat.sub && cat.sub.length ? cat.sub : [catId];
+  if(Array.isArray(p.cat)) return p.cat.some(c=>allowed.includes(c));
+  return allowed.includes(p.cat);
 }
 
 function renderGrid(){
@@ -66,7 +73,7 @@ function renderGrid(){
           <p>${p.desc}</p>
           <div class="price-row">
             <span class="price quote">Precio a cotizar</span>
-            <button type="button" class="add-btn quote-btn" onclick="quoteWA('${p.name.replace(/'/g,"")}')">Cotizar</button>
+            <button type="button" class="quote-btn" onclick="quoteWA('${p.name.replace(/'/g,"")}')">Cotizar</button>
           </div>
         </div>
       </div>`;
@@ -74,12 +81,13 @@ function renderGrid(){
     const priceLabel = p.unit === 'unidad'
       ? `$${money(p.price)} <small>/ ${p.unit_label || 'unidad'}</small>`
       : `$${money(p.price)} <small>CUP</small>`;
+    const cartIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
     const addControl = p.unit === 'unidad'
       ? `<div class="qty-add">
-           <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input">
-           <button type="button" class="add-btn" onclick="addToCart('${p.row}')">+</button>
+           <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input" aria-label="Cantidad">
+           <button type="button" class="add-btn" onclick="addToCart('${p.row}')"><span class="add-plus" aria-hidden="true">${cartIcon}</span><span class="add-label">Agregar</span></button>
          </div>`
-      : `<button type="button" class="add-btn" onclick="addToCart('${p.row}')">+</button>`;
+      : `<button type="button" class="add-btn" onclick="addToCart('${p.row}')"><span class="add-plus" aria-hidden="true">${cartIcon}</span><span class="add-label">Agregar</span></button>`;
     return `<div class="card">
       ${media}
       <div class="card-body">
@@ -95,12 +103,20 @@ function renderGrid(){
 }
 
 function renderServices(){
-  document.getElementById('servicesGrid').innerHTML = SERVICES.map(s => `
-    <div class="svc-card">
-      <span class="ico">${s.ico}</span>
-      <h4>${s.name}</h4>
-      <p>${s.desc}</p>
-    </div>`).join('');
+  document.getElementById('servicesGrid').innerHTML = SERVICES.map(s => {
+    const featured = s.featured ? ' svc-featured' : '';
+    const media = s.img ? `<div class="svc-media" style="background-image:url('${s.img}')" role="img" aria-label="${s.name}"></div>` : '';
+    return `
+    <div class="svc-card${featured}">
+      ${media}
+      <div class="svc-body">
+        <span class="svc-icon">${s.icon}</span>
+        <h4>${s.name}</h4>
+        <p>${s.desc}</p>
+        <a href="#contacto" class="svc-link">Ver servicio <span aria-hidden="true">→</span></a>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 /* ===================== CARRITO ===================== */
@@ -157,9 +173,10 @@ function renderCart(){
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
-    <div class="row-total" style="background:var(--rosa-suave);padding:10px 14px;border-radius:12px;margin-top:8px;"><span style="font-weight:700;">Entrega a domicilio</span><span style="font-weight:600;color:var(--fucsia);">Costo adicional según distancia</span></div>
+    <div class="delivery-note"><span class="delivery-note-title">🚚 Entrega a domicilio</span><span class="delivery-note-desc">El costo se calcula según la distancia y se confirma por WhatsApp</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:10px;" onclick="openOrderModal()">Continuar pedido</button>`;
+    <div class="zelle-note">💳 También aceptamos pagos por <b>Zelle</b></div>
+    <button class="btn btn-cart-continue" onclick="openOrderModal()">Continuar pedido<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`;
 }
 
 function openCart(){ document.getElementById('cartDrawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
