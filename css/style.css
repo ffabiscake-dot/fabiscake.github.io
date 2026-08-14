@@ -135,8 +135,15 @@ nav.links{
   display:flex;gap:28px;font-size:14px;font-weight:500;
   letter-spacing:0.06em;text-transform:uppercase;
 }
-nav.links a{opacity:0.85;transition:opacity .2s,color .2s;text-decoration:none;}
+nav.links a{opacity:0.85;transition:opacity .2s,color .2s;text-decoration:none;position:relative;padding-bottom:3px;}
+nav.links a::after{
+  content:'';position:absolute;left:0;bottom:0;
+  width:100%;height:2px;background:var(--link);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .28s ease;
+}
 nav.links a:hover{opacity:1;color:var(--link);}
+nav.links a:hover::after{transform:scaleX(1);}
 .nav-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
 .icon-btn{
   border:none;background:transparent;width:42px;height:42px;border-radius:50%;
@@ -364,6 +371,7 @@ nav.links a:hover{opacity:1;color:var(--link);}
   transition:all .2s;flex-shrink:0;
 }
 .add-btn:hover{background:var(--bg-cream);border-color:var(--bg-cream);}
+.add-btn .add-plus svg{width:16px;height:16px;}
 .add-btn.quote-btn{width:auto;border-radius:var(--radius);padding:0 18px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
 .qty-add{display:flex;align-items:center;gap:6px;flex-shrink:0;}
 .qty-input{
@@ -422,6 +430,7 @@ nav.links a:hover{opacity:1;color:var(--link);}
   display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;
   flex-shrink:0;
 }
+#catalogo .add-btn .add-plus svg{width:14px;height:14px;}
 #catalogo .add-btn:hover{background:#F3E1E3;}
 #catalogo .add-btn:active{transform:scale(.97);}
 #catalogo .qty-add{display:flex;align-items:center;gap:8px;flex-shrink:0;}
@@ -623,6 +632,42 @@ footer a:hover{color:var(--link);opacity:1;}
 .row-total b{font-family:var(--font-head);font-size:20px;color:var(--text);}
 .empty-cart{text-align:center;padding:60px 10px;opacity:.6;font-size:14px;}
 
+.delivery-note{
+  display:flex;flex-direction:column;gap:2px;
+  background:var(--bg-cream);padding:10px 14px;border-radius:var(--radius);
+  margin:8px 0 6px;
+}
+.delivery-note-title{font-size:13px;font-weight:700;color:var(--text);}
+.delivery-note-desc{font-size:12px;font-weight:500;color:var(--text-muted);line-height:1.4;}
+
+.zelle-note{
+  display:flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:600;color:#3D7A5C;
+  background:#EAF6EF;border:1px solid #CFEBDA;
+  padding:9px 14px;border-radius:var(--radius);
+  margin:10px 0 4px;
+}
+.zelle-note b{font-weight:800;}
+
+.btn-cart-continue{
+  width:100%;justify-content:center;gap:10px;
+  margin-top:12px;
+  padding:0 22px;min-height:52px;
+  background:linear-gradient(135deg,#D34B64,#B83F58);
+  color:#fff;font-weight:700;font-size:14.5px;
+  letter-spacing:0.03em;
+  box-shadow:0 14px 28px -12px rgba(211,75,100,0.6);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.btn-cart-continue svg{flex-shrink:0;transition:transform .25s ease;}
+.btn-cart-continue:hover{
+  filter:brightness(1.06);
+  transform:translateY(-2px);
+  box-shadow:0 18px 34px -12px rgba(211,75,100,0.7);
+}
+.btn-cart-continue:hover svg{transform:translateX(3px);}
+.btn-cart-continue:active{transform:translateY(0);}
+
 /* ===================== MODAL PEDIDO ===================== */
 .modal{
   position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;
@@ -653,6 +698,23 @@ footer a:hover{color:var(--link);opacity:1;}
 }
 .form-grid .full{grid-column:1/-1;}
 .modal-card .btn{width:100%;justify-content:center;margin-top:24px;}
+.btn-send-wa{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:54px;margin-top:24px;
+  padding:0 22px;border-radius:999px;
+  background:linear-gradient(135deg,#25D366,#1DA851);
+  color:#fff;font-weight:700;font-size:15px;
+  letter-spacing:0.02em;border:none;cursor:pointer;
+  box-shadow:0 16px 32px -14px rgba(37,211,102,0.65);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.btn-send-wa svg{flex-shrink:0;}
+.btn-send-wa:hover{
+  filter:brightness(1.05);
+  transform:translateY(-2px);
+  box-shadow:0 20px 38px -14px rgba(37,211,102,0.75);
+}
+.btn-send-wa:active{transform:translateY(0);}
 
 /* ===================== BANNER DE COOKIES ===================== */
 .cookie-banner{
