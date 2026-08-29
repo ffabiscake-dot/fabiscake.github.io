@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // products-loader.js
 // Carga los productos desde Firestore y los deja en `window.PRODUCTS`
 // con el MISMO formato que ya usa tu app.js:
@@ -10,7 +10,7 @@
 // ============================================================
 import { db, collection, query, orderBy, onSnapshot } from "./firebase-init.js";
 
-const CACHE_KEY = "fabiscake_products_cache_v3";
+const CACHE_KEY = "fabiscake_products_cache_v4";
 
 function mapDoc(docSnap) {
   const d = docSnap.data();
