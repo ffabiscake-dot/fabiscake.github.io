@@ -1,9 +1,10 @@
 // ============================================================
-// service-worker.js — Fabi's Cake PWA v2
+// service-worker.js - Fabi's Cake PWA v5
 // Estrategias:
-//   - Cache-first para assets estáticos (CSS, JS, imágenes)
+//   - Stale-while-revalidate para JS/CSS (siempre actualizado)
+//   - Cache-first para imágenes (rápido)
 //   - Stale-while-revalidate para páginas HTML
-//   - Network-first para Firebase/API
+//   - NEVER_CACHE para Firebase/API
 //   - Página offline de fallback
 // ============================================================
 
@@ -78,7 +79,7 @@ self.addEventListener("fetch", (event) => {
 
   if (req.destination === "style" || req.destination === "script" || req.destination === "font" ||
       url.pathname.match(/\.(css|js|woff2?|ttf|eot)$/i)) {
-    event.respondWith(cacheFirstWithFallback(req, CACHE_STATIC));
+    event.respondWith(staleWhileRevalidate(req, CACHE_STATIC));
     return;
   }
 
