@@ -1,4 +1,4 @@
-window.PRODUCTS = [
+﻿window.PRODUCTS = [
  {
   "row": 1,
   "name": "Panetela sencilla",
@@ -609,7 +609,7 @@ window.PRODUCTS = [
   "name": "Ensalada fría",
   "cat": "postres",
   "desc": "Ensalada fría 8 Libras Disfruta de nuestra deliciosa ensalada fría, preparada con pasta, jamón, queso, aceitunas y un suave aderezo cremoso que combina perfectamente cada ingrediente.",
-  "price": 6000,
+  "price": 10000,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🥮",
