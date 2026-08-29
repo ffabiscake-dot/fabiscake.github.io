@@ -1,4 +1,4 @@
-﻿window.PRODUCTS = [
+﻿﻿window.PRODUCTS = [
  {
   "row": 1,
   "name": "Panetela sencilla",
