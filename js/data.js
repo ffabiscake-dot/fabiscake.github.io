@@ -1,4 +1,4 @@
-﻿﻿﻿window.PRODUCTS = [
+﻿﻿﻿﻿window.PRODUCTS = [
  {
   "row": 1,
   "name": "Panetela sencilla",
@@ -851,7 +851,7 @@
   "name": "Combo para cumpleaños 20 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 20 personas · Incluye · 20 Croquetas fritas · 20 churros · 20 empanadillas · 20 mini donas · 20panecillos con pasta · 20 rosquitas de azúcar",
-  "price": 9200,
+    "price": 9700,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -862,7 +862,7 @@
   "name": "Combo para cumpleaños 30 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 30 personas · Incluye · 30 croquetas fritas · 30 churros · 30 empanadillas · 30 mini donas · 30panecillos con pasta · 30 rosquitas de azúcar",
-  "price": 13350,
+    "price": 14100,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -873,7 +873,7 @@
   "name": "Combo para cumpleaños 40 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 40 personas · Incluye · 40 Croquetas fritas · 40 churros · 40 empanadillas · 40 mini donas · 40panecillos con pasta · 40 rosquitas de azúcar",
-  "price": 17500,
+    "price": 18500,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -884,7 +884,7 @@
   "name": "Combo para cumpleaños 50 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 50 personas · Incluye · 50 Croquetas fritas · 50 churros · 50 empanadillas · 50 mini donas · 50 panecillos con pasta · 50 rosquitas de azúcar",
-  "price": 21650,
+    "price": 23800,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -895,7 +895,7 @@
   "name": "Combo para cumpleaños 75 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 75personas · Incluye · 75Croquetas fritas · 75churros · 75 empanadillas · 75mini donas · 75panecillos con pasta · 75 rosquitas de azúcar",
-  "price": 32875,
+    "price": 34900,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -906,7 +906,7 @@
   "name": "Combo para cumpleaños 100 personas",
   "cat": "combos_cumple",
   "desc": "Combo para cumpleaños · 100 personas · Incluye · 100 Croquetas fritas · 100 churros · 100 empanadillas · 100 mini donas · 100 panecillos con pasta · 100 rosquitas de azúcar",
-  "price": 43000,
+    "price": 46700,
   "unit": "pedido",
   "unit_label": null,
   "icon": "🎉",
@@ -935,3 +935,5 @@
   "img": "assets/products/botella-de-whisky-91.jpg"
  }
 ];
+
+
