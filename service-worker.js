@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // service-worker.js - Fabi's Cake PWA v5
 // Estrategias:
 //   - Stale-while-revalidate para JS/CSS (siempre actualizado)
@@ -8,7 +8,7 @@
 //   - Página offline de fallback
 // ============================================================
 
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 const CACHE_STATIC = `fabiscake-static-${CACHE_VERSION}`;
 const CACHE_PAGES  = `fabiscake-pages-${CACHE_VERSION}`;
 const CACHE_IMAGES = `fabiscake-images-${CACHE_VERSION}`;
