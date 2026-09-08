@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sin conexión — Fabi's Cake</title>
+<meta name="theme-color" content="#E84393">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',Verdana,'Helvetica Neue',Arial,sans-serif;
+    background:#faf7f8;color:#351a2b;
+    min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:24px;
+  }
+  .offline-card{
+    background:#fff;border-radius:24px;padding:48px 36px;
+    box-shadow:0 18px 40px -18px rgba(137,0,79,0.25);
+    max-width:400px;width:100%;
+  }
+  .offline-icon{font-size:72px;margin-bottom:20px;display:block;}
+  h1{font-family:Georgia,serif;font-size:26px;margin:0 0 12px;color:#89004f;}
+  p{font-size:15px;line-height:1.6;opacity:.8;margin:0 0 28px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:15px;
+    padding:14px 28px;border-radius:100px;text-decoration:none;
+    transition:transform .2s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:#d6478e;color:#fff;box-shadow:0 10px 24px -8px rgba(137,0,79,0.4);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{background:transparent;color:#351a2b;border:2px solid rgba(53,26,43,0.2);margin-left:10px;}
+  .btn-ghost:hover{border-color:#d6478e;color:#d6478e;}
+  .info{margin-top:28px;padding-top:20px;border-top:1px solid rgba(53,26,43,0.08);font-size:13px;opacity:.6;}
+  .wa-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:20px;
+    color:#25D366;font-weight:700;font-size:14px;text-decoration:none;
+  }
+  .wa-link:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+  <div class="offline-card">
+    <span class="offline-icon">📡</span>
+    <h1>Sin conexión a internet</h1>
+    <p>Parece que no tienes conexión en este momento. Algunas funciones de la app pueden no estar disponibles hasta que te vuelvas a conectar.</p>
+    <div>
+      <button class="btn btn-primary" onclick="window.location.reload()">Reintentar</button>
+      <a href="https://wa.me/5352076748" target="_blank" class="btn btn-ghost">WhatsApp</a>
+    </div>
+    <a href="https://wa.me/5352076748" target="_blank" class="wa-link">
+      💬 ¿Necesitas ayuda? Escríbenos por WhatsApp
+    </a>
+    <div class="info">Fabi's Cake — Maffo, Contramaestre, Santiago de Cuba</div>
+  </div>
+</body>
+</html>

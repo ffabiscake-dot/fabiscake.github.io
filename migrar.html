@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Migrar productos a Firestore · Fabi's Cake</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="admin-main" style="max-width:700px;margin:0 auto;padding:20px;">
+  <h1>Migración única: data.js → Firestore</h1>
+  <p>Esta página se usa <strong>una sola vez</strong> para copiar tus productos actuales
+  (los que tenías en <code>js/data.js</code>) hacia la base de datos Firestore.
+  Después de migrar, puedes borrar esta página o dejarla (está protegida por tu inicio de sesión).</p>
+
+  <ol>
+    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administrador.</li>
+    <li>Abre tu archivo <code>js/data.js</code> actual, copia el array de productos y pégalo abajo
+      convertido a formato JSON (ver ejemplo).</li>
+    <li>Revisa que cada producto tenga: nombre, descripcion, precio, categoria, imagen (URL existente
+      de tu carpeta assets/products/), estado y destacado.</li>
+    <li>Presiona "Migrar a Firestore".</li>
+  </ol>
+
+  <p><strong>Ejemplo de formato esperado:</strong></p>
+  <pre style="background:#f3eef1;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;">[
+  {
+    "nombre": "Torta para XV años",
+    "descripcion": "Torta personalizada de tres pisos.",
+    "precio": 1500,
+    "categoria": "Tortas",
+    "imagen": "assets/products/torta-para-15-anos-4.jpg",
+    "estado": "Disponible",
+    "destacado": true
+  }
+]</pre>
+
+  <label for="json-input">Pega aquí el JSON de tus productos:</label>
+  <textarea id="json-input" class="input" rows="12" placeholder="[ ... ]"></textarea>
+
+  <div style="margin-top:10px;display:flex;align-items:center;gap:10px;">
+    <input type="file" id="json-file" accept=".json,.txt,application/json,text/plain">
+    <span style="color:#8a8291;font-size:13px;">O selecciona el archivo y se pega solo (evita errores al copiar).</span>
+  </div>
+  <div id="file-status" style="margin-top:6px;color:#8a8291;font-size:13px;"></div>
+
+  <script>
+    // Script independiente (no usa Firebase): si algo del módulo falla,
+    // este botón igual debe funcionar.
+    document.getElementById("json-file").addEventListener("change", (e) => {
+      var fileStatus = document.getElementById("file-status");
+      var file = e.target.files && e.target.files[0];
+      if (!file) { fileStatus.textContent = "No se seleccionó ningún archivo."; return; }
+      fileStatus.textContent = "Leyendo " + file.name + " (" + (file.size / 1024 / 1024).toFixed(1) + " MB)...";
+      var reader = new FileReader();
+      reader.onload = function () {
+        document.getElementById("json-input").value = reader.result;
+        fileStatus.textContent = "✔ Archivo cargado: " + file.name + " (" + reader.result.length + " caracteres).";
+      };
+      reader.onerror = function () {
+        fileStatus.textContent = "✖ No se pudo leer el archivo: " + reader.error;
+      };
+      try { reader.readAsText(file); }
+      catch (err) { fileStatus.textContent = "✖ Error: " + err.message; }
+    });
+  </script>
+
+  <div style="margin-top:10px;">
+    <label>
+      <input type="checkbox" id="clear-first">
+      Vaciar el catálogo (borrar todos los productos) antes de importar — úsalo para reimportar con el orden correcto sin duplicados.
+    </label>
+  </div>
+
+  <div style="margin-top:16px;display:flex;gap:10px;">
+    <button id="migrate-btn" class="btn btn-primary">Migrar a Firestore</button>
+    <span id="migrate-status" style="align-self:center;color:#8a8291;"></span>
+  </div>
+
+  <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
+    Debes iniciar sesión como administrador en admin.html antes de migrar.
+  </div>
+  <div id="diag" style="margin-top:10px;color:#e05353;font-weight:600;white-space:pre-wrap;"></div>
+</div>
+
+<script>
+  // ===== DIAGNÓSTICO (funciona aunque Firebase falle) =====
+  function diag(msg) {
+    var d = document.getElementById("diag");
+    if (d) d.textContent = msg;
+  }
+  // Causa 1: archivo abierto con doble clic (file://) -> los módulos están bloqueados.
+  if (location.protocol === "file:") {
+    diag("✖ Abriste el archivo LOCAL (file://).\nDEBES abrir esta URL en el navegador:\nhttps://ffabiscake-dot.github.io/fabiscake.github.io/migrar.html");
+  }
+  window.addEventListener("error", function (e) {
+    diag("⚠ Error del script: " + (e.message || "desconocido"));
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    diag("⚠ Error de Firebase: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+  // Si el módulo de Firebase no se ejecutó en 4 segundos, probamos gstatic.com.
+  setTimeout(function () {
+    if (window.__MIGRAR_MODULE_OK) return;
+    // Causa 2: gstatic.com (CDN de Firebase) bloqueado por la red/VPN.
+    fetch("https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js")
+      .then(function () {
+        diag("⚠ El módulo de Firebase NO cargó, pero gstatic.com SÍ responde.\nCausa: un error interno del script. Pulsa F12 y dime el error de la pestaña Console.");
+      })
+      .catch(function () {
+        diag("⚠ El módulo de Firebase NO cargó y gstatic.com NO responde.\nCausa: tu red/VPN bloquea gstatic.com.\nSolución: enciende Proton VPN (o pruébalo conectado) y recarga con Ctrl+F5.");
+      });
+  }, 4000);
+</script>
+
+<script type="module">
+import { ADMIN_EMAIL } from "./js/firebase-config.js";
+import { auth, db, onAuthStateChanged, collection, addDoc, getDocs, deleteDoc, serverTimestamp } from "./js/firebase-init.js";
+
+window.__MIGRAR_MODULE_OK = true;
+
+const btn = document.getElementById("migrate-btn");
+const status = document.getElementById("migrate-status");
+const warning = document.getElementById("login-warning");
+
+let isAdmin = false;
+onAuthStateChanged(auth, (user) => {
+  isAdmin = !!(user && user.email === ADMIN_EMAIL);
+  warning.style.display = isAdmin ? "none" : "block";
+  btn.disabled = !isAdmin;
+  if (!isAdmin) status.textContent = "No has iniciado sesión como administrador (ffabiscake@gmail.com).";
+});
+
+btn.addEventListener("click", async () => {
+  if (!isAdmin) return;
+  let products;
+  try {
+    products = JSON.parse(document.getElementById("json-input").value);
+    if (!Array.isArray(products)) throw new Error("El JSON debe ser un arreglo [ ... ]");
+  } catch (e) {
+    status.textContent = "JSON inválido: " + e.message;
+    return;
+  }
+
+  btn.disabled = true;
+  // Opcional: borrar todos los productos existentes antes de importar,
+  // para reimportar el catálogo con el orden correcto sin duplicados.
+  if (document.getElementById("clear-first") && document.getElementById("clear-first").checked) {
+    status.textContent = "Vacando catálogo...";
+    const snap = await getDocs(collection(db, "products"));
+    await Promise.all(snap.docs.map(d => deleteDoc(d.ref)));
+  }
+  let done = 0;
+  for (const [i, p] of products.entries()) {
+    try {
+      await addDoc(collection(db, "products"), {
+        nombre: p.nombre || "",
+        descripcion: p.descripcion || "",
+        precio: Number(p.precio) || 0,
+        categoria: p.categoria || "Otros",
+        estado: p.estado || "Disponible",
+        destacado: !!p.destacado,
+        orden: i,                                   // posición fija en el catálogo
+        imagenPrincipal: p.imagen || p.imagenPrincipal || "",
+        imagenes: p.imagenes || [],
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      done++;
+      status.textContent = `Migrados ${done}/${products.length}...`;
+    } catch (e) {
+      status.textContent = `Error en producto "${p.nombre}": ${e.message}`;
+      break;
+    }
+  }
+  if (done === products.length) {
+    status.textContent = `✔ Migración completa: ${done} productos agregados.`;
+  }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

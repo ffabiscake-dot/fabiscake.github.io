@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador de iconos PWA — Fabi's Cake</title>
+<style>
+  body{font-family:sans-serif;background:#f4f0f1;color:#351a2b;padding:32px;max-width:600px;margin:0 auto;}
+  h1{font-family:Georgia,serif;color:#89004f;}
+  canvas{border:1px solid #ddd;border-radius:12px;margin:10px 0;}
+  .row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin:16px 0;}
+  .col{text-align:center;}
+  label{font-size:13px;font-weight:700;display:block;margin-bottom:4px;}
+  a.btn{display:inline-block;padding:10px 20px;background:#d6478e;color:#fff;border-radius:100px;text-decoration:none;font-weight:700;margin:4px;}
+  a.btn:hover{background:#89004f;}
+  p{line-height:1.6;opacity:.8;}
+</style>
+</head>
+<body>
+<h1>Generador de iconos PWA</h1>
+<p>Sube tu logo y se generarán los iconos necesarios para la PWA. Haz clic en cada uno para descargarlo.</p>
+
+<div class="row">
+  <div class="col">
+    <label>Logo original</label>
+    <input type="file" id="logoInput" accept="image/*">
+  </div>
+</div>
+
+<div class="row" id="outputs" style="display:none;">
+  <div class="col">
+    <label>192x192</label>
+    <canvas id="c192" width="192" height="192"></canvas>
+    <br><a class="btn" id="dl192" download="icon-192.png">Descargar 192px</a>
+  </div>
+  <div class="col">
+    <label>512x512</label>
+    <canvas id="c512" width="512" height="512"></canvas>
+    <br><a class="btn" id="dl512" download="icon-512.png">Descargar 512px</a>
+  </div>
+</div>
+
+<script>
+document.getElementById('logoInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = function() {
+    document.getElementById('outputs').style.display = 'flex';
+    drawIcon('c192', img, 192);
+    drawIcon('c512', img, 512);
+  };
+  img.src = URL.createObjectURL(file);
+});
+
+function drawIcon(canvasId, img, size) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#faf7f8';
+  ctx.fillRect(0, 0, size, size);
+  const aspect = img.width / img.height;
+  let w, h;
+  if (aspect > 1) { h = size; w = h * aspect; } else { w = size; h = w / aspect; }
+  const x = (size - w) / 2;
+  const y = (size - h) / 2;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(size/2, size/2, Math.min(w, h) / 2, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.drawImage(img, x, y, w, h);
+  ctx.restore();
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const linkId = canvasId === 'c192' ? 'dl192' : 'dl512';
+    document.getElementById(linkId).href = url;
+  }, 'image/png');
+}
+</script>
+</body>
+</html>
