@@ -9,7 +9,11 @@ window.WebP = (function(){
 
 function toWebP(path) {
   if (!path || !window.WebP) return path;
-  return path.replace(/\.jpg$/i, '.webp').replace(/\.jpeg$/i, '.webp').replace(/\.png$/i, '.webp');
+  let result = path.replace(/\.jpg$/i, '.webp').replace(/\.jpeg$/i, '.webp').replace(/\.png$/i, '.webp');
+  if (result.includes('assets/products/')) {
+    result = result.replace('assets/products/', 'assets/products/webp/');
+  }
+  return result;
 }
 
 /* ===================== TEMA Y NAVEGACIÓN (compartido en todo el sitio) ===================== */
