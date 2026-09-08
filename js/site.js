@@ -1,3 +1,17 @@
+/* ===================== DETECCIÓN WebP ===================== */
+window.WebP = (function(){
+  try {
+    const c = document.createElement('canvas');
+    if(c.toDataURL && c.toDataURL('image/webp').indexOf('data:image/webp') === 0) return true;
+  } catch(e) {}
+  return false;
+})();
+
+function toWebP(path) {
+  if (!path || !window.WebP) return path;
+  return path.replace(/\.jpg$/i, '.webp').replace(/\.jpeg$/i, '.webp').replace(/\.png$/i, '.webp');
+}
+
 /* ===================== TEMA Y NAVEGACIÓN (compartido en todo el sitio) ===================== */
 function toggleTheme(){
   const body = document.body;

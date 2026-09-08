@@ -62,8 +62,9 @@ function renderGrid(){
   const el = document.getElementById('productGrid');
   const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>matchesCat(p, activeCat));
   el.innerHTML = list.map(p => {
+    const imgSrc = toWebP(p.img);
     const media = p.img
-      ? `<div class="card-media" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>`
+      ? `<div class="card-media" role="img" aria-label="${p.name}"><img src="${imgSrc}" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;"></div>`
       : `<div class="card-media">${p.icon}</div>`;
     if(p.unit === 'cotizar'){
       return `<div class="card">
@@ -105,7 +106,8 @@ function renderGrid(){
 function renderServices(){
   document.getElementById('servicesGrid').innerHTML = SERVICES.map(s => {
     const featured = s.featured ? ' svc-featured' : '';
-    const media = s.img ? `<div class="svc-media" style="background-image:url('${s.img}')" role="img" aria-label="${s.name}"></div>` : '';
+    const imgSrc = toWebP(s.img);
+    const media = s.img ? `<div class="svc-media" role="img" aria-label="${s.name}"><img src="${imgSrc}" alt="${s.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;"></div>` : '';
     return `
     <div class="svc-card${featured}">
       ${media}
@@ -154,7 +156,8 @@ function renderCart(){
   }
   body.innerHTML = cart.map((i,idx)=>{
     const p = PRODUCTS.find(x=>x.row===i.row);
-    const bg = p && p.img ? `style="background-image:url('${p.img}')"` : '';
+    const imgSrc = p && p.img ? toWebP(p.img) : '';
+    const bg = imgSrc ? `style="background-image:url('${imgSrc}')"` : '';
     return `
     <div class="cart-item">
       <div class="ico" ${bg}>${p && p.img ? '' : (p?p.icon:'🎂')}</div>
@@ -248,12 +251,42 @@ function toggleTheme(){
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
 
+/* ===================== GALERÍA ===================== */
+function renderGallery(){
+  const galleryImages = [
+    {href:'assets/products/cake-premium-12.jpg', title:'Cake Premium', alt:'Cake premium personalizado'},
+    {href:'assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg', title:'Pastel Bodas', alt:'Pastel para bodas o XV años'},
+    {href:'assets/products/cake-en-forma-de-corazon-92.jpg', title:'Cake Corazón', alt:'Cake en forma de corazón'},
+    {href:'assets/products/cake-rectangular-93.jpg', title:'Cake Rectangular', alt:'Cake rectangular'},
+    {href:'assets/products/cake-rectangular-de-2-pisos-14.jpg', title:'Cake 2 Pisos', alt:'Cake rectangular de 2 pisos'},
+    {href:'assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg', title:'Decoración XV Años', alt:'Decoración de XV años'},
+    {href:'assets/products/decoracion-con-globos-sencilla-61.jpg', title:'Decoración Globos', alt:'Decoración con globos'},
+    {href:'assets/products/decoracion-interior-set-principal-58.jpg', title:'Decoración Interior', alt:'Decoración interior set principal'},
+    {href:'assets/products/ramo-de-novia-52.jpg', title:'Ramo Novia', alt:'Ramo de novia'},
+    {href:'assets/products/ramo-de-rosas-eternas-52.jpg', title:'Ramo Rosas Eternas', alt:'Ramo de rosas eternas'},
+    {href:'assets/products/ramo-buchon-54.jpg', title:'Ramo Buchón', alt:'Ramo buchón'},
+    {href:'assets/products/ancheta-32.jpg', title:'Ancheta', alt:'Ancheta de regalo'},
+    {href:'assets/products/ancheta-de-mujer-25.jpg', title:'Ancheta Mujer', alt:'Ancheta para mujer'},
+    {href:'assets/products/cesta-presentacion-34.jpg', title:'Cesta Regalo', alt:'Cesta de regalo'},
+    {href:'assets/products/cesta-de-confituras-95.jpg', title:'Cesta Confituras', alt:'Cesta de confituras'},
+    {href:'assets/products/combo-para-cumpleanos-20-personas-75.jpg', title:'Combo Cumpleaños', alt:'Combo para cumpleaños'},
+    {href:'assets/products/sorpresa-con-disfraz-59.jpg', title:'Sorpresa Disfraz', alt:'Sorpresa con disfraz'}
+  ];
+  const el = document.getElementById('galleryGrid');
+  if(!el) return;
+  el.innerHTML = galleryImages.map(img => {
+    const src = toWebP(img.href);
+    return `<a href="${img.href}" target="_blank" data-title="${img.title}"><img src="${src}" loading="lazy" decoding="async" alt="${img.alt}"></a>`;
+  }).join('');
+}
+
 /* ===================== INIT ===================== */
 (function init(){
   const savedTheme = localStorage.getItem('fc_theme');
   if(savedTheme==='dark'){ document.body.setAttribute('data-theme','dark'); document.getElementById('themeBtn').textContent='☀️'; }
   renderPills();
   renderServices();
+  renderGallery();
   renderCart();
   initFabWhatsapp();
 
