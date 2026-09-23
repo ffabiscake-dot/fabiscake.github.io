@@ -543,7 +543,7 @@
   "name": "Donas de Chocolate",
   "cat": "postres",
   "desc": "Esponjosas donas elaboradas con masa suave y fresca, cubiertas con una deliciosa capa de chocolate y decoradas con coloridas grageas. El postre perfecto para endulzar cualquier celebración, mesa de postres, bufet o compartir en familia.",
-  "price": 85,
+  "price": 60,
   "unit": "unidad",
   "unit_label": "unidad",
   "icon": "🥮",
