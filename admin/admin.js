@@ -9,7 +9,6 @@ import {
   query, orderBy, onSnapshot, serverTimestamp
 } from "../js/firebase-init.js";
 
-// ---------- Referencias DOM ----------
 const $ = (id) => document.getElementById(id);
 
 const loginScreen = $("login-screen");
@@ -31,27 +30,29 @@ const deleteProductBtn = $("delete-product-btn");
 const confirmModal = $("confirm-modal");
 const cropModal = $("crop-modal");
 
-let allProducts = [];      // cache local de productos
-let currentMainImageBlob = null;   // blob ya recortado/comprimido de la imagen principal
-let currentExtraImageBlobs = [];   // blobs de imágenes adicionales
-let existingMainImageUrl = "";     // url ya guardada (al editar)
-let existingExtraUrls = [];        // urls ya guardadas (al editar)
+let allProducts = [];
+let currentMainImageBlob = null;
+let currentExtraImageBlobs = [];
+let existingMainImageUrl = "";
+let existingExtraUrls = [];
 let pendingDeleteId = null;
-let cropCallback = null;           // qué hacer con el resultado del recorte
+let cropCallback = null;
 
-// ============================================================
-// 1) AUTENTICACIÓN
-// ============================================================
+function triggerCatalogRefresh() {
+  try {
+    if (window.fabiscakeBroadcastRefresh) {
+      window.fabiscakeBroadcastRefresh();
+    }
+  } catch (_) {}
+}
+
 onAuthStateChanged(auth, (user) => {
   if (user && user.email === ADMIN_EMAIL) {
     loginScreen.hidden = true;
     adminApp.hidden = false;
     listenToProducts();
   } else {
-    if (user) {
-      // Alguien inició sesión pero no es el admin autorizado.
-      signOut(auth);
-    }
+    if (user) signOut(auth);
     adminApp.hidden = true;
     loginScreen.hidden = false;
   }
@@ -78,9 +79,6 @@ loginForm.addEventListener("submit", async (e) => {
 
 $("logout-btn").addEventListener("click", () => signOut(auth));
 
-// ============================================================
-// 2) LISTAR / BUSCAR / FILTRAR PRODUCTOS
-// ============================================================
 function listenToProducts() {
   loadingIndicator.hidden = false;
   const q = query(collection(db, "products"), orderBy("orden", "asc"), orderBy("createdAt", "asc"));
@@ -152,9 +150,6 @@ function renderGrid() {
 searchInput.addEventListener("input", renderGrid);
 categoryFilter.addEventListener("change", renderGrid);
 
-// ============================================================
-// 3) MODAL DE PRODUCTO (crear / editar)
-// ============================================================
 $("new-product-btn").addEventListener("click", () => openNewModal());
 $("modal-close").addEventListener("click", closeProductModal);
 $("cancel-btn").addEventListener("click", closeProductModal);
@@ -213,7 +208,6 @@ function closeProductModal() {
   productModal.hidden = true;
 }
 
-// ---------- Guardar producto (crear o actualizar) ----------
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = $("product-id").value;
@@ -258,13 +252,9 @@ productForm.addEventListener("submit", async (e) => {
     if (ordenRaw !== "") {
       payload.orden = parseInt(ordenRaw, 10) || 0;
     } else {
-      // Producto sin posición explícita: se agrega al final.
-      // (también aplica a ediciones de productos viejos que no tienen "orden")
       const maxOrden = allProducts.reduce((m, p) => Math.max(m, typeof p.orden === "number" ? p.orden : -1), -1);
       payload.orden = maxOrden + 1;
     }
-    // Si es edición con posición en blanco, igual se mueve al final (así los
-    // productos viejos sin "orden" quedan visibles en la web, que ordena por "orden").
 
     if (id) {
       await updateDoc(doc(db, "products", id), payload);
@@ -274,6 +264,8 @@ productForm.addEventListener("submit", async (e) => {
       await addDoc(collection(db, "products"), payload);
       showToast("Producto creado ✔", "success");
     }
+
+    triggerCatalogRefresh();
     closeProductModal();
   } catch (err) {
     showToast("Error al guardar: " + err.message, "error");
@@ -283,9 +275,6 @@ productForm.addEventListener("submit", async (e) => {
   }
 });
 
-// ============================================================
-// 4) ELIMINAR PRODUCTO (con confirmación)
-// ============================================================
 deleteProductBtn.addEventListener("click", () => {
   pendingDeleteId = $("product-id").value;
   confirmModal.hidden = false;
@@ -304,6 +293,7 @@ $("confirm-delete").addEventListener("click", async () => {
   try {
     await deleteDoc(doc(db, "products", pendingDeleteId));
     showToast("Producto eliminado", "success");
+    triggerCatalogRefresh();
     confirmModal.hidden = true;
     closeProductModal();
   } catch (err) {
@@ -322,9 +312,6 @@ function decodeStoragePath(downloadUrl) {
   } catch { return null; }
 }
 
-// ============================================================
-// 5) SUBIDA DE IMÁGENES: cámara, galería, recorte, compresión
-// ============================================================
 $("btn-camera").addEventListener("click", () => $("input-camera").click());
 $("btn-gallery").addEventListener("click", () => $("input-gallery").click());
 $("btn-add-extra").addEventListener("click", () => $("input-extra").click());
@@ -385,11 +372,6 @@ function renderExtraPreviews() {
   });
 }
 
-// ---------- Convertir un blob ya recortado/comprimido a base64 ----------
-// (En vez de subirlo a Firebase Storage —que exige plan de pago—,
-// lo guardamos directo como texto dentro del documento de Firestore,
-// que es gratis. Por eso comprimimos fuerte y limitamos la cantidad
-// de fotos por producto.)
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -405,16 +387,13 @@ function showUploadProgress(show, text) {
   box.hidden = !show;
   if (show) {
     $("upload-progress-text").textContent = text || "Subiendo...";
-    bar.style.width = "70%"; // uploadBytes no reporta progreso incremental; barra indicativa
+    bar.style.width = "70%";
   } else {
     bar.style.width = "100%";
     setTimeout(() => { bar.style.width = "0%"; }, 300);
   }
 }
 
-// ============================================================
-// 6) RECORTE DE IMAGEN (crop cuadrado con pan + zoom) + COMPRESIÓN
-// ============================================================
 const cropStage = $("crop-stage");
 const cropImage = $("crop-image");
 const cropZoom = $("crop-zoom");
@@ -487,25 +466,23 @@ $("crop-cancel").addEventListener("click", () => { cropModal.hidden = true; });
 
 $("crop-confirm").addEventListener("click", async () => {
   const stageSize = cropStage.clientWidth || 320;
-  const OUTPUT_SIZE = 900; // tamaño final del cuadrado, luego se comprime
+  const OUTPUT_SIZE = 900;
   const canvas = document.createElement("canvas");
   canvas.width = OUTPUT_SIZE;
   canvas.height = OUTPUT_SIZE;
   const ctx = canvas.getContext("2d");
 
-  // Área visible del recorte, en coordenadas de la imagen original.
   const sx = (0 - cropState.x) / cropState.scale;
   const sy = (0 - cropState.y) / cropState.scale;
   const sSize = stageSize / cropState.scale;
 
   ctx.drawImage(cropImage, sx, sy, sSize, sSize, 0, 0, OUTPUT_SIZE, OUTPUT_SIZE);
 
-  const blob = await compressCanvas(canvas, 120); // 120KB máx. por imagen (se guardan dentro de Firestore, no en Storage)
+  const blob = await compressCanvas(canvas, 120);
   if (cropCallback) await cropCallback(blob);
   cropModal.hidden = true;
 });
 
-// Comprime iterativamente hasta quedar por debajo de targetKB.
 function compressCanvas(canvas, targetKB = 120) {
   return new Promise((resolve) => {
     let quality = 0.85;
@@ -524,9 +501,6 @@ function compressCanvas(canvas, targetKB = 120) {
   });
 }
 
-// ============================================================
-// Utilidades
-// ============================================================
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
