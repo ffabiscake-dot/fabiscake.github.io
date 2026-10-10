@@ -18,6 +18,7 @@ import {
   doc,
   addDoc,
   updateDoc,
+  setDoc,
   deleteDoc,
   getDocs,
   getDoc,
@@ -46,6 +47,7 @@ export const storage = getStorage(app);
 setPersistence(auth, browserLocalPersistence);
 
 export {
+  setDoc,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,

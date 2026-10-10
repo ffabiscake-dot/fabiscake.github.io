@@ -40,6 +40,63 @@ let activeCat = 'all';
 
 function saveCart(){ sessionStorage.setItem('fc_cart', JSON.stringify(cart)); renderCart(); }
 
+/* ===================== CARGA DEL CATÁLOGO ===================== */
+const CATALOG_CACHE_KEY = 'fabiscake_products_cache_v7'; // misma clave que products-loader.js
+let catalogReady = false;
+let catalogWatchdog = null;
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function setCatalogNotice(text){
+  const grid = document.getElementById('productGrid');
+  if(!grid) return;
+  let n = document.getElementById('catalogNotice');
+  if(!text){ if(n) n.remove(); return; }
+  if(!n){
+    n = document.createElement('div');
+    n.id = 'catalogNotice';
+    n.setAttribute('role','status');
+    n.style.cssText = 'margin:0 0 16px;padding:12px 16px;border-radius:12px;background:rgba(200,140,60,.14);font-size:14px;text-align:center;';
+    grid.parentNode.insertBefore(n, grid);
+  }
+  n.textContent = text;
+}
+function showCatalogLoading(){
+  const el = document.getElementById('productGrid');
+  if(el) el.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:32px 0;opacity:.7">Cargando catálogo…</p>';
+}
+function showCatalogError(){
+  const el = document.getElementById('productGrid');
+  if(!el) return;
+  el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px 0">' +
+    '<p><strong>No pudimos cargar el catálogo.</strong></p>' +
+    '<p style="opacity:.7">Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp.</p>' +
+    '<button type="button" class="quote-btn" onclick="location.reload()">Reintentar</button></div>';
+}
+function onCatalogData(detail){
+  if(detail && Array.isArray(detail.products)) window.PRODUCTS = detail.products;
+  catalogReady = true;
+  clearTimeout(catalogWatchdog);
+  const src = detail && detail.source;
+  setCatalogNotice(
+    src === 'cache' ? 'Mostrando el último catálogo guardado en tu dispositivo; puede no estar actualizado.' :
+    src === 'fallback' ? 'Mostrando un catálogo de respaldo; algunos precios podrían no estar actualizados. Confírmalos por WhatsApp.' : ''
+  );
+  renderPills();
+  renderGrid();
+}
+// Si Firestore no responde (o el script de Firebase está bloqueado en la red
+// del visitante) no dejamos "Cargando…" para siempre: caché local → data.js.
+function catalogFallbackNow(){
+  if(catalogReady) return;
+  let list = null;
+  try { const c = JSON.parse(localStorage.getItem(CATALOG_CACHE_KEY) || 'null'); if(Array.isArray(c) && c.length) list = c; } catch(_){}
+  if(list){ window.PRODUCTS = list; onCatalogData({source:'cache'}); return; }
+  if(Array.isArray(window.PRODUCTS) && window.PRODUCTS.length){ onCatalogData({source:'fallback'}); return; }
+  showCatalogError();
+}
+
 /* ===================== RENDER CATÁLOGO ===================== */
 function renderPills(){
   const el = document.getElementById('pills');
@@ -60,21 +117,29 @@ function matchesCat(p, catId){
 
 function renderGrid(){
   const el = document.getElementById('productGrid');
-  const list = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>matchesCat(p, activeCat));
+  const all = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+  const list = activeCat==='all' ? all : all.filter(p=>matchesCat(p, activeCat));
+  if(!list.length){
+    el.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:32px 0;opacity:.7">' +
+      (all.length ? 'No hay productos en esta categoría por ahora.' : 'Estamos actualizando el catálogo. Escríbenos por WhatsApp y te ayudamos con tu pedido.') + '</p>';
+    return;
+  }
   el.innerHTML = list.map(p => {
+    const name = esc(p.name), desc = esc(p.desc);
+    const soldOut = p.estado === 'Agotado';
     const imgSrc = toWebP(p.img);
     const media = p.img
-      ? `<div class="card-media" role="img" aria-label="${p.name}"><img src="${imgSrc}" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;"></div>`
-      : `<div class="card-media">${p.icon}</div>`;
+      ? `<div class="card-media" role="img" aria-label="${name}"><img src="${imgSrc}" alt="${name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;"></div>`
+      : `<div class="card-media">${esc(p.icon)}</div>`;
     if(p.unit === 'cotizar'){
       return `<div class="card">
         ${media}
         <div class="card-body">
-          <h3>${p.name}</h3>
-          <p>${p.desc}</p>
+          <h3>${name}</h3>
+          <p>${desc}</p>
           <div class="price-row">
             <span class="price quote">Precio a cotizar</span>
-            <button type="button" class="quote-btn" onclick="quoteWA('${p.name.replace(/'/g,"")}')">Cotizar</button>
+            <button type="button" class="quote-btn" onclick="quoteWA('${String(p.name).replace(/['"\\<>&]/g,"")}')">Cotizar</button>
           </div>
         </div>
       </div>`;
@@ -83,7 +148,9 @@ function renderGrid(){
       ? `$${money(p.price)} <small>/ ${p.unit_label || 'unidad'}</small>`
       : `$${money(p.price)} <small>CUP</small>`;
     const cartIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
-    const addControl = p.unit === 'unidad'
+    const addControl = soldOut
+      ? `<button type="button" class="add-btn" disabled aria-disabled="true" style="opacity:.55;cursor:not-allowed"><span class="add-label">Agotado</span></button>`
+      : p.unit === 'unidad'
       ? `<div class="qty-add">
            <input type="number" min="1" value="1" id="qtyinput-${p.row}" class="qty-input" aria-label="Cantidad">
            <button type="button" class="add-btn" onclick="addToCart('${p.row}')"><span class="add-plus" aria-hidden="true">${cartIcon}</span><span class="add-label">Agregar</span></button>
@@ -92,8 +159,8 @@ function renderGrid(){
     return `<div class="card">
       ${media}
       <div class="card-body">
-        <h3>${p.name}</h3>
-        <p>${p.desc}</p>
+        <h3>${name}</h3>
+        <p>${desc}</p>
         <div class="price-row">
           <span class="price">${priceLabel}</span>
           ${addControl}
@@ -123,8 +190,8 @@ function renderServices(){
 
 /* ===================== CARRITO ===================== */
 function addToCart(row){
-  const p = PRODUCTS.find(x=>String(x.row)===String(row));
-  if(!p) return;
+  const p = (window.PRODUCTS||[]).find(x=>String(x.row)===String(row));
+  if(!p || p.estado === 'Agotado') return;
   let qtyToAdd = 1;
   if(p.unit === 'unidad'){
     const input = document.getElementById(`qtyinput-${row}`);
@@ -133,7 +200,7 @@ function addToCart(row){
       if(!qtyToAdd || qtyToAdd < 1) qtyToAdd = 1;
     }
   }
-  const existing = cart.find(i=>i.row===row);
+  const existing = cart.find(i=>String(i.row)===String(p.row));
   if(existing){ existing.qty += qtyToAdd; } else { cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:qtyToAdd}); }
   saveCart();
   openCart();
@@ -155,7 +222,7 @@ function renderCart(){
     return;
   }
   body.innerHTML = cart.map((i,idx)=>{
-    const p = PRODUCTS.find(x=>x.row===i.row);
+    const p = (window.PRODUCTS||[]).find(x=>String(x.row)===String(i.row));
     const imgSrc = p && p.img ? toWebP(p.img) : '';
     const bg = imgSrc ? `style="background-image:url('${imgSrc}')"` : '';
     return `
@@ -290,23 +357,15 @@ function renderGallery(){
   renderCart();
   initFabWhatsapp();
 
-  // El catálogo se pinta aquí (con data.js como respaldo) y de nuevo cada
-  // vez que Firestore envía datos actualizados (products-loader.js).
-  renderGridIfReady();
-
-  // Cuando products-loader.js recibe (o reutiliza el caché de) los productos
-  // desde Firestore, re-renderiza el catálogo en tiempo real.
-  window.addEventListener('products:ready', () => {
-    renderPills();
-    renderGrid();
-  });
+  // El catálogo se pinta cuando products-loader.js entrega los productos de
+  // Firestore (y de nuevo en cada cambio en tiempo real). data.js solo se usa
+  // como respaldo, para no mostrar precios viejos mientras se carga.
+  showCatalogLoading();
+  window.addEventListener('products:ready', (e) => onCatalogData(e.detail));
+  window.addEventListener('products:error', () => { if(!catalogReady) catalogFallbackNow(); });
+  catalogWatchdog = setTimeout(catalogFallbackNow, 8000);
 })();
 
-function renderGridIfReady(){
-  // Si aún no hay productos (ni data.js ni Firestore), muestra vacío sin errores.
-  if(!Array.isArray(window.PRODUCTS)) return;
-  renderGrid();
-}
 
 /* ===================== BOTÓN FLOTANTE WHATSAPP ===================== */
 function initFabWhatsapp(){
