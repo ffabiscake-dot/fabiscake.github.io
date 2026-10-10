@@ -17,22 +17,23 @@
 import { db, collection, query, orderBy, onSnapshot } from "./firebase-init.js";
 
 const CACHE_KEY = "fabiscake_products_cache_v6";
+const REFRESH_BROADCAST_KEY = "fabiscake_sync_broadcast";
 let hasInitializedFromFirestore = false;
 
 function mapDoc(docSnap) {
   const d = docSnap.data();
   return {
-    row: docSnap.id,                              // identificador único (string)
+    row: docSnap.id,
     name: d.nombre || "",
     desc: d.descripcion || "",
     price: Number(d.precio) || 0,
-    unit: d.unidad || "unidad",                    // "unidad" | "cotizar" | otro
+    unit: d.unidad || "unidad",
     unit_label: d.unidadEtiqueta || null,
     img: d.imagenPrincipal || "",
     icon: d.icono || "🎂",
-    cat: d.categoria || "cakes",                    // debe ser un id válido de CATEGORIES
+    cat: d.categoria || "cakes",
     imagenes: Array.isArray(d.imagenes) ? d.imagenes : [],
-    estado: d.estado || "Disponible",               // "Disponible" | "Agotado"
+    estado: d.estado || "Disponible",
     destacado: !!d.destacado,
     orden: typeof d.orden === "number" ? d.orden : 0
   };
@@ -41,8 +42,7 @@ function mapDoc(docSnap) {
 function productsChanged(oldProducts, newProducts) {
   if (!oldProducts || !newProducts) return true;
   if (oldProducts.length !== newProducts.length) return true;
-  
-  // Comparar rápido: si algún producto cambió, es cambio
+
   return oldProducts.some((oldProd, idx) => {
     const newProd = newProducts[idx];
     if (!newProd) return true;
@@ -61,20 +61,15 @@ function productsChanged(oldProducts, newProducts) {
 function dispatchProducts(products, fromCache = false) {
   const oldProducts = window.PRODUCTS;
   window.PRODUCTS = products;
-  
-  // Emitir evento para que app.js sepa que hay productos nuevos
+
   window.dispatchEvent(new CustomEvent("products:ready", { detail: { products, fromCache } }));
-  
-  // Si es la primera vez desde Firestore Y hay cambios reales, recargar el catálogo
+
   if (!fromCache && hasInitializedFromFirestore && productsChanged(oldProducts, products)) {
     console.log("✅ Productos actualizados desde Firestore. Refrescando catálogo...");
     window.dispatchEvent(new CustomEvent("products:updated", { detail: { products } }));
   }
 }
 
-// Si Firestore viene VACÍA (aún no migras tus productos o borraste todo),
-// conservamos el catálogo de respaldo de js/data.js para que la página
-// nunca se quede sin productos a la vista.
 function hasFallback() {
   return Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0;
 }
@@ -84,14 +79,12 @@ function applyFirestoreProducts(products) {
     console.warn("⚠️ Firestore no tiene productos. Se usa el catálogo de respaldo de data.js.");
     return;
   }
-  
-  // Guardar en caché como respaldo
+
   localStorage.setItem(CACHE_KEY, JSON.stringify(products));
   dispatchProducts(products, false);
   hasInitializedFromFirestore = true;
 }
 
-// Limpiar cachés viejos de versiones anteriores
 try {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -101,21 +94,15 @@ try {
   }
 } catch (_) {}
 
-// CONFIGURAR LISTENER EN TIEMPO REAL A FIRESTORE
-// Esto se ejecuta INMEDIATAMENTE cuando la página carga
-// y se actualiza automáticamente cada vez que se edita un producto en admin
 const q = query(collection(db, "products"), orderBy("orden", "asc"), orderBy("createdAt", "asc"));
 
 onSnapshot(q, (snapshot) => {
     const products = [];
     snapshot.forEach((docSnap) => products.push(mapDoc(docSnap)));
-    
-    // Aplicar productos desde Firestore (siempre prioriza Firestore)
     applyFirestoreProducts(products);
   }, (error) => {
   console.error("❌ No se pudieron cargar los productos desde Firestore:", error);
-  
-  // Si Firestore falla, intentar cargar desde caché
+
   const cached = localStorage.getItem(CACHE_KEY);
   if (cached) {
     try {
@@ -127,5 +114,19 @@ onSnapshot(q, (snapshot) => {
     }
   } else if (!hasFallback()) {
     console.warn("⚠️ No hay productos disponibles. Verifica la conexión a Firestore.");
+  }
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key !== REFRESH_BROADCAST_KEY) return;
+  const payload = event.newValue ? JSON.parse(event.newValue) : null;
+  if (!payload || !payload.ts) return;
+
+  console.log("🔄 Cambio detectado desde admin; recargando catálogo...");
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (cached) {
+    try {
+      dispatchProducts(JSON.parse(cached), true);
+    } catch (_) {}
   }
 });
