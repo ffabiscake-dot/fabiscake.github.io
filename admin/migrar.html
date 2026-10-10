@@ -5,128 +5,213 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Migrar productos a Firestore · Fabi's Cake</title>
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=8">
+<style>
+  .box{background:#fff;border:1px solid #eadfe5;border-radius:12px;padding:14px 16px;margin-top:14px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}
+  .stat{background:#f7f2f5;border-radius:10px;padding:10px;text-align:center}
+  .stat b{display:block;font-size:22px}
+  .ok{color:#1f8a4c;font-weight:600}.bad{color:#e05353;font-weight:600}.muted{color:#8a8291}
+  #log p{margin:4px 0;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+</style>
 </head>
 <body>
-<div class="admin-main" style="max-width:700px;margin:0 auto;padding:20px;">
+<div class="admin-main" style="max-width:760px;margin:0 auto;padding:20px;">
   <h1>Importar catálogo a Firestore</h1>
-  <p>Esta página se usa para cargar de una vez tu catálogo completo (nombre, descripción,
-  precio, categoría y foto de cada producto) hacia la base de datos. Puedes usarla las
-  veces que necesites para agregar lotes nuevos de productos.</p>
+  <p>Sincroniza los productos de <code>productos_import.json</code> con la base de datos que usan el
+  administrador y la web pública. Es <strong>seguro repetirla</strong>: cada producto tiene un identificador
+  estable, así que los existentes se reconocen y no se duplican.</p>
 
   <ol>
-    <li>Primero inicia sesión en <a href="admin.html">admin.html</a> con tu cuenta de administradora.</li>
-    <li>Regresa a esta página — el catálogo (<code>productos_import.json</code>) se carga automáticamente.</li>
-    <li>Presiona "Importar a Firestore". Verás el progreso producto por producto.</li>
+    <li>Inicia sesión en <a href="admin.html">admin.html</a> con la cuenta de administradora.</li>
+    <li>Pulsa <strong>1. Analizar</strong>: compara el archivo con Firestore y muestra qué haría. <em>No escribe nada.</em></li>
+    <li>Revisa el resumen y pulsa <strong>2. Aplicar</strong>.</li>
   </ol>
 
-  <p id="auto-status" style="color:#8a8291;">Buscando productos_import.json en esta misma carpeta...</p>
-
-  <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
-    <button id="migrate-btn" class="btn btn-primary" disabled>Importar a Firestore</button>
-    <span id="migrate-status" style="color:#8a8291;"></span>
+  <div class="box">
+    <div id="file-status" class="muted">Buscando productos_import.json…</div>
+    <div class="row">
+      <button type="button" id="pick-file" class="btn btn-ghost btn-sm">Elegir otro archivo</button>
+      <input type="file" id="file-input" accept="application/json,.json" hidden>
+    </div>
+    <div id="login-status" class="bad" style="margin-top:10px;">Comprobando sesión…</div>
   </div>
 
-  <p style="margin-top:10px;font-size:13px;color:#8a8291;">
-    ¿Prefieres cargar otro archivo distinto? <button type="button" id="show-file-picker" class="btn btn-ghost btn-sm">Elegir archivo manualmente</button>
-  </p>
-  <input type="file" id="file-input" accept="application/json,.json" class="input" style="margin-top:8px;" hidden>
-
-  <div id="login-warning" style="display:none;margin-top:16px;color:#e05353;font-weight:600;">
-    Debes iniciar sesión como administradora en admin.html antes de importar.
+  <div class="box">
+    <label style="display:flex;gap:8px;align-items:flex-start;font-size:14px;">
+      <input type="checkbox" id="overwrite" style="margin-top:3px;">
+      <span>Sobrescribir los productos que ya existen con los datos del archivo.
+      <span class="muted">(Desmarcado: solo se <em>completan</em> campos que falten, como el orden; tus ediciones desde el panel se respetan.)</span></span>
+    </label>
+    <div class="row">
+      <button type="button" id="analyze-btn" class="btn btn-primary" disabled>1. Analizar</button>
+      <button type="button" id="apply-btn" class="btn btn-primary" disabled>2. Aplicar</button>
+      <span id="progress" class="muted"></span>
+    </div>
   </div>
 
-  <div id="results" style="margin-top:20px;font-size:14px;color:#8a8291;"></div>
+  <div id="summary" class="box" hidden>
+    <strong>Resultado del análisis</strong>
+    <div class="stats">
+      <div class="stat"><b id="s-found">0</b>encontrados</div>
+      <div class="stat"><b id="s-add">0</b>por añadir</div>
+      <div class="stat"><b id="s-update">0</b>por actualizar</div>
+      <div class="stat"><b id="s-skip">0</b>omitidos</div>
+      <div class="stat"><b id="s-err">0</b>con error</div>
+    </div>
+    <p class="muted" style="font-size:13px;margin:8px 0 0;">En Firestore hay ahora <span id="s-existing">0</span> productos.</p>
+  </div>
+
+  <div id="dup-box" class="box" hidden>
+    <strong class="bad">Se detectaron productos duplicados ya guardados en Firestore</strong>
+    <p style="font-size:14px;margin:6px 0;">Hay <span id="dup-count">0</span> producto(s) repetidos exactamente (mismo nombre, categoría, foto, precio y descripción),
+    seguramente por importaciones antiguas. Se conservará <strong>uno</strong> de cada y se borrarán solo los sobrantes.
+    Si no los borras, aparecerán repetidos en la web.</p>
+    <button type="button" id="dedupe-btn" class="btn btn-ghost">Eliminar duplicados exactos…</button>
+  </div>
+
+  <div id="final" class="box" hidden></div>
+  <div id="log" class="box" hidden></div>
 </div>
 
 <script type="module">
 import { ADMIN_EMAIL } from "../js/firebase-config.js";
-import { auth, db, onAuthStateChanged, collection, addDoc, serverTimestamp } from "../js/firebase-init.js";
+import {
+  auth, db, onAuthStateChanged,
+  collection, doc, setDoc, updateDoc, deleteDoc, getDocs, serverTimestamp
+} from "../js/firebase-init.js";
+import { analyze, apply, verify, removeDuplicates, friendlyError } from "../js/migration-runner.js";
 
-const btn = document.getElementById("migrate-btn");
-const status = document.getElementById("migrate-status");
-const warning = document.getElementById("login-warning");
-const fileInput = document.getElementById("file-input");
-const results = document.getElementById("results");
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-let isAdmin = false;
-let selectedProducts = null;
+// Store real de Firestore (colección "products").
+const store = {
+  async listAll() {
+    const snap = await getDocs(collection(db, "products"));
+    return snap.docs.map((d) => ({ id: d.id, data: d.data() }));
+  },
+  add: (id, data) => setDoc(doc(db, "products", id), { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }),
+  update: (id, patch, o) => updateDoc(doc(db, "products", id), {
+    ...patch, ...(o && o.needsCreatedAt ? { createdAt: serverTimestamp() } : {}), updatedAt: serverTimestamp()
+  }),
+  remove: (id) => deleteDoc(doc(db, "products", id))
+};
 
-const autoStatus = document.getElementById("auto-status");
-const showFilePickerBtn = document.getElementById("show-file-picker");
+let isAdmin = false, items = null, lastAnalysis = null, busy = false;
 
-showFilePickerBtn.addEventListener("click", () => fileInput.click());
-
-async function autoLoadProducts() {
-  try {
-    const res = await fetch("./productos_import.json");
-    if (!res.ok) throw new Error("No se encontró el archivo en esta carpeta.");
-    selectedProducts = await res.json();
-    autoStatus.textContent = `✔ Se encontraron ${selectedProducts.length} productos en productos_import.json, listos para importar.`;
-  } catch (e) {
-    autoStatus.textContent = "No se pudo cargar productos_import.json automáticamente (" + e.message + "). Usa 'Elegir archivo manualmente'.";
-  }
-  updateButtonState();
+function refreshButtons() {
+  $("analyze-btn").disabled = busy || !(isAdmin && items && items.length);
+  $("apply-btn").disabled = busy || !(isAdmin && lastAnalysis && (lastAnalysis.plan.summary.add + lastAnalysis.plan.summary.update) > 0);
 }
-autoLoadProducts();
+function log(html, cls) {
+  $("log").hidden = false;
+  $("log").insertAdjacentHTML("beforeend", `<p class="${cls || ""}">${html}</p>`);
+}
+function setItems(list, source) {
+  if (!Array.isArray(list)) throw new Error("El archivo debe contener una lista [ ... ] de productos.");
+  items = list; lastAnalysis = null;
+  $("summary").hidden = true; $("dup-box").hidden = true; $("final").hidden = true; $("log").hidden = true; $("log").innerHTML = "";
+  $("file-status").innerHTML = `<span class="ok">✔ ${list.length} productos leídos de ${esc(source)}.</span>`;
+  refreshButtons();
+}
+
+async function autoLoad() {
+  try {
+    const res = await fetch("./productos_import.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    setItems(await res.json(), "productos_import.json");
+  } catch (e) {
+    $("file-status").innerHTML = `<span class="bad">No se pudo leer productos_import.json (${esc(e.message)}).</span> Usa “Elegir otro archivo”.`;
+  }
+}
+autoLoad();
+
+$("pick-file").addEventListener("click", () => $("file-input").click());
+$("file-input").addEventListener("change", async () => {
+  const f = $("file-input").files[0];
+  if (!f) return;
+  try { setItems(JSON.parse(await f.text()), f.name); }
+  catch (e) { items = null; lastAnalysis = null; $("file-status").innerHTML = `<span class="bad">Archivo inválido: ${esc(e.message)}</span>`; refreshButtons(); }
+});
 
 onAuthStateChanged(auth, (user) => {
   isAdmin = !!(user && user.email === ADMIN_EMAIL);
-  warning.style.display = isAdmin ? "none" : "block";
-  updateButtonState();
+  $("login-status").className = isAdmin ? "ok" : "bad";
+  $("login-status").textContent = isAdmin
+    ? "✔ Sesión de administradora iniciada."
+    : "Debes iniciar sesión como administradora en admin.html (en este mismo navegador) antes de continuar.";
+  refreshButtons();
 });
 
-fileInput.addEventListener("change", async () => {
-  const file = fileInput.files[0];
-  if (!file) return;
-  status.textContent = "Leyendo archivo...";
-  try {
-    const text = await file.text();
-    selectedProducts = JSON.parse(text);
-    if (!Array.isArray(selectedProducts)) throw new Error("El archivo debe contener un arreglo [ ... ]");
-    status.textContent = `Archivo cargado: ${selectedProducts.length} productos listos para importar.`;
-  } catch (e) {
-    selectedProducts = null;
-    status.textContent = "Error leyendo el archivo: " + e.message;
-  }
-  updateButtonState();
-});
-
-function updateButtonState() {
-  btn.disabled = !(isAdmin && selectedProducts && selectedProducts.length);
+function showAnalysis(a) {
+  const s = a.plan.summary;
+  $("summary").hidden = false;
+  $("s-found").textContent = s.found; $("s-add").textContent = s.add; $("s-update").textContent = s.update;
+  $("s-skip").textContent = s.skipped; $("s-err").textContent = s.errors; $("s-existing").textContent = a.existing.length;
+  $("dup-box").hidden = a.duplicates.length === 0;
+  $("dup-count").textContent = a.duplicates.reduce((n, g) => n + g.remove.length, 0);
+  $("log").innerHTML = "";
+  a.plan.rows.filter((r) => r.action === "error").forEach((r) =>
+    log(`✖ #${r.index + 1} “${esc(r.label)}”: ${esc(r.reason)}`, "bad"));
 }
 
-btn.addEventListener("click", async () => {
-  if (!isAdmin || !selectedProducts) return;
-  btn.disabled = true;
-  let done = 0;
-  let errors = 0;
-  for (const p of selectedProducts) {
-    try {
-      await addDoc(collection(db, "products"), {
-        nombre: p.nombre || "",
-        descripcion: p.descripcion || "",
-        precio: Number(p.precio) || 0,
-        categoria: p.categoria || "cakes",
-        unidad: p.unidad || "unidad",
-        unidadEtiqueta: p.unidadEtiqueta || "",
-        icono: p.icono || "🎂",
-        estado: p.estado || "Disponible",
-        destacado: !!p.destacado,
-        imagenPrincipal: p.imagenPrincipal || "",
-        imagenes: Array.isArray(p.imagenes) ? p.imagenes : [],
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
-      done++;
-      status.textContent = `Importando... ${done}/${selectedProducts.length}`;
-    } catch (e) {
-      errors++;
-      results.innerHTML += `<p style="color:#e05353">Error en "${p.nombre}": ${e.message}</p>`;
-    }
+$("analyze-btn").addEventListener("click", async () => {
+  busy = true; refreshButtons(); $("final").hidden = true; $("progress").textContent = "Leyendo Firestore…";
+  try {
+    lastAnalysis = await analyze(items, store, { overwrite: $("overwrite").checked });
+    showAnalysis(lastAnalysis);
+    $("progress").textContent = "";
+  } catch (e) {
+    lastAnalysis = null; $("progress").textContent = "";
+    $("final").hidden = false; $("final").innerHTML = `<span class="bad">No se pudo analizar: ${esc(friendlyError(e))}</span>`;
   }
-  status.textContent = `✔ Importación completa: ${done} productos agregados${errors ? `, ${errors} con error` : ""}.`;
-  btn.disabled = false;
+  busy = false; refreshButtons();
+});
+
+$("apply-btn").addEventListener("click", async () => {
+  if (!lastAnalysis) return;
+  busy = true; refreshButtons(); $("final").hidden = true;
+  const opts = { overwrite: $("overwrite").checked };
+  const res = await apply(lastAnalysis.plan, store, {
+    onProgress: (d, t) => { $("progress").textContent = `Escribiendo ${d}/${t}…`; }
+  });
+  res.errors.forEach((e) => log(`✖ “${esc(e.label)}”: ${esc(e.message)}`, "bad"));
+
+  $("progress").textContent = "Verificando en Firestore…";
+  let verdict = "";
+  try {
+    const v = await verify(items, store, opts);
+    const okAll = res.errors.length === 0 && v.pending === 0 && v.validationErrors === 0;
+    verdict = okAll
+      ? `<span class="ok">✔ Migración finalizada correctamente.</span> Firestore tiene ${v.total} productos y no queda nada pendiente.`
+      : `<span class="bad">⚠ Migración incompleta.</span> Errores al escribir: ${res.errors.length}; pendientes tras verificar: ${v.pending}; productos inválidos en el archivo: ${v.validationErrors}.`;
+    lastAnalysis = await analyze(items, store, opts); showAnalysis(lastAnalysis);
+  } catch (e) {
+    verdict = `<span class="bad">⚠ No se pudo verificar el resultado: ${esc(friendlyError(e))}</span>`;
+  }
+  $("progress").textContent = "";
+  $("final").hidden = false;
+  $("final").innerHTML = `${verdict}<br><span class="muted" style="font-size:13px;">Añadidos: ${res.added} · Actualizados: ${res.updated} · Errores: ${res.errors.length}</span>`;
+  busy = false; refreshButtons();
+});
+
+$("dedupe-btn").addEventListener("click", async () => {
+  if (!lastAnalysis || !isAdmin) return;
+  const groups = lastAnalysis.duplicates;
+  const n = groups.reduce((a, g) => a + g.remove.length, 0);
+  if (!confirm(`Se borrarán ${n} producto(s) duplicados exactos de Firestore (se conserva 1 de cada). Esta acción no se puede deshacer. ¿Continuar?`)) return;
+  busy = true; refreshButtons();
+  const r = await removeDuplicates(groups, store, { onProgress: (d, t) => { $("progress").textContent = `Eliminando ${d}/${t}…`; } });
+  r.errors.forEach((e) => log(`✖ ${esc(e.label)}: ${esc(e.message)}`, "bad"));
+  $("progress").textContent = "";
+  $("final").hidden = false;
+  $("final").innerHTML = r.errors.length
+    ? `<span class="bad">Se borraron ${r.removed} duplicados; ${r.errors.length} fallaron.</span>`
+    : `<span class="ok">✔ Se borraron ${r.removed} duplicados exactos.</span>`;
+  try { lastAnalysis = await analyze(items, store, { overwrite: $("overwrite").checked }); showAnalysis(lastAnalysis); } catch (_) {}
+  busy = false; refreshButtons();
 });
 </script>
 </body>

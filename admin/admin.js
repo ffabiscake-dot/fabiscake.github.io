@@ -8,6 +8,7 @@ import {
   collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
   query, orderBy, onSnapshot, serverTimestamp
 } from "../js/firebase-init.js";
+import { sortProducts, isHiddenProduct } from "../js/products-model.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -79,12 +80,17 @@ loginForm.addEventListener("submit", async (e) => {
 
 $("logout-btn").addEventListener("click", () => signOut(auth));
 
+let unsubscribeProducts = null;
+
 function listenToProducts() {
+  if (unsubscribeProducts) unsubscribeProducts();
   loadingIndicator.hidden = false;
-  const q = query(collection(db, "products"), orderBy("orden", "asc"), orderBy("createdAt", "asc"));
-  onSnapshot(q, (snapshot) => {
+  // Se leen TODOS los documentos (sin orderBy en Firestore, que ocultaría
+  // los productos sin "orden"/"createdAt") y se ordenan aquí.
+  unsubscribeProducts = onSnapshot(collection(db, "products"), (snapshot) => {
     allProducts = [];
     snapshot.forEach((d) => allProducts.push({ id: d.id, ...d.data() }));
+    allProducts = sortProducts(allProducts);
     loadingIndicator.hidden = true;
     populateCategoryFilter();
     renderGrid();
@@ -136,6 +142,7 @@ function renderGrid() {
         <div class="product-card-badges">
           <span class="badge badge-cat">${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria || 'Sin categoría')}</span>
           ${p.estado === 'Agotado' ? '<span class="badge badge-agotado">Agotado</span>' : ''}
+          ${isHiddenProduct(p) ? '<span class="badge badge-agotado">Oculto en la web</span>' : ''}
           ${p.destacado ? '<span class="badge badge-destacado">★ Destacado</span>' : ''}
         </div>
       </div>
