@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Limpieza de productos · Fabi's Cake</title>
+<style>
+:root{--rosa:#F9BED4;--tinta:#3a2b33;--suave:#fdf3f7;--borde:#e8d3dc;--rojo:#b3261e;--verde:#2e7d4f;--ambar:#9a6700}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--tinta);background:#fff}
+header{background:var(--rosa);padding:14px 18px}
+header h1{margin:0;font-size:1.15rem}
+main{max-width:1100px;margin:0 auto;padding:16px}
+button{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--tinta);background:#fff;color:var(--tinta);cursor:pointer}
+button.primario{background:var(--tinta);color:#fff}
+button.peligro{background:var(--rojo);border-color:var(--rojo);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7b4a60;outline-offset:2px}
+input,select{font:inherit;padding:8px 10px;border:1px solid var(--borde);border-radius:8px}
+.caja{border:1px solid var(--borde);background:var(--suave);border-radius:10px;padding:14px;margin:12px 0}
+.fila{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.resumen div{border:1px solid var(--borde);border-radius:10px;padding:10px 12px}
+.resumen b{display:block;font-size:1.5rem}
+.tabla{overflow-x:auto;border:1px solid var(--borde);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--borde);vertical-align:middle}
+th{background:var(--suave);position:sticky;top:0}
+tr.borrar td{background:#fdecea}
+tr.conservar td{background:#fff}
+img.mini{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee;display:block}
+.sinfoto{width:48px;height:48px;border-radius:6px;background:#eee;display:grid;place-items:center;font-size:.7rem;color:#777;text-align:center}
+.etq{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.8rem;border:1px solid currentColor}
+.ok{color:var(--verde)}.mal{color:var(--rojo)}.aviso{color:var(--ambar)}
+.id{font:.75rem ui-monospace,Menlo,monospace;color:#7a6a72;word-break:break-all}
+#estado{min-height:1.5em}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>Limpieza de productos · Fabi's Cake</h1></header>
+<main>
+
+<section id="login" class="caja" hidden>
+  <p>Inicia sesión con la cuenta de administradora.</p>
+  <form id="f-login" class="fila">
+    <input id="email" type="email" placeholder="Correo" autocomplete="username" required>
+    <input id="clave" type="password" placeholder="Contraseña" autocomplete="current-password" required>
+    <button class="primario" type="submit">Entrar</button>
+  </form>
+</section>
+
+<section id="panel" hidden>
+  <div class="caja">
+    <p style="margin-top:0">Esta página <b>no borra nada hasta que lo confirmes</b>. Los productos marcados en rojo son los que se eliminarían. Puedes marcar o desmarcar cualquier fila a mano, incluidos los productos antiguos que ya no quieras.</p>
+    <div class="fila">
+      <button id="b-analizar" class="primario">Analizar de nuevo</button>
+      <button id="b-respaldo">Descargar copia de seguridad (JSON)</button>
+      <select id="filtro" aria-label="Filtrar lista">
+        <option value="todos">Mostrar todos</option>
+        <option value="borrar">Solo marcados para borrar</option>
+        <option value="sinfoto">Solo sin imagen</option>
+        <option value="dup">Solo duplicados</option>
+      </select>
+      <button id="b-sinfoto">Marcar todos los que no tienen imagen</button>
+      <button id="b-limpiar">Quitar todas las marcas</button>
+    </div>
+  </div>
+
+  <div class="resumen" id="resumen"></div>
+  <p id="estado" role="status"></p>
+
+  <div class="fila" style="margin:8px 0">
+    <button id="b-borrar" class="peligro" disabled>Borrar productos marcados</button>
+    <span id="cuenta"></span>
+  </div>
+
+  <div class="tabla">
+    <table>
+      <thead><tr><th>Borrar</th><th>Foto</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Id</th></tr></thead>
+      <tbody id="filas"></tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxMVxqi0CFru50vQPDk7RYA136qBT38a4",
+  authDomain: "fabi-s-cake-b8d4a.firebaseapp.com",
+  projectId: "fabi-s-cake-b8d4a",
+  storageBucket: "fabi-s-cake-b8d4a.firebasestorage.app",
+  messagingSenderId: "827286701975",
+  appId: "1:827286701975:web:49318a0a4fe5aead1d66d2"
+};
+const ADMIN_EMAIL = "ffabiscake@gmail.com";
+const COLECCION = "products";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const NAME_KEYS = ["name", "nombre"];
+const CAT_KEYS = ["cat", "categoria", "category"];
+const PRICE_KEYS = ["price", "precio"];
+const IMG_KEYS = ["img", "imagen", "image", "foto", "photo", "imageUrl", "imagenUrl", "url"];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = s => String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const vacio = v => v === undefined || v === null || v === "" || (Array.isArray(v) && !v.length);
+const pick = (d, keys) => { for (const k of keys) if (!vacio(d[k])) return { k, v: d[k] }; return { k: null, v: "" }; };
+const RAIZ = new URL("../", location.href);
+
+let items = [];   // {id, data, nombre, cat, precio, img:{k,v,tipo,fp,src}, accion, motivo, grupo}
+let marcados = new Set();
+let fusiones = new Map(); // idSuperviviente -> {campo: valor}
+
+function infoImagen(d) {
+  const { k, v } = pick(d, IMG_KEYS);
+  if (!k || typeof v !== "string") return { k: null, v: "", tipo: "ninguna", fp: "", src: "" };
+  if (v.startsWith("data:")) return { k, v, tipo: "base64", fp: "d:" + v.length + ":" + v.slice(100, 160) + v.slice(-40), src: v };
+  if (/^https?:/i.test(v)) return { k, v, tipo: "url", fp: "p:" + v.split("/").pop().toLowerCase(), src: v };
+  return { k, v, tipo: "ruta", fp: "p:" + v.split("/").pop().toLowerCase(), src: new URL(v.replace(/^\.?\//, ""), RAIZ).href };
+}
+
+function puntuar(it) {
+  let p = 0;
+  if (it.img.tipo !== "ninguna") p += 3;
+  if (!vacio(it.data.orden)) p += 1;
+  p += Object.values(it.data).filter(x => !vacio(x)).length * 0.1;
+  return p;
+}
+function fecha(it) {
+  const t = it.data.createdAt;
+  return t && typeof t.toMillis === "function" ? t.toMillis() : Number.MAX_SAFE_INTEGER;
+}
+
+function analizar() {
+  marcados = new Set(); fusiones = new Map();
+  const grupos = new Map();
+  for (const it of items) {
+    it.accion = "conservar"; it.motivo = ""; it.grupo = "";
+    const clave = norm(it.nombre) + "|" + norm(it.cat);
+    if (!grupos.has(clave)) grupos.set(clave, []);
+    grupos.get(clave).push(it);
+  }
+  for (const [clave, lista] of grupos) {
+    if (lista.length < 2) continue;
+    // Cubetas por huella de imagen: misma huella = misma foto = duplicado exacto
+    const cubetas = new Map(); const sinFoto = [];
+    for (const it of lista) {
+      if (it.img.tipo === "ninguna") { sinFoto.push(it); continue; }
+      if (!cubetas.has(it.img.fp)) cubetas.set(it.img.fp, []);
+      cubetas.get(it.img.fp).push(it);
+    }
+    const supervivientes = [];
+    for (const c of cubetas.values()) {
+      c.sort((a, b) => puntuar(b) - puntuar(a) || fecha(a) - fecha(b) || a.id.localeCompare(b.id));
+      supervivientes.push(c[0]);
+      for (const extra of c.slice(1)) {
+        extra.accion = "duplicado"; extra.motivo = "Copia con la misma foto"; extra.grupo = clave;
+        marcados.add(extra.id); fusionar(c[0], extra);
+      }
+    }
+    // Sin foto: si solo hay una ficha con foto, es copia incompleta de esa; si hay varias, se deja a revisar
+    for (const it of sinFoto) {
+      it.grupo = clave;
+      if (supervivientes.length === 1) {
+        it.accion = "duplicado"; it.motivo = "Copia sin foto de otro producto igual";
+        marcados.add(it.id); fusionar(supervivientes[0], it);
+      } else if (supervivientes.length === 0 && sinFoto.length > 1) {
+        const mejor = sinFoto.slice().sort((a, b) => puntuar(b) - puntuar(a) || fecha(a) - fecha(b) || a.id.localeCompare(b.id))[0];
+        if (it !== mejor) { it.accion = "duplicado"; it.motivo = "Copia sin foto"; marcados.add(it.id); fusionar(mejor, it); }
+      } else { it.accion = "revisar"; it.motivo = "Sin foto y hay varias fichas con foto distinta: revisa a mano"; }
+    }
+    if (cubetas.size > 1) for (const s of supervivientes) if (s.accion === "conservar") s.motivo = "Mismo nombre, foto distinta: se conserva";
+  }
+}
+function fusionar(sup, perd) {
+  const m = fusiones.get(sup.id) || {};
+  for (const [k, v] of Object.entries(perd.data)) {
+    if (vacio(v) || !vacio(sup.data[k]) || k in m) continue;
+    m[k] = v;
+  }
+  if (Object.keys(m).length) fusiones.set(sup.id, m);
+}
+
+function pintar() {
+  const f = $("filtro").value;
+  const dup = items.filter(i => i.accion === "duplicado").length;
+  const sinfoto = items.filter(i => i.img.tipo === "ninguna").length;
+  const tipos = items.reduce((a, i) => (a[i.img.tipo] = (a[i.img.tipo] || 0) + 1, a), {});
+  $("resumen").innerHTML = [
+    ["Productos en Firestore", items.length],
+    ["Duplicados detectados", dup],
+    ["Sin imagen", sinfoto],
+    ["Imagen base64 / ruta / URL", `${tipos.base64 || 0} / ${tipos.ruta || 0} / ${tipos.url || 0}`],
+    ["Marcados para borrar", marcados.size]
+  ].map(([t, n]) => `<div><b>${n}</b>${t}</div>`).join("");
+
+  const vis = items.filter(i =>
+    f === "todos" ? true :
+    f === "borrar" ? marcados.has(i.id) :
+    f === "sinfoto" ? i.img.tipo === "ninguna" :
+    i.accion === "duplicado" || i.accion === "revisar");
+  vis.sort((a, b) => norm(a.nombre).localeCompare(norm(b.nombre)) || a.id.localeCompare(b.id));
+
+  $("filas").innerHTML = vis.map(i => {
+    const foto = i.img.tipo === "ninguna"
+      ? `<div class="sinfoto">sin foto</div>`
+      : `<img class="mini" loading="lazy" src="${esc(i.img.src)}" alt="" onerror="this.outerHTML='<div class=&quot;sinfoto&quot;>no carga</div>'">`;
+    const etq = i.accion === "duplicado" ? `<span class="etq mal">Duplicado</span>`
+      : i.accion === "revisar" ? `<span class="etq aviso">Revisar</span>`
+      : `<span class="etq ok">Conservar</span>`;
+    return `<tr class="${marcados.has(i.id) ? "borrar" : "conservar"}">
+      <td><input type="checkbox" data-id="${esc(i.id)}" ${marcados.has(i.id) ? "checked" : ""} aria-label="Borrar ${esc(i.nombre)}"></td>
+      <td>${foto}</td><td>${esc(i.nombre) || "<i>(sin nombre)</i>"}</td><td>${esc(i.cat)}</td><td>${esc(i.precio)}</td>
+      <td>${etq}<br><small>${esc(i.motivo)}</small></td><td class="id">${esc(i.id)}</td></tr>`;
+  }).join("") || `<tr><td colspan="7">No hay productos en esta vista.</td></tr>`;
+
+  $("b-borrar").disabled = marcados.size === 0;
+  $("cuenta").textContent = marcados.size ? `${marcados.size} producto(s) marcados` : "";
+}
+
+async function cargar() {
+  $("estado").textContent = "Leyendo productos…";
+  try {
+    const snap = await getDocs(collection(db, COLECCION));
+    items = snap.docs.map(d => {
+      const data = d.data();
+      return { id: d.id, data, nombre: pick(data, NAME_KEYS).v, cat: pick(data, CAT_KEYS).v, precio: pick(data, PRICE_KEYS).v, img: infoImagen(data) };
+    });
+    analizar(); pintar();
+    $("estado").textContent = `Listo: ${items.length} productos leídos. Revisa la tabla antes de borrar.`;
+  } catch (e) {
+    $("estado").innerHTML = `<span class="mal">No se pudo leer Firestore: ${esc(e.code || e.message)}. Comprueba que las reglas permiten leer y que has iniciado sesión.</span>`;
+  }
+}
+
+function descargarRespaldo() {
+  const salida = items.map(i => ({ id: i.id, ...i.data }));
+  const blob = new Blob([JSON.stringify(salida, null, 1)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `respaldo-productos-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+async function borrar() {
+  const n = marcados.size;
+  const texto = prompt(`Vas a borrar ${n} producto(s). No se puede deshacer.\nSe descargará antes una copia de seguridad.\n\nEscribe BORRAR para confirmar:`);
+  if (texto !== "BORRAR") { $("estado").textContent = "Cancelado: no se borró nada."; return; }
+  descargarRespaldo();
+  $("b-borrar").disabled = true;
+  const ops = [];
+  for (const [id, campos] of fusiones) if (!marcados.has(id)) ops.push({ t: "u", id, campos });
+  for (const id of marcados) ops.push({ t: "d", id });
+  try {
+    let hechos = 0;
+    for (let i = 0; i < ops.length; i += 400) {
+      const lote = writeBatch(db);
+      for (const o of ops.slice(i, i + 400)) {
+        const ref = doc(db, COLECCION, o.id);
+        o.t === "u" ? lote.update(ref, o.campos) : lote.delete(ref);
+      }
+      await lote.commit(); hechos += Math.min(400, ops.length - i);
+      $("estado").textContent = `Aplicando cambios… ${hechos}/${ops.length}`;
+    }
+    $("estado").innerHTML = `<span class="ok">Listo: se borraron ${n} producto(s). Volviendo a analizar…</span>`;
+    await cargar();
+  } catch (e) {
+    $("estado").innerHTML = `<span class="mal">Error al borrar: ${esc(e.code || e.message)}. Es posible que parte de los cambios se aplicara; pulsa «Analizar de nuevo» para ver el estado real.</span>`;
+    $("b-borrar").disabled = false;
+  }
+}
+
+$("filas").addEventListener("change", e => {
+  const id = e.target.dataset.id; if (!id) return;
+  e.target.checked ? marcados.add(id) : marcados.delete(id);
+  e.target.closest("tr").className = e.target.checked ? "borrar" : "conservar";
+  pintar();
+});
+$("filtro").onchange = pintar;
+$("b-analizar").onclick = cargar;
+$("b-respaldo").onclick = descargarRespaldo;
+$("b-borrar").onclick = borrar;
+$("b-limpiar").onclick = () => { marcados.clear(); pintar(); };
+$("b-sinfoto").onclick = () => { items.filter(i => i.img.tipo === "ninguna").forEach(i => marcados.add(i.id)); pintar(); };
+$("f-login").onsubmit = async e => {
+  e.preventDefault();
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("clave").value); }
+  catch (err) { alert("No se pudo iniciar sesión: " + (err.code || err.message)); }
+};
+onAuthStateChanged(auth, user => {
+  const ok = user && user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  if (user && !ok) { alert("Esta cuenta no es la de administradora."); signOut(auth); return; }
+  $("login").hidden = !!ok; $("panel").hidden = !ok;
+  if (ok) cargar();
+});
+</script>
+</body>
+</html>
