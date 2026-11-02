@@ -85,6 +85,8 @@ function onCatalogData(detail){
   );
   renderPills();
   renderGrid();
+  // Volver a dibujar el carrito con las imágenes recién cargadas.
+  renderCart();
 }
 // Si Firestore no responde (o el script de Firebase está bloqueado en la red
 // del visitante) no dejamos "Cargando…" para siempre: caché local → data.js.
@@ -201,7 +203,16 @@ function addToCart(row){
     }
   }
   const existing = cart.find(i=>String(i.row)===String(p.row));
-  if(existing){ existing.qty += qtyToAdd; } else { cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:qtyToAdd}); }
+  if(existing){
+    existing.qty += qtyToAdd;
+    // Mantener sincronizados los datos visuales del producto en el carrito.
+    existing.img = p.img || existing.img || '';
+    existing.icon = p.icon || existing.icon || '🎂';
+  } else {
+    // Guardar también la imagen permite mostrarla aunque el catálogo tarde
+    // en cargar o el usuario vuelva a abrir el carrito en esta sesión.
+    cart.push({row:p.row, name:p.name, price:p.price, unit:p.unit, qty:qtyToAdd, img:p.img || '', icon:p.icon || '🎂'});
+  }
   saveCart();
   openCart();
 }
@@ -223,11 +234,17 @@ function renderCart(){
   }
   body.innerHTML = cart.map((i,idx)=>{
     const p = (window.PRODUCTS||[]).find(x=>String(x.row)===String(i.row));
-    const imgSrc = p && p.img ? toWebP(p.img) : '';
-    const bg = imgSrc ? `style="background-image:url('${imgSrc}')"` : '';
+    // Preferir la imagen actual del catálogo y usar la guardada en el carrito
+    // como respaldo mientras se termina de cargar el catálogo.
+    const imagePath = (p && p.img) || i.img || '';
+    const imgSrc = imagePath ? toWebP(imagePath) : '';
+    const icon = (p && p.icon) || i.icon || '🎂';
+    const media = imgSrc
+      ? `<img src="${esc(imgSrc)}" alt="${esc(i.name)}" loading="lazy" decoding="async">`
+      : esc(icon);
     return `
     <div class="cart-item">
-      <div class="ico" ${bg}>${p && p.img ? '' : (p?p.icon:'🎂')}</div>
+      <div class="ico">${media}</div>
       <div class="meta">
         <h4>${i.name}</h4>
         <small>$${money(i.price)} ${i.unit==='unidad'?'c/u':''}</small>
