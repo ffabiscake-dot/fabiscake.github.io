@@ -13,20 +13,20 @@ const CATEGORIES = [
 ];
 
 const ICONS = {
-  globos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="4.5"/><circle cx="15.5" cy="10" r="3.5"/><path d="M8.5 12 7.4 20.5"/><path d="M8.5 12l1.1 1.2 1.1-1.2"/><path d="M15.5 13.5 14.6 20.5"/></svg>',
-  pastel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18h15"/><path d="M5.5 18v-2.5a6.5 6.5 0 0 1 13 0V18"/><path d="M12 8.5V5.5"/><path d="M9.5 4 12 1.5 14.5 4"/><path d="M8 11.5h.01M12 13h.01M16 11.5h.01"/></svg>',
-  anillos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13.5" r="3.5"/><circle cx="15" cy="13.5" r="3.5"/><path d="m12 3 1.7 2.4L12 7.8l-1.7-2.4z"/></svg>',
+  globos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="4.5"/><circle cx="15.5" cy="10" r="4.5"/><path d="m8.5 12 2 8m5-5 1 5"/></svg>',
+  pastel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18h15"/><path d="M5.5 18v-2.5a6.5 6.5 0 0 1 13 0V18"/><path d="M8 9V5m4 4V3m4 6V5"/></svg>',
+  anillos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13.5" r="3.5"/><circle cx="15" cy="13.5" r="3.5"/></svg>',
   corona: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18"/><path d="M4.2 17 5.8 7l3.9 3.3L12 4.5l2.3 5.8L18.2 7l1.6 10"/></svg>',
-  bebe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11.5" r="7.5"/><path d="M12 4a2.6 2.6 0 0 0-2.5 2.6c0 .6.2 1.1.5 1.6"/><circle cx="9.3" cy="12" r=".6" fill="currentColor" stroke="none"/><circle cx="14.7" cy="12" r=".6" fill="currentColor" stroke="none"/><path d="M9.6 15.3c1 .7 3.8.7 4.8 0"/></svg>',
-  edificio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="9.5" height="17" rx="1"/><path d="M14.5 8.5h4.5v12"/><path d="M8 8h3.5"/><path d="M8 12h3.5"/><path d="M8 16h3.5"/><path d="M17 12h.01M17 16h.01"/></svg>',
-  calendario: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15.5" rx="2"/><path d="M4 9.5h16"/><path d="M8.5 3v4"/><path d="M15.5 3v4"/></svg>',
-  mascara: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5c0-3.2 1.6-5.2 8-5.2s8 2 8 5.2-1.6 5.8-8 5.8-8-2.6-8-5.8z"/><circle cx="9" cy="11.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="11.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
-  caramelo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.7 6.8a3.3 3.3 0 0 1 6.6 0 3.3 3.3 0 0 1-6.6 0z"/><path d="M12 15v6"/><path d="m12 21-2.6-2.4"/></svg>',
+  bebe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11.5" r="7.5"/><path d="M12 4a2.6 2.6 0 0 0 2.6-2.5M9 12h.01M15 12h.01m-5 3c1.5 1 3.5 1 5 0"/></svg>',
+  edificio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="9.5" height="17" rx="1"/><path d="M14.5 9H19v11.5h-4.5M8 7h3m-3 4h3m-3 4h3"/></svg>',
+  calendario: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15.5" rx="2"/><path d="M8 3v4m8-4v4M4 10h16"/></svg>',
+  mascara: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5c0-3.2 1.6-5.2 8-5.2s8 2 8 5.2-1.6 5.8-8 5.8-8-2.6-8-5.8Z"/><path d="M7 11h3m4 0h3m-7 4h4"/></svg>',
+  caramelo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.7 6.8a3.3 3.3 0 1 0 6.6 0M9 15l-1 6m7-6 1 6"/></svg>'
 };
 
 const SERVICES = [
   {icon:ICONS.globos, name:'Decoración con globos', desc:'Arcos, columnas y arreglos personalizados para darle vida a tu celebración.', featured:true, img:'assets/products/decoracion-con-globos-sencilla-61.jpg'},
-  {icon:ICONS.pastel, name:'Decoración de cumpleaños', desc:'Ambientación completa y personalizada para celebrar un día inolvidable.', featured:true, img:'assets/products/decoracion-interior-set-principal-68.jpg'},
+  {icon:ICONS.pastel, name:'Decoración de cumpleaños', desc:'Ambientación completa y personalizada para celebrar un día inolvidable.', featured:true, img:'assets/products/decoracion-interior-set-principal-58.jpg'},
   {icon:ICONS.anillos, name:'Decoración de bodas', desc:'Decoración elegante y romántica diseñada para tu día especial.', featured:true, img:'assets/products/torta-o-pastel-de-15-o-para-bodas-6.jpg'},
   {icon:ICONS.corona, name:'Decoración de XV años', desc:'Creamos una ambientación única para celebrar tus quince años.', featured:true, img:'assets/products/decoracion-de-espacios-grandes-para-15-anos-65.jpg'},
   {icon:ICONS.calendario, name:'Organización de eventos', desc:'Coordinamos cada detalle para que disfrutes tu evento sin preocupaciones.'},
@@ -149,7 +149,7 @@ function renderGrid(){
     const priceLabel = p.unit === 'unidad'
       ? `$${money(p.price)} <small>/ ${p.unit_label || 'unidad'}</small>`
       : `$${money(p.price)} <small>CUP</small>`;
-    const cartIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+    const cartIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
     const addControl = soldOut
       ? `<button type="button" class="add-btn" disabled aria-disabled="true" style="opacity:.55;cursor:not-allowed"><span class="add-label">Agotado</span></button>`
       : p.unit === 'unidad'
@@ -232,21 +232,27 @@ function renderCart(){
     foot.innerHTML = '';
     return;
   }
+  let cartUpdated = false;
   body.innerHTML = cart.map((i,idx)=>{
     const p = (window.PRODUCTS||[]).find(x=>String(x.row)===String(i.row));
-    // Preferir la imagen actual del catálogo y usar la guardada en el carrito
-    // como respaldo mientras se termina de cargar el catálogo.
-    const imagePath = (p && p.img) || i.img || '';
-    const imgSrc = imagePath ? toWebP(imagePath) : '';
-    const icon = (p && p.icon) || i.icon || '🎂';
+    // Sincronizar la ficha completa: si el catálogo cambió, nombre, precio e
+    // imagen deben corresponder al mismo producto, no a datos antiguos del carrito.
+    if(p){
+      const updates = {name:p.name, price:p.price, unit:p.unit, img:p.img || i.img || '', icon:p.icon || i.icon || '🎂'};
+      for(const [key,value] of Object.entries(updates)){
+        if(i[key] !== value){ i[key] = value; cartUpdated = true; }
+      }
+    }
+    // Usar el mismo archivo de imagen que la tarjeta del catálogo.
+    const imgSrc = i.img ? toWebP(i.img) : '';
     const media = imgSrc
       ? `<img src="${esc(imgSrc)}" alt="${esc(i.name)}" loading="lazy" decoding="async">`
-      : esc(icon);
+      : esc(i.icon || '🎂');
     return `
     <div class="cart-item">
       <div class="ico">${media}</div>
       <div class="meta">
-        <h4>${i.name}</h4>
+        <h4>${esc(i.name)}</h4>
         <small>$${money(i.price)} ${i.unit==='unidad'?'c/u':''}</small>
         <div class="qty-ctrl">
           <button onclick="changeQty(${idx},-1)">−</button>
@@ -257,10 +263,13 @@ function renderCart(){
       <button class="remove" onclick="removeItem(${idx})">Quitar</button>
     </div>`;
   }).join('');
+  if(cartUpdated){
+    try { sessionStorage.setItem('fc_cart', JSON.stringify(cart)); } catch(_) {}
+  }
   const subtotal = cart.reduce((a,i)=>a+i.price*i.qty,0);
   foot.innerHTML = `
     <div class="row-total"><span>Subtotal</span><span>$${money(subtotal)} CUP</span></div>
-    <div class="delivery-note"><span class="delivery-note-title">🚚 Entrega a domicilio</span><span class="delivery-note-desc">El costo se calcula según la distancia y se confirma por WhatsApp</span></div>
+    <div class="delivery-note"><span class="delivery-note-title">🚚 Entrega a domicilio</span><span class="delivery-note-desc">El costo se calcula según la distancia y se confirma por WhatsApp.</span></div>
     <div class="row-total"><b>Total</b><b>$${money(subtotal)} CUP</b></div>
     <div class="zelle-note">💳 También aceptamos pagos por <b>Zelle</b></div>
     <button class="btn btn-cart-continue" onclick="openOrderModal()">Continuar pedido<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`;
