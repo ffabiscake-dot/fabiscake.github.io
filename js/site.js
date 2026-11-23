@@ -56,7 +56,6 @@ function showCookieBannerIfNeeded(){
 (function initCatalogSearch(){
   const normalize = (value) => String(value == null ? '' : value)
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-
   const categoryNames = {
     cakes: 'cakes tortas pasteles', postres: 'postres bufet', ramos: 'flores ramos rosas',
     sorpresas: 'sorpresas entretenimiento', decoracion: 'decoracion globos',
@@ -111,90 +110,82 @@ function showCookieBannerIfNeeded(){
     const input = form.querySelector('#catalogSearchInput');
     const clearButton = form.querySelector('.search-clear');
     const status = form.querySelector('#catalogSearchStatus');
-    let query = '';
     let debounceTimer = null;
+    const originalRenderGrid = window.renderGrid;
 
     function categoryText(product){
       const categories = Array.isArray(product.cat) ? product.cat : [product.cat];
       return categories.map((cat) => `${cat || ''} ${categoryNames[cat] || ''}`).join(' ');
     }
 
-    function getProductSearchText(product){
-      return normalize([
-        product.name, product.desc, categoryText(product),
-        product.keywords, product.tags, product.palabrasClave, product.descripcion
-      ].join(' '));
-    }
-
-    function applySearch(){
-      const cards = Array.from(grid.children).filter((child) => child.classList.contains('card'));
-      const term = normalize(query);
+    function renderSearchResults(){
+      const term = normalize(input.value);
       const words = term ? term.split(' ').filter(Boolean) : [];
-      let visible = 0;
+      const allProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+      const filtered = words.length ? allProducts.filter((product) => {
+        const searchable = normalize([
+          product.name, product.desc, categoryText(product), product.keywords,
+          product.tags, product.palabrasClave, product.descripcion
+        ].join(' '));
+        return words.every((word) => searchable.includes(word));
+      }) : allProducts;
 
-      cards.forEach((card) => {
-        const name = normalize(card.querySelector('h3')?.textContent);
-        const desc = normalize(card.querySelector('.card-body p')?.textContent);
-        const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find((p) =>
-          normalize(p.name) === name && normalize(p.desc) === desc
-        );
-        const searchable = product ? getProductSearchText(product) : normalize(`${name} ${desc}`);
-        const matches = words.every((word) => searchable.includes(word));
-        card.hidden = !matches;
-        if(matches) visible++;
-      });
-
-      const previousEmpty = grid.querySelector('.search-empty');
-      if(previousEmpty) previousEmpty.remove();
-
-      if(!term){
-        status.textContent = '';
-        return;
+      // Dejar que el renderizador oficial genere las tarjetas originales. El
+      // renderizador de categoría sigue aplicándose a esta lista filtrada.
+      if(typeof originalRenderGrid === 'function'){
+        window.PRODUCTS = filtered;
+        try { originalRenderGrid(); }
+        finally { window.PRODUCTS = allProducts; }
       }
-      status.textContent = visible === 1 ? '1 producto encontrado' : `${visible} productos encontrados`;
 
-      if(visible === 0){
+      const cards = Array.from(grid.children).filter((child) => child.classList.contains('card'));
+      const visibleCount = cards.length;
+      status.textContent = !term ? '' : visibleCount === 1
+        ? '1 producto encontrado'
+        : `${visibleCount} productos encontrados`;
+
+      const oldEmpty = grid.querySelector('.search-empty');
+      if(oldEmpty) oldEmpty.remove();
+      if(term && visibleCount === 0){
         const empty = document.createElement('div');
         empty.className = 'search-empty';
         empty.innerHTML = '<p>No encontramos productos con esa búsqueda</p><button class="quote-btn" type="button">Ver todos los productos</button>';
         empty.querySelector('button').addEventListener('click', () => {
           input.value = '';
-          query = '';
           clearButton.hidden = true;
-          status.textContent = '';
           if(typeof window.setCat === 'function') window.setCat('all');
-          else if(typeof window.renderGrid === 'function') window.renderGrid();
+          else renderSearchResults();
           input.focus();
         });
-        grid.appendChild(empty);
+        grid.replaceChildren(empty);
       }
     }
 
     form.addEventListener('submit', (event) => event.preventDefault());
     input.addEventListener('input', () => {
-      query = input.value;
-      clearButton.hidden = !query;
+      clearButton.hidden = !input.value;
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(applySearch, 80);
+      debounceTimer = setTimeout(renderSearchResults, 60);
     });
     clearButton.addEventListener('click', () => {
       input.value = '';
-      query = '';
       clearButton.hidden = true;
-      applySearch();
+      renderSearchResults();
       input.focus();
     });
 
-    if(typeof window.renderGrid === 'function' && !window.renderGrid.__catalogSearchWrapped){
-      const originalRenderGrid = window.renderGrid;
+    if(typeof originalRenderGrid === 'function' && !originalRenderGrid.__catalogSearchWrapped){
       const wrappedRenderGrid = function(){
-        originalRenderGrid.apply(this, arguments);
-        applySearch();
+        if(input.value.trim()) renderSearchResults();
+        else originalRenderGrid.apply(this, arguments);
       };
       wrappedRenderGrid.__catalogSearchWrapped = true;
       window.renderGrid = wrappedRenderGrid;
     }
-    window.addEventListener('products:ready', () => setTimeout(applySearch, 0));
+    window.addEventListener('products:ready', () => {
+      clearTimeout(debounceTimer);
+      renderSearchResults();
+    });
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
