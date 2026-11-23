@@ -53,7 +53,162 @@ function showCookieBannerIfNeeded(){
   if(!pref && b) b.classList.add('show');
 }
 
-/* ===================== INIT (compartido) ===================== */
+/* ===================== BUSCADOR DEL CATÁLOGO ===================== */
+(function initCatalogSearch(){
+  const normalize = (value) => String(value == null ? '' : value)
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const categoryNames = {
+    cakes: 'cakes tortas pasteles', postres: 'postres bufet', ramos: 'flores ramos rosas',
+    sorpresas: 'sorpresas entretenimiento', decoracion: 'decoracion globos',
+    hombre: 'regalos hombre', mujer: 'regalos mujer', nino: 'regalos nino', nina: 'regalos nina',
+    combos_alimentos: 'combos alimentos bebidas comida', combos_cumple: 'combos cumpleaños cumpleanos'
+  };
+
+  function install(){
+    const catalog = document.getElementById('catalogo');
+    const heading = catalog && catalog.querySelector('.catalog-head');
+    const grid = document.getElementById('productGrid');
+    const pills = document.getElementById('pills');
+    if(!catalog || !heading || !grid || !pills) return;
+
+    const style = document.createElement('style');
+    style.id = 'catalog-search-styles';
+    style.textContent = `
+      #catalogSearch{width:min(100%,620px);margin:-20px auto 34px;}
+      #catalogSearch .search-box{display:flex;align-items:center;gap:12px;min-height:58px;padding:0 16px 0 19px;background:#fff;border:1px solid #f0dfe2;border-radius:999px;box-shadow:0 12px 30px -20px rgba(110,48,62,.42);transition:border-color .2s,box-shadow .2s,transform .2s;}
+      #catalogSearch .search-box:focus-within{border-color:#c98f9b;box-shadow:0 14px 32px -18px rgba(150,77,94,.48);transform:translateY(-1px);}
+      #catalogSearch .search-icon{width:20px;height:20px;flex:none;color:#a86f7b;}
+      #catalogSearch input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#3a2528;font:500 15px var(--font-body);}
+      #catalogSearch input::placeholder{color:#9a8a8d;opacity:1;}
+      #catalogSearch .search-clear{width:36px;height:36px;flex:none;border:0;border-radius:50%;background:transparent;color:#755c61;font:inherit;font-size:21px;cursor:pointer;}
+      #catalogSearch .search-clear:hover{background:#fff1f3;color:#9f5d6a;}
+      #catalogSearch .search-status{min-height:20px;margin:7px 12px 0;color:#817276;font-size:12px;text-align:left;}
+      #catalogSearch .search-empty{grid-column:1/-1;padding:42px 20px;text-align:center;background:#fff;border:1px solid #f3e1e3;border-radius:18px;box-shadow:0 12px 34px -24px rgba(201,143,155,.4);}
+      #catalogSearch .search-empty p{margin:0 0 16px;color:#625257;font-size:15px;}
+      #catalogSearch .search-empty .quote-btn{background:#fff;border:1px solid #c98f9b;color:#a86f7b;border-radius:99px;padding:11px 20px;font:700 12px var(--font-body);letter-spacing:.04em;cursor:pointer;}
+      #catalogSearch .search-empty .quote-btn:hover{background:#fff1f3;}
+      [data-theme="dark"] #catalogSearch .search-box,[data-theme="dark"] #catalogSearch .search-empty{background:#2b1019;border-color:rgba(253,232,240,.18);}
+      [data-theme="dark"] #catalogSearch input{color:#fde8f0;}
+      [data-theme="dark"] #catalogSearch .search-status{color:rgba(253,232,240,.7);}
+      [data-theme="dark"] #catalogSearch .search-empty p{color:#fde8f0;}
+      @media(max-width:640px){#catalogSearch{margin:-16px auto 28px;padding:0 2px;}#catalogSearch .search-box{min-height:54px;padding:0 13px 0 16px;}#catalogSearch input{font-size:14px;}#catalogSearch .search-status{margin-left:8px;}}
+      @media(prefers-reduced-motion:reduce){#catalogSearch .search-box{transition:none;}}
+    `;
+    document.head.appendChild(style);
+
+    const form = document.createElement('form');
+    form.id = 'catalogSearch';
+    form.setAttribute('role', 'search');
+    form.innerHTML = `
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        <input id="catalogSearchInput" type="search" placeholder="¿Qué estás buscando?" autocomplete="off" aria-label="Buscar productos por nombre, categoría o descripción" aria-controls="productGrid">
+        <button class="search-clear" type="button" aria-label="Limpiar búsqueda" title="Limpiar búsqueda" hidden>×</button>
+      </div>
+      <div class="search-status" id="catalogSearchStatus" role="status" aria-live="polite" aria-atomic="true"></div>`;
+    heading.insertAdjacentElement('afterend', form);
+
+    const input = form.querySelector('#catalogSearchInput');
+    const clearButton = form.querySelector('.search-clear');
+    const status = form.querySelector('#catalogSearchStatus');
+    let query = '';
+
+    function categoryText(product){
+      const categories = Array.isArray(product.cat) ? product.cat : [product.cat];
+      return categories.map((cat) => `${cat || ''} ${categoryNames[cat] || ''}`).join(' ');
+    }
+
+    function productIndex(){
+      const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+      const index = new Map();
+      products.forEach((product) => {
+        const name = normalize(product.name);
+        const desc = normalize(product.desc);
+        const key = `${name}|${desc}`;
+        const searchable = normalize([
+          product.name, product.desc, categoryText(product), product.keywords,
+          product.tags, product.palabrasClave, product.descripcion
+        ].join(' '));
+        index.set(key, searchable);
+        if(!index.has(`${name}|`)) index.set(`${name}|`, searchable);
+      });
+      return index;
+    }
+
+    function applySearch(){
+      const cards = Array.from(grid.children).filter((child) => child.classList.contains('card'));
+      const term = normalize(query);
+      const words = term ? term.split(' ').filter(Boolean) : [];
+      const index = productIndex();
+      let visible = 0;
+      cards.forEach((card) => {
+        const name = normalize(card.querySelector('h3')?.textContent);
+        const desc = normalize(card.querySelector('.card-body p')?.textContent);
+        const searchable = index.get(`${name}|${desc}`) || index.get(`${name}|`) || normalize(`${name} ${desc}`);
+        const matches = words.every((word) => searchable.includes(word));
+        card.hidden = !matches;
+        if(matches) visible++;
+      });
+
+      const previousEmpty = grid.querySelector('.search-empty');
+      if(previousEmpty) previousEmpty.remove();
+      if(!term){
+        status.textContent = '';
+        return;
+      }
+      status.textContent = visible === 1 ? '1 producto encontrado' : `${visible} productos encontrados`;
+      if(visible === 0){
+        const empty = document.createElement('div');
+        empty.className = 'search-empty';
+        empty.innerHTML = '<p>No encontramos productos con esa búsqueda</p><button class="quote-btn" type="button">Ver todos los productos</button>';
+        empty.querySelector('button').addEventListener('click', () => {
+          input.value = '';
+          query = '';
+          clearButton.hidden = true;
+          status.textContent = '';
+          if(typeof window.setCat === 'function') window.setCat('all');
+          else if(typeof window.renderGrid === 'function') window.renderGrid();
+          input.focus();
+        });
+        grid.appendChild(empty);
+      }
+    }
+
+    form.addEventListener('submit', (event) => event.preventDefault());
+    input.addEventListener('input', () => {
+      query = input.value;
+      clearButton.hidden = !query;
+      applySearch();
+    });
+    clearButton.addEventListener('click', () => {
+      input.value = '';
+      query = '';
+      clearButton.hidden = true;
+      applySearch();
+      input.focus();
+    });
+
+    // renderGrid conserva las tarjetas y botones de compra existentes; el filtro
+    // se reaplica después de cada cambio de categoría o actualización de Firestore.
+    if(typeof window.renderGrid === 'function' && !window.renderGrid.__catalogSearchWrapped){
+      const originalRenderGrid = window.renderGrid;
+      const wrappedRenderGrid = function(){
+        originalRenderGrid.apply(this, arguments);
+        applySearch();
+      };
+      wrappedRenderGrid.__catalogSearchWrapped = true;
+      window.renderGrid = wrappedRenderGrid;
+      wrappedRenderGrid();
+    } else {
+      applySearch();
+    }
+  }
+
+  if(document.readyState === 'complete') install();
+  else window.addEventListener('load', install, {once:true});
+})();
+
+/* ===================== INIT (compartido en todo el sitio) ===================== */
 (function initSite(){
   const savedTheme = localStorage.getItem('fc_theme');
   if(savedTheme === 'dark'){
