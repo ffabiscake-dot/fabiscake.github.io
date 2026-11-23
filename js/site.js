@@ -44,7 +44,6 @@ function acceptCookies(){
   hideCookieBanner();
 }
 function configureCookies(){
-  // Enlaza a la política de cookies para que el usuario revise el detalle antes de decidir.
   window.location.href = (document.body.getAttribute('data-root') || '') + 'cookies.html';
 }
 function showCookieBannerIfNeeded(){
@@ -57,11 +56,12 @@ function showCookieBannerIfNeeded(){
 (function initCatalogSearch(){
   const normalize = (value) => String(value == null ? '' : value)
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+
   const categoryNames = {
     cakes: 'cakes tortas pasteles', postres: 'postres bufet', ramos: 'flores ramos rosas',
     sorpresas: 'sorpresas entretenimiento', decoracion: 'decoracion globos',
     hombre: 'regalos hombre', mujer: 'regalos mujer', nino: 'regalos nino', nina: 'regalos nina',
-    combos_alimentos: 'combos alimentos bebidas comida', combos_cumple: 'combos cumpleaños cumpleanos'
+    combos_alimentos: 'combos alimentos bebidas comida', combos_cumple: 'combos cumpleanos cumpleaños'
   };
 
   function install(){
@@ -69,7 +69,7 @@ function showCookieBannerIfNeeded(){
     const heading = catalog && catalog.querySelector('.catalog-head');
     const grid = document.getElementById('productGrid');
     const pills = document.getElementById('pills');
-    if(!catalog || !heading || !grid || !pills) return;
+    if(!catalog || !heading || !grid || !pills || document.getElementById('catalogSearch')) return;
 
     const style = document.createElement('style');
     style.id = 'catalog-search-styles';
@@ -112,39 +112,33 @@ function showCookieBannerIfNeeded(){
     const clearButton = form.querySelector('.search-clear');
     const status = form.querySelector('#catalogSearchStatus');
     let query = '';
+    let debounceTimer = null;
 
     function categoryText(product){
       const categories = Array.isArray(product.cat) ? product.cat : [product.cat];
       return categories.map((cat) => `${cat || ''} ${categoryNames[cat] || ''}`).join(' ');
     }
 
-    function productIndex(){
-      const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
-      const index = new Map();
-      products.forEach((product) => {
-        const name = normalize(product.name);
-        const desc = normalize(product.desc);
-        const key = `${name}|${desc}`;
-        const searchable = normalize([
-          product.name, product.desc, categoryText(product), product.keywords,
-          product.tags, product.palabrasClave, product.descripcion
-        ].join(' '));
-        index.set(key, searchable);
-        if(!index.has(`${name}|`)) index.set(`${name}|`, searchable);
-      });
-      return index;
+    function getProductSearchText(product){
+      return normalize([
+        product.name, product.desc, categoryText(product),
+        product.keywords, product.tags, product.palabrasClave, product.descripcion
+      ].join(' '));
     }
 
     function applySearch(){
       const cards = Array.from(grid.children).filter((child) => child.classList.contains('card'));
       const term = normalize(query);
       const words = term ? term.split(' ').filter(Boolean) : [];
-      const index = productIndex();
       let visible = 0;
+
       cards.forEach((card) => {
         const name = normalize(card.querySelector('h3')?.textContent);
         const desc = normalize(card.querySelector('.card-body p')?.textContent);
-        const searchable = index.get(`${name}|${desc}`) || index.get(`${name}|`) || normalize(`${name} ${desc}`);
+        const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find((p) =>
+          normalize(p.name) === name && normalize(p.desc) === desc
+        );
+        const searchable = product ? getProductSearchText(product) : normalize(`${name} ${desc}`);
         const matches = words.every((word) => searchable.includes(word));
         card.hidden = !matches;
         if(matches) visible++;
@@ -152,11 +146,13 @@ function showCookieBannerIfNeeded(){
 
       const previousEmpty = grid.querySelector('.search-empty');
       if(previousEmpty) previousEmpty.remove();
+
       if(!term){
         status.textContent = '';
         return;
       }
       status.textContent = visible === 1 ? '1 producto encontrado' : `${visible} productos encontrados`;
+
       if(visible === 0){
         const empty = document.createElement('div');
         empty.className = 'search-empty';
@@ -178,7 +174,8 @@ function showCookieBannerIfNeeded(){
     input.addEventListener('input', () => {
       query = input.value;
       clearButton.hidden = !query;
-      applySearch();
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(applySearch, 80);
     });
     clearButton.addEventListener('click', () => {
       input.value = '';
@@ -188,8 +185,6 @@ function showCookieBannerIfNeeded(){
       input.focus();
     });
 
-    // renderGrid conserva las tarjetas y botones de compra existentes; el filtro
-    // se reaplica después de cada cambio de categoría o actualización de Firestore.
     if(typeof window.renderGrid === 'function' && !window.renderGrid.__catalogSearchWrapped){
       const originalRenderGrid = window.renderGrid;
       const wrappedRenderGrid = function(){
@@ -198,17 +193,15 @@ function showCookieBannerIfNeeded(){
       };
       wrappedRenderGrid.__catalogSearchWrapped = true;
       window.renderGrid = wrappedRenderGrid;
-      wrappedRenderGrid();
-    } else {
-      applySearch();
     }
+    window.addEventListener('products:ready', () => setTimeout(applySearch, 0));
   }
 
-  if(document.readyState === 'complete') install();
-  else window.addEventListener('load', install, {once:true});
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
 })();
 
-/* ===================== INIT (compartido en todo el sitio) ===================== */
+/* ===================== INIT (compartido) ===================== */
 (function initSite(){
   const savedTheme = localStorage.getItem('fc_theme');
   if(savedTheme === 'dark'){
