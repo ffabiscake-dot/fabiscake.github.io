@@ -14,7 +14,7 @@
 //  - Un fallo al guardar la caché (localStorage lleno) ya no impide
 //    pintar el catálogo.
 // ============================================================
-import { db, collection, onSnapshot } from "./firebase-init.js";
+import { db, collection, onSnapshot } from "./firebase-public.js";
 import { isHiddenProduct, sortProducts } from "./products-model.js";
 
 const CACHE_KEY = "fabiscake_products_cache_v7"; // app.js usa la misma clave
