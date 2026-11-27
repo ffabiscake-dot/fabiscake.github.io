@@ -1020,3 +1020,28 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .cookie-actions { gap: 8px; }
   .cookie-actions .btn { font-size: 12px; padding-inline: 8px; }
 }
+
+
+/* LOGO OFICIAL FABI'S CAKE — integración en cabecera */
+.brand .mark {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  overflow: visible;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+.brand .mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0;
+}
+@media (max-width: 860px) {
+  .brand .mark { width: 46px; height: 46px; }
+}
+@media (max-width: 480px) {
+  .brand .mark { width: 42px; height: 42px; }
+}
