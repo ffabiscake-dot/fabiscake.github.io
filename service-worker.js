@@ -8,7 +8,7 @@
 //   - Página offline de fallback
 // ============================================================
 
-const CACHE_VERSION = "v13";
+const CACHE_VERSION = "v14";
 const CACHE_STATIC = `fabiscake-static-${CACHE_VERSION}`;
 const CACHE_PAGES  = `fabiscake-pages-${CACHE_VERSION}`;
 const CACHE_IMAGES = `fabiscake-images-${CACHE_VERSION}`;
@@ -27,6 +27,7 @@ const CORE_ASSETS = [
   "./assets/logo.jpg",
   "./assets/logo-fabis-cake.svg",
   "./assets/logo-fabis-cake.webp",
+  "./assets/logo-fabis-cake.png",
   "./assets/icon-fallback.svg",
   "./assets/hero-reference.webp",
   "./manifest.json",
@@ -145,8 +146,8 @@ self.addEventListener("push", (event) => {
   const data = event.data.json();
   const options = {
     body: data.body || "Nuevo mensaje de Fabi's Cake",
-    icon: "./assets/logo-fabis-cake.webp",
-    badge: "./assets/logo-fabis-cake.webp",
+    icon: "./assets/logo-fabis-cake.png",
+    badge: "./assets/logo-fabis-cake.png",
     vibrate: [200, 100, 200],
     data: { url: data.url || "./" },
     actions: [

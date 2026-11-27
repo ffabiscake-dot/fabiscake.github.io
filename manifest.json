@@ -24,15 +24,9 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "assets/logo-fabis-cake.webp",
-      "sizes": "192x198",
-      "type": "image/webp",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icon-fallback.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "assets/logo-fabis-cake.png",
+      "sizes": "408x420",
+      "type": "image/png",
       "purpose": "any"
     }
   ],
@@ -52,9 +46,9 @@
       "url": "index.html#catalogo",
       "icons": [
         {
-          "src": "assets/logo-fabis-cake.webp",
-          "sizes": "192x198",
-          "type": "image/webp"
+          "src": "assets/logo-fabis-cake.png",
+          "sizes": "408x420",
+          "type": "image/png"
         }
       ]
     },
@@ -64,9 +58,9 @@
       "url": "index.html#servicios",
       "icons": [
         {
-          "src": "assets/logo-fabis-cake.webp",
-          "sizes": "192x198",
-          "type": "image/webp"
+          "src": "assets/logo-fabis-cake.png",
+          "sizes": "408x420",
+          "type": "image/png"
         }
       ]
     }
