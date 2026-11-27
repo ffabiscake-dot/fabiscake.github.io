@@ -8,7 +8,7 @@
 //   - Página offline de fallback
 // ============================================================
 
-const CACHE_VERSION = "v8";
+const CACHE_VERSION = "v9";
 const CACHE_STATIC = `fabiscake-static-${CACHE_VERSION}`;
 const CACHE_PAGES  = `fabiscake-pages-${CACHE_VERSION}`;
 const CACHE_IMAGES = `fabiscake-images-${CACHE_VERSION}`;
@@ -25,7 +25,7 @@ const CORE_ASSETS = [
   "./js/products-loader.js",
   "./assets/logo.jpg",
   "./assets/icon-fallback.svg",
-  "./assets/hero-reference.jpg",
+  "./assets/hero-reference.webp",
   "./manifest.json",
   "./offline.html"
 ];

@@ -849,3 +849,93 @@ footer a:hover{color:var(--link);opacity:1;}
   .form-grid{grid-template-columns:1fr;}
   .pill{padding:9px 15px;font-size:12px;}
 }
+
+/* ============================================================
+   OPTIMIZACIÓN RESPONSIVE Y RENDIMIENTO — noviembre 2026
+   Mantiene la identidad visual y las funciones existentes.
+   ============================================================ */
+html { scroll-padding-top: 92px; }
+body { overflow-x: clip; }
+img { height: auto; }
+.hero {
+  background-image: url('../assets/hero-reference.webp');
+  background-color: #FDDBDA;
+  contain: paint;
+}
+.hero-content { animation-duration: .45s; }
+.card, .svc-card, .gallery-grid > a { min-width: 0; }
+#catalogo .grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  align-items: stretch;
+}
+#catalogo .card { height: 100%; }
+#catalogo .card-media { aspect-ratio: 1 / 1; overflow: hidden; }
+#catalogo .card-media img { width: 100%; height: 100%; object-fit: cover; }
+button, .btn, .pill, .icon-btn { touch-action: manipulation; }
+a, button { -webkit-tap-highlight-color: transparent; }
+
+@media (min-width: 861px) {
+  .wrap { max-width: 1240px; }
+  .hero { min-height: min(780px, 82vh); }
+  .hero-content { max-width: 620px; }
+}
+@media (max-width: 1100px) {
+  #catalogo .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .navbar { gap: 10px; }
+  .nav-actions { gap: 4px; }
+  .hero { min-height: auto; padding: 58px 20px 64px; }
+  .hero-content { max-width: 680px; }
+  #catalogo .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; }
+}
+@media (max-width: 640px) {
+  .top-banner { font-size: 10px; letter-spacing: .07em; padding: 8px 12px; }
+  .navbar { padding: 10px 0; }
+  .brand { font-size: 19px; gap: 8px; }
+  .brand .mark { width: 36px; height: 36px; }
+  .nav-actions .icon-btn { width: 38px; height: 38px; }
+  .hero {
+    padding: 48px 16px 52px;
+    background-position: 68% center;
+  }
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(253,219,218,.96) 0%, rgba(253,219,218,.82) 58%, rgba(253,219,218,.48) 100%),
+      linear-gradient(180deg, rgba(253,219,218,.08), rgba(253,219,218,.3));
+  }
+  .hero-content { max-width: 100%; }
+  .hero-title { font-size: clamp(36px, 10vw, 52px); line-height: 1.04; margin-bottom: 16px; }
+  .hero .lead { font-size: 14px; line-height: 1.65; max-width: 42ch; }
+  .hero-loc { font-size: 9px; letter-spacing: 1px; padding: 7px 11px; margin-bottom: 16px; }
+  .btn-row { display: grid; grid-template-columns: 1fr; width: 100%; max-width: 390px; margin-inline: auto; }
+  .btn-hero-wa, .btn-hero-cat { width: 100%; min-height: 50px; justify-content: center; }
+  .hero-badges { flex-wrap: wrap; gap: 10px 14px; }
+  #catalogo .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; max-width: none; }
+  #catalogo .card-body { padding: 14px 12px 16px; }
+  #catalogo .card h3, #catalogo .card-title { font-size: 14px; line-height: 1.35; }
+  #catalogo .card p { font-size: 12px; line-height: 1.5; }
+  #catalogo .pills { margin-inline: -4px; padding-inline: 4px; }
+  .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .svc-cta { padding: 30px 18px; }
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .modal { padding: 10px; align-items: flex-end; }
+  .modal-card { max-height: 92dvh; padding: 26px 18px 22px; border-radius: 18px 18px 0 0; }
+  .cookie-banner { padding: 14px 16px; gap: 12px; }
+  .cookie-actions { width: 100%; }
+  .cookie-actions .btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 360px) {
+  #catalogo .grid, .svc-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+  .brand { font-size: 17px; }
+  .nav-actions .icon-btn { width: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
