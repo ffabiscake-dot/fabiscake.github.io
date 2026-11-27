@@ -939,3 +939,84 @@ a, button { -webkit-tap-highlight-color: transparent; }
     transition-duration: .01ms !important;
   }
 }
+
+/* ============================================================
+   AVISO DE COOKIES — accesible y sin solaparse con WhatsApp
+   ============================================================ */
+.cookie-banner {
+  position: fixed;
+  left: 24px;
+  right: 104px;
+  bottom: 24px;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 20px;
+  padding: 18px 22px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 36px rgba(35, 24, 29, .18);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.cookie-banner.show { display: flex; }
+.cookie-banner p {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+.cookie-banner a {
+  color: var(--link);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.cookie-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.cookie-actions .btn {
+  min-height: 44px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+.cookie-banner .btn-ghost {
+  border-color: var(--border);
+}
+.cookie-banner button:focus-visible,
+.cookie-banner a:focus-visible {
+  outline: 3px solid var(--link);
+  outline-offset: 3px;
+}
+@media (max-width: 860px) {
+  .cookie-banner {
+    left: 14px;
+    right: 14px;
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 13px;
+  }
+  .cookie-actions { width: 100%; }
+  .cookie-actions .btn {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .cookie-banner { left: 10px; right: 10px; padding: 14px; }
+  .cookie-actions { gap: 8px; }
+  .cookie-actions .btn { font-size: 12px; padding-inline: 8px; }
+}
